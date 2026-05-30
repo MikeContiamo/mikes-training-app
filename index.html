@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Mike's Training App</title>
+<style>
+  :root {
+    --bg: #0d0d1a;
+    --surface: #16162a;
+    --surface2: #1e1e38;
+    --border: #2a2a4a;
+    --text: #f0f0ff;
+    --muted: #8888aa;
+    --work: #22c55e;
+    --rest: #60a5fa;
+    --transition: #fbbf24;
+    --cardio: #fb923c;
+    --danger: #f87171;
+    --radius: 16px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+  }
+
+  .screen { width: 100%; max-width: 480px; padding: 20px; display: none; flex-direction: column; gap: 16px; }
+  .screen.active { display: flex; }
+
+  /* ── START SCREEN ── */
+  .app-title { text-align: center; }
+  .app-title h1 { font-size: 2rem; font-weight: 800; letter-spacing: -1px; }
+  .app-title .subtitle { color: var(--muted); font-size: 0.9rem; margin-top: 4px; }
+
+  .day-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .day-btn {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 16px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+    color: var(--text);
+  }
+  .day-btn:hover, .day-btn.selected {
+    border-color: var(--work);
+    background: rgba(34,197,94,0.1);
+  }
+  .day-btn.day2.selected { border-color: var(--cardio); background: rgba(251,146,60,0.1); }
+  .day-btn .day-icon { font-size: 2rem; margin-bottom: 8px; }
+  .day-btn .day-label { font-weight: 700; font-size: 1rem; }
+  .day-btn .day-desc { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
+
+  .workout-preview {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 16px;
+    border: 1px solid var(--border);
+  }
+  .workout-preview h3 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 12px; }
+  .preview-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.88rem; }
+  .preview-row:last-child { border-bottom: none; }
+  .preview-row .section-name { color: var(--muted); }
+  .preview-row .section-time { font-weight: 700; color: var(--work); }
+
+  .start-btn {
+    background: var(--work);
+    color: #000;
+    border: none;
+    border-radius: var(--radius);
+    padding: 18px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    letter-spacing: 0.5px;
+  }
+  .start-btn:hover { opacity: 0.9; }
+  .start-btn:active { transform: scale(0.98); }
+  .start-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  /* ── WORKOUT SCREEN ── */
+  .workout-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .section-label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    flex: 1;
+  }
+  .overall-time { font-size: 0.78rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+  .progress-bar-outer {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-bar-inner {
+    height: 100%;
+    background: var(--work);
+    border-radius: 2px;
+    transition: width 1s linear;
+  }
+
+  .timer-ring-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+  }
+
+  .ring-container {
+    position: relative;
+    width: 240px;
+    height: 240px;
+  }
+  .ring-container svg { transform: rotate(-90deg); }
+  .ring-bg { fill: none; stroke: var(--surface2); stroke-width: 10; }
+  .ring-progress {
+    fill: none;
+    stroke-width: 10;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1s linear, stroke 0.3s;
+  }
+  .ring-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .ring-timer {
+    font-size: 4rem;
+    font-weight: 900;
+    letter-spacing: -3px;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  .ring-timer.flash { animation: flash 0.3s ease; }
+  @keyframes flash { 0%,100% { opacity:1; } 50% { opacity:0.2; } }
+
+  .phase-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 6px;
+  }
+
+  .exercise-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 18px;
+    border: 2px solid var(--border);
+    text-align: center;
+    transition: border-color 0.3s;
+  }
+  .exercise-card.work-card { border-color: rgba(34,197,94,0.5); }
+  .exercise-card.rest-card { border-color: rgba(96,165,250,0.5); }
+  .exercise-card.cardio-card { border-color: rgba(251,146,60,0.5); }
+
+  .exercise-name {
+    font-size: 1.4rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+  .exercise-detail { font-size: 0.82rem; color: var(--muted); line-height: 1.4; }
+
+  .next-up {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+  }
+  .next-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); white-space: nowrap; }
+  .next-name { font-size: 0.9rem; font-weight: 600; }
+
+  .controls { display: flex; gap: 10px; }
+  .ctrl-btn {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: var(--text);
+    transition: background 0.2s;
+  }
+  .ctrl-btn:hover { background: var(--surface2); }
+  .ctrl-btn.primary { background: var(--work); color: #000; border-color: var(--work); }
+  .ctrl-btn.skip { font-size: 0.8rem; flex: 0.6; }
+  .ctrl-btn.audio-btn { flex: 0.6; }
+
+  /* ── COMPLETE SCREEN ── */
+  .complete-header { text-align: center; padding: 20px 0 10px; }
+  .complete-header .trophy { font-size: 4rem; }
+  .complete-header h2 { font-size: 1.8rem; font-weight: 900; margin-top: 8px; }
+  .complete-header p { color: var(--muted); margin-top: 4px; }
+
+  .stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stat-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 16px;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+  .stat-value { font-size: 1.8rem; font-weight: 900; color: var(--work); }
+  .stat-label { font-size: 0.75rem; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .rep-log-section {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 16px;
+    border: 1px solid var(--border);
+  }
+  .rep-log-section h3 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 14px; }
+  .rep-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    gap: 12px;
+  }
+  .rep-row:last-child { border-bottom: none; }
+  .rep-ex-name { font-size: 0.88rem; font-weight: 600; flex: 1; }
+  .rep-input {
+    width: 60px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 8px;
+    color: var(--text);
+    font-size: 0.95rem;
+    text-align: center;
+    font-weight: 700;
+  }
+  .rep-input:focus { outline: none; border-color: var(--work); }
+  .rep-sets { font-size: 0.75rem; color: var(--muted); white-space: nowrap; }
+
+  .save-btn {
+    background: var(--work);
+    color: #000;
+    border: none;
+    border-radius: var(--radius);
+    padding: 16px;
+    font-size: 1rem;
+    font-weight: 800;
+    cursor: pointer;
+    width: 100%;
+  }
+  .restart-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--muted);
+    width: 100%;
+  }
+
+  .saved-msg {
+    text-align: center;
+    color: var(--work);
+    font-weight: 700;
+    padding: 8px;
+    display: none;
+  }
+
+  /* ── HISTORY LOG ── */
+  .history-section {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 16px;
+    border: 1px solid var(--border);
+    display: none;
+  }
+  .history-section.visible { display: block; }
+  .history-section h3 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 12px; }
+  .history-entry {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.85rem;
+  }
+  .history-entry:last-child { border-bottom: none; }
+  .history-date { color: var(--muted); }
+
+  /* ── COUNTDOWN OVERLAY ── */
+  .countdown-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    display: none;
+  }
+  .countdown-overlay.visible { display: flex; }
+  .countdown-number {
+    font-size: 8rem;
+    font-weight: 900;
+    animation: countPop 1s ease;
+  }
+  .countdown-text { color: var(--muted); font-size: 1rem; margin-top: 16px; }
+  @keyframes countPop {
+    0% { transform: scale(1.5); opacity: 0; }
+    30% { transform: scale(1); opacity: 1; }
+    80% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(0.8); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COUNTDOWN OVERLAY -->
+<div class="countdown-overlay" id="countdownOverlay">
+  <div class="countdown-number" id="countdownNumber">3</div>
+  <div class="countdown-text">Mach dich bereit…</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     START SCREEN
+══════════════════════════════════════════ -->
+<div class="screen active" id="startScreen">
+  <div class="app-title">
+    <h1>💪 Mike's Training</h1>
+    <div class="subtitle">45 Min · Bodyweight · Kein Equipment</div>
+  </div>
+
+  <div>
+    <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:10px;">Wähle deinen Tag</div>
+    <div class="day-selector">
+      <button class="day-btn" id="day1Btn" onclick="selectDay(1)">
+        <div class="day-icon">🏃</div>
+        <div class="day-label">Tag 1</div>
+        <div class="day-desc">Steady State<br>Konstantes Cardio</div>
+      </button>
+      <button class="day-btn day2" id="day2Btn" onclick="selectDay(2)">
+        <div class="day-icon">⚡</div>
+        <div class="day-label">Tag 2</div>
+        <div class="day-desc">HIIT<br>Intervall-Cardio</div>
+      </button>
+    </div>
+  </div>
+
+  <div class="workout-preview">
+    <h3>Workout-Überblick</h3>
+    <div class="preview-row">
+      <span>Warm-Up</span>
+      <span class="section-time">3 Min</span>
+    </div>
+    <div class="preview-row">
+      <span>Superset 1 · Squats + Push-ups</span>
+      <span class="section-time">12 Min</span>
+    </div>
+    <div class="preview-row">
+      <span>Superset 2 · Lunges/Bridges + Rows</span>
+      <span class="section-time">12 Min</span>
+    </div>
+    <div class="preview-row">
+      <span>Core Finisher · Plank</span>
+      <span class="section-time">3 Min</span>
+    </div>
+    <div class="preview-row" id="cardioPreviewRow">
+      <span id="cardioPreviewName">Cardio – wähle Tag</span>
+      <span class="section-time">15 Min</span>
+    </div>
+  </div>
+
+  <button class="start-btn" id="startBtn" disabled onclick="startWorkout()">
+    Tag wählen ↑
+  </button>
+
+  <div class="history-section" id="historySection">
+    <h3>Letzte Workouts</h3>
+    <div id="historyList"></div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     WORKOUT SCREEN
+══════════════════════════════════════════ -->
+<div class="screen" id="workoutScreen">
+  <div class="workout-header">
+    <div class="section-label" id="sectionLabel">–</div>
+    <div class="overall-time" id="overallTime">45:00</div>
+  </div>
+
+  <div class="progress-bar-outer">
+    <div class="progress-bar-inner" id="progressBar" style="width:0%"></div>
+  </div>
+
+  <div class="timer-ring-wrap">
+    <div class="ring-container">
+      <svg width="240" height="240" viewBox="0 0 240 240">
+        <circle class="ring-bg" cx="120" cy="120" r="108"/>
+        <circle class="ring-progress" id="ringProgress" cx="120" cy="120" r="108"
+          stroke-dasharray="678.58" stroke-dashoffset="0" stroke="var(--work)"/>
+      </svg>
+      <div class="ring-center">
+        <div class="ring-timer" id="ringTimer">00:00</div>
+        <span class="phase-badge" id="phaseBadge">–</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="exercise-card" id="exerciseCard">
+    <div class="exercise-name" id="exerciseName">–</div>
+    <div class="exercise-detail" id="exerciseDetail"></div>
+  </div>
+
+  <div class="next-up" id="nextUp">
+    <span class="next-label">Nächstes</span>
+    <span class="next-name" id="nextName">–</span>
+  </div>
+
+  <div class="controls">
+    <button class="ctrl-btn audio-btn" id="audioBtn" onclick="toggleAudio()">🔊</button>
+    <button class="ctrl-btn primary" id="pauseBtn" onclick="togglePause()">⏸ Pause</button>
+    <button class="ctrl-btn skip" onclick="skipPhase()">Überspringen ⏭</button>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     COMPLETE SCREEN
+══════════════════════════════════════════ -->
+<div class="screen" id="completeScreen">
+  <div class="complete-header">
+    <div class="trophy">🏆</div>
+    <h2>Workout Done!</h2>
+    <p id="completeSub">Tag 1 · Steady State</p>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-value" id="statDuration">–</div>
+      <div class="stat-label">Dauer</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="statDay">–</div>
+      <div class="stat-label">Workout-Typ</div>
+    </div>
+  </div>
+
+  <div class="rep-log-section">
+    <h3>Wiederholungen loggen (optional)</h3>
+    <div class="rep-row">
+      <span class="rep-ex-name">Kniebeugen (Squats)</span>
+      <span class="rep-sets">3 Sätze</span>
+      <input type="number" class="rep-input" id="reps_squats" placeholder="–" min="0" max="999">
+    </div>
+    <div class="rep-row">
+      <span class="rep-ex-name">Liegestütze (Push-ups)</span>
+      <span class="rep-sets">3 Sätze</span>
+      <input type="number" class="rep-input" id="reps_pushups" placeholder="–" min="0" max="999">
+    </div>
+    <div class="rep-row">
+      <span class="rep-ex-name">Reverse Lunges/Glute Bridges</span>
+      <span class="rep-sets">3 Sätze</span>
+      <input type="number" class="rep-input" id="reps_lunges" placeholder="–" min="0" max="999">
+    </div>
+    <div class="rep-row">
+      <span class="rep-ex-name">Türrahmen-Rudern</span>
+      <span class="rep-sets">3 Sätze</span>
+      <input type="number" class="rep-input" id="reps_rows" placeholder="–" min="0" max="999">
+    </div>
+  </div>
+
+  <button class="save-btn" onclick="saveLog()">💾 Workout speichern</button>
+  <div class="saved-msg" id="savedMsg">✅ Gespeichert!</div>
+  <button class="restart-btn" onclick="goHome()">← Neues Workout starten</button>
+</div>
+
+
+<script>
+// ══════════════════════════════════════════
+// WORKOUT BUILDER
+// ══════════════════════════════════════════
+const CIRCUMFERENCE = 2 * Math.PI * 108; // r=108
+
+function buildWorkout(day) {
+  const phases = [];
+
+  const add = (name, type, duration, section, detail = '', logKey = null) =>
+    phases.push({ name, type, duration, section, detail, logKey });
+
+  // WARM-UP
+  add('Hampelmänner (Jumping Jacks)', 'work', 60, 'Warm-Up', 'Lockeres Aufwärmen · locker bleiben');
+  add('Kniebeugen + Armkreisen', 'work', 120, 'Warm-Up', 'Tief in die Hocke · Arme weit kreisen · Mobilität aktivieren');
+
+  // SUPERSET 1 (3 rounds × 240s = 12 min)
+  for (let r = 1; r <= 3; r++) {
+    add('Kniebeugen (Squats)', 'work', 60, `Superset 1 · Runde ${r}/3`,
+      '3 Sek. langsam runter · 1 Sek. explosiv hoch · 10–15 Wdh', 'squats');
+    add('Push-Ups aufbauen…', 'transition', 15, `Superset 1 · Runde ${r}/3`, 'Position wechseln');
+    add('Liegestütze (Push-ups)', 'work', 60, `Superset 1 · Runde ${r}/3`,
+      'Körper gerade · volle Bewegung · Brust zur Matte', 'pushups');
+    add(r < 3 ? 'Pause' : 'Superset 1 geschafft! 🎉', 'rest', 90,
+      `Superset 1 · Pause ${r}/3`, 'Durchatmen · Nächste Runde vorbereiten');
+  }
+
+  // SUPERSET 2 (3 rounds × 240s = 12 min)
+  const ss2A = ['Ausfallschritte rückwärts (Reverse Lunges)', 'Beckenheben (Glute Bridges)', 'Ausfallschritte rückwärts (Reverse Lunges)'];
+  const ss2ADetail = [
+    'Rücken gerade · Knie fast zum Boden · Wechsel-Beine · 10–15 Wdh pro Seite',
+    'Füße hüftbreit · Becken oben halten · Gesäß anspannen · 15 Wdh',
+    'Rücken gerade · Knie fast zum Boden · Wechsel-Beine · 10–15 Wdh pro Seite'
+  ];
+  for (let r = 1; r <= 3; r++) {
+    add(ss2A[r-1], 'work', 60, `Superset 2 · Runde ${r}/3`, ss2ADetail[r-1], 'lunges');
+    add('Türrahmen-Rudern aufbauen…', 'transition', 15, `Superset 2 · Runde ${r}/3`, 'Position wechseln');
+    add('Türrahmen-Rudern (Doorframe Rows)', 'work', 60, `Superset 2 · Runde ${r}/3`,
+      'Türrahmen greifen · Körper schräg zurück · Brust zur Tür ziehen', 'rows');
+    add(r < 3 ? 'Pause' : 'Superset 2 geschafft! 🔥', 'rest', 90,
+      `Superset 2 · Pause ${r}/3`, 'Arme ausschütteln · Schultern lockern');
+  }
+
+  // CORE FINISHER (2 rounds × 90s = 3 min)
+  for (let r = 1; r <= 2; r++) {
+    add('Plank mit Reach', 'work', 60, `Core Finisher · Runde ${r}/2`,
+      'Unterarmstütz · Hüfte tief · abwechselnd Arm nach vorne strecken');
+    add(r < 2 ? 'Pause' : 'Kraftteil abgeschlossen! 💪', 'rest', 30,
+      `Core · Pause ${r}/2`, 'Kurz verschnaufen');
+  }
+
+  // CARDIO
+  if (day === 1) {
+    add('Steady State Laufen 🏃', 'cardio', 900, 'Cardio – Tag 1',
+      '15 Min konstantes Tempo · moderat · Atemrhythmus halten');
+  } else {
+    add('Einlaufen (Jogging)', 'cardio', 180, 'Cardio – HIIT Tag 2', 'Lockeres Tempo · Körper auf Betriebstemperatur bringen');
+    for (let r = 1; r <= 6; r++) {
+      add('SPRINT! ⚡', 'work', 60, `HIIT · Runde ${r}/6`, 'Maximale Intensität! Voller Einsatz!');
+      add('Gehen (Erholung)', 'rest', 60, `HIIT · Runde ${r}/6`, 'Aktive Erholung · Puls senken');
+    }
+    add('Auslaufen (Cool-down)', 'cardio', 120, 'Cardio – Auslaufen', 'Sehr ruhiges Tempo · Puls runterbringen');
+  }
+
+  return phases;
+}
+
+// ══════════════════════════════════════════
+// AUDIO ENGINE (Web Audio API)
+// ══════════════════════════════════════════
+let audioCtx = null;
+let audioEnabled = true;
+
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function beep(freq, duration, vol = 0.3, type = 'sine') {
+  if (!audioEnabled) return;
+  try {
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.frequency.value = freq;
+    osc.type = type;
+    gain.gain.setValueAtTime(vol, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + duration);
+  } catch(e) {}
+}
+
+function playStartCue() {
+  beep(440, 0.1, 0.3);
+  setTimeout(() => beep(550, 0.1, 0.3), 120);
+  setTimeout(() => beep(660, 0.2, 0.4), 240);
+}
+
+function playRestCue() {
+  beep(550, 0.15, 0.25);
+  setTimeout(() => beep(440, 0.3, 0.2), 150);
+}
+
+function playCountdownBeep(n) {
+  if (n === 0) {
+    beep(880, 0.4, 0.5, 'square');
+  } else {
+    beep(330, 0.15, 0.2);
+  }
+}
+
+function playCompleteCue() {
+  [0, 150, 300, 500].forEach((t, i) => {
+    setTimeout(() => beep([523, 659, 784, 1047][i], 0.3, 0.4), t);
+  });
+}
+
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+let workout = [];
+let currentIdx = 0;
+let timeLeft = 0;
+let totalDuration = 0;
+let elapsedTotal = 0;
+let isPaused = false;
+let timerInterval = null;
+let selectedDay = null;
+let workoutStartTime = null;
+
+// ══════════════════════════════════════════
+// UI HELPERS
+// ══════════════════════════════════════════
+function fmtTime(secs) {
+  const m = Math.floor(secs / 60).toString().padStart(2, '0');
+  const s = (secs % 60).toString().padStart(2, '0');
+  return `${m}:${s}`;
+}
+
+function phaseColor(type) {
+  return { work: 'var(--work)', rest: 'var(--rest)', transition: 'var(--transition)', cardio: 'var(--cardio)' }[type] || 'var(--muted)';
+}
+function phaseLabel(type) {
+  return { work: 'AKTIV', rest: 'PAUSE', transition: 'WECHSEL', cardio: 'CARDIO' }[type] || '–';
+}
+function cardClass(type) {
+  return { work: 'work-card', rest: 'rest-card', transition: 'rest-card', cardio: 'cardio-card' }[type] || '';
+}
+
+function updateUI() {
+  const phase = workout[currentIdx];
+  if (!phase) return;
+
+  // Section / overall time
+  document.getElementById('sectionLabel').textContent = phase.section;
+  const remaining = totalDuration - elapsedTotal - (workout[currentIdx].duration - timeLeft);
+  document.getElementById('overallTime').textContent = fmtTime(Math.max(0, remaining));
+
+  // Progress bar
+  const elapsed = totalDuration - remaining;
+  document.getElementById('progressBar').style.width = `${Math.min(100, (elapsed / totalDuration) * 100)}%`;
+
+  // Ring
+  const progress = timeLeft / phase.duration;
+  const offset = CIRCUMFERENCE * (1 - progress);
+  const ring = document.getElementById('ringProgress');
+  ring.style.strokeDashoffset = offset;
+  ring.style.stroke = phaseColor(phase.type);
+
+  // Timer
+  const timerEl = document.getElementById('ringTimer');
+  timerEl.textContent = fmtTime(timeLeft);
+
+  // Phase badge
+  const badge = document.getElementById('phaseBadge');
+  badge.textContent = phaseLabel(phase.type);
+  badge.style.background = phaseColor(phase.type) + '33';
+  badge.style.color = phaseColor(phase.type);
+
+  // Exercise card
+  const card = document.getElementById('exerciseCard');
+  card.className = `exercise-card ${cardClass(phase.type)}`;
+  document.getElementById('exerciseName').textContent = phase.name;
+  document.getElementById('exerciseDetail').textContent = phase.detail;
+
+  // Next up
+  const next = workout[currentIdx + 1];
+  document.getElementById('nextName').textContent = next ? next.name : '🎉 Fertig!';
+
+  // Flash on low time
+  if (timeLeft <= 3 && timeLeft > 0) {
+    timerEl.classList.add('flash');
+    setTimeout(() => timerEl.classList.remove('flash'), 300);
+  }
+}
+
+// ══════════════════════════════════════════
+// TIMER ENGINE
+// ══════════════════════════════════════════
+function tick() {
+  if (isPaused) return;
+
+  if (timeLeft <= 3 && timeLeft > 0) playCountdownBeep(timeLeft);
+  if (timeLeft === 0) {
+    playCountdownBeep(0);
+  }
+
+  if (timeLeft <= 0) {
+    elapsedTotal += workout[currentIdx].duration;
+    currentIdx++;
+    if (currentIdx >= workout.length) {
+      finishWorkout();
+      return;
+    }
+    timeLeft = workout[currentIdx].duration;
+    const type = workout[currentIdx].type;
+    if (type === 'work' || type === 'cardio') playStartCue();
+    else playRestCue();
+  } else {
+    timeLeft--;
+  }
+
+  updateUI();
+}
+
+function startTimer() {
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(tick, 1000);
+}
+
+function togglePause() {
+  isPaused = !isPaused;
+  document.getElementById('pauseBtn').textContent = isPaused ? '▶ Weiter' : '⏸ Pause';
+  document.getElementById('pauseBtn').className = isPaused
+    ? 'ctrl-btn primary'
+    : 'ctrl-btn primary';
+}
+
+function skipPhase() {
+  elapsedTotal += workout[currentIdx].duration - timeLeft;
+  currentIdx++;
+  if (currentIdx >= workout.length) { finishWorkout(); return; }
+  timeLeft = workout[currentIdx].duration;
+  const type = workout[currentIdx].type;
+  if (type === 'work' || type === 'cardio') playStartCue();
+  else playRestCue();
+  updateUI();
+}
+
+function toggleAudio() {
+  audioEnabled = !audioEnabled;
+  document.getElementById('audioBtn').textContent = audioEnabled ? '🔊' : '🔇';
+  // Resume AudioContext if needed
+  if (audioEnabled && audioCtx && audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+}
+
+// ══════════════════════════════════════════
+// FLOW CONTROL
+// ══════════════════════════════════════════
+function selectDay(day) {
+  selectedDay = day;
+  document.getElementById('day1Btn').classList.toggle('selected', day === 1);
+  document.getElementById('day2Btn').classList.toggle('selected', day === 2);
+  document.getElementById('cardioPreviewName').textContent =
+    day === 1 ? 'Steady State Laufen (15 Min)' : 'HIIT-Intervalle (6 Runden)';
+  const btn = document.getElementById('startBtn');
+  btn.disabled = false;
+  btn.textContent = day === 1 ? '▶ Tag 1 starten' : '▶ Tag 2 starten';
+}
+
+function doCountdown(cb) {
+  const overlay = document.getElementById('countdownOverlay');
+  const numEl = document.getElementById('countdownNumber');
+  overlay.classList.add('visible');
+  let n = 3;
+  numEl.textContent = n;
+  beep(440, 0.15);
+  const iv = setInterval(() => {
+    n--;
+    if (n <= 0) {
+      clearInterval(iv);
+      overlay.classList.remove('visible');
+      cb();
+    } else {
+      numEl.textContent = n;
+      // re-trigger animation
+      numEl.style.animation = 'none';
+      numEl.offsetHeight;
+      numEl.style.animation = '';
+      beep(440, 0.15);
+    }
+  }, 1000);
+}
+
+function startWorkout() {
+  if (!selectedDay) return;
+
+  workout = buildWorkout(selectedDay);
+  totalDuration = workout.reduce((s, p) => s + p.duration, 0);
+  currentIdx = 0;
+  timeLeft = workout[0].duration;
+  elapsedTotal = 0;
+  isPaused = false;
+  workoutStartTime = Date.now();
+
+  // Unlock AudioContext on user gesture
+  try { getAudioCtx().resume(); } catch(e) {}
+
+  showScreen('workoutScreen');
+
+  doCountdown(() => {
+    playStartCue();
+    updateUI();
+    startTimer();
+  });
+}
+
+function finishWorkout() {
+  clearInterval(timerInterval);
+  playCompleteCue();
+  const elapsed = Math.round((Date.now() - workoutStartTime) / 1000);
+  document.getElementById('statDuration').textContent = fmtTime(elapsed);
+  document.getElementById('statDay').textContent = selectedDay === 1 ? 'Tag 1' : 'Tag 2';
+  document.getElementById('completeSub').textContent =
+    selectedDay === 1 ? 'Tag 1 · Steady State Cardio' : 'Tag 2 · HIIT Intervalle';
+  showScreen('completeScreen');
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function goHome() {
+  clearInterval(timerInterval);
+  selectedDay = null;
+  document.getElementById('day1Btn').classList.remove('selected');
+  document.getElementById('day2Btn').classList.remove('selected');
+  document.getElementById('startBtn').disabled = true;
+  document.getElementById('startBtn').textContent = 'Tag wählen ↑';
+  document.getElementById('savedMsg').style.display = 'none';
+  loadHistory();
+  showScreen('startScreen');
+}
+
+// ══════════════════════════════════════════
+// HISTORY / LOGGING
+// ══════════════════════════════════════════
+function saveLog() {
+  const entry = {
+    date: new Date().toLocaleDateString('de-DE', { day:'2-digit', month:'2-digit', year:'numeric' }),
+    day: selectedDay,
+    duration: Math.round((Date.now() - workoutStartTime) / 1000),
+    reps: {
+      squats: document.getElementById('reps_squats').value || '–',
+      pushups: document.getElementById('reps_pushups').value || '–',
+      lunges: document.getElementById('reps_lunges').value || '–',
+      rows: document.getElementById('reps_rows').value || '–'
+    }
+  };
+
+  const history = JSON.parse(localStorage.getItem('mikeTrainingLog') || '[]');
+  history.unshift(entry);
+  localStorage.setItem('mikeTrainingLog', JSON.stringify(history.slice(0, 30)));
+
+  document.getElementById('savedMsg').style.display = 'block';
+}
+
+function loadHistory() {
+  const history = JSON.parse(localStorage.getItem('mikeTrainingLog') || '[]');
+  const section = document.getElementById('historySection');
+  const list = document.getElementById('historyList');
+  if (history.length === 0) { section.classList.remove('visible'); return; }
+  section.classList.add('visible');
+  list.innerHTML = history.slice(0, 5).map(e => `
+    <div class="history-entry">
+      <span>${e.date} · <strong>Tag ${e.day}</strong></span>
+      <span class="history-date">${fmtTime(e.duration)} · Squats: ${e.reps.squats} · PU: ${e.reps.pushups}</span>
+    </div>
+  `).join('');
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+loadHistory();
+</script>
+</body>
+</html>
