@@ -105,6 +105,16 @@
     background: none; border: none; color: var(--muted); font-size: 0.8rem;
     cursor: pointer; width: 100%; text-align: center; padding: 4px; font-family: inherit;
   }
+
+  .program-guide { font-size: 0.84rem; line-height: 1.5; color: var(--muted); }
+  .program-guide h4 {
+    color: var(--text); font-size: 0.78rem; text-transform: uppercase;
+    letter-spacing: 1px; margin: 14px 0 6px;
+  }
+  .program-guide h4:first-child { margin-top: 8px; }
+  .program-guide ul { padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }
+  .program-guide strong { color: var(--text); }
+  .program-guide .highlight { color: var(--work); font-weight: 700; }
   .level-row {
     display: flex; align-items: center; justify-content: space-between;
     padding: 9px 0; border-bottom: 1px solid var(--border); gap: 8px;
@@ -356,6 +366,38 @@
   <div class="card">
     <button class="levels-toggle-btn" onclick="toggleLevels()" id="levelsToggleBtn">⚙️ Deine Levels anzeigen ▾</button>
     <div id="levelsList" class="hidden"></div>
+  </div>
+
+  <div class="card">
+    <button class="levels-toggle-btn" onclick="toggleGuide()" id="guideToggleBtn">📋 Dein Programm — so holst du das Optimum raus ▾</button>
+    <div id="programGuide" class="program-guide hidden">
+      <h4>📅 Rhythmus</h4>
+      <ul>
+        <li><strong>3× pro Woche</strong>, immer ein Ruhetag dazwischen — z. B. <strong>Mo · Mi · Fr</strong>. Minimum: 2× pro Woche.</li>
+        <li>Die App rotiert automatisch <strong>A → B → C</strong> — einfach das vorgeschlagene Workout machen. Die drei Templates setzen unterschiedliche Reize (Kraft-Technik, Muskelspannung, Ausdauer).</li>
+        <li>Nie zwei Tage direkt hintereinander: Der Muskel wächst in den <strong>~48 h Erholung</strong>, nicht im Training.</li>
+      </ul>
+      <h4>🔥 Intensität — der wichtigste Hebel</h4>
+      <ul>
+        <li>Jeder Satz bis <span class="highlight">1–2 Wdh vor Muskelversagen</span>. Die letzten Wiederholungen müssen langsam und schwer sein — sonst zählt der Satz kaum.</li>
+        <li>Saubere Technik und volle Bewegungsamplitude schlagen hohe Wiederholungszahlen.</li>
+      </ul>
+      <h4>📈 Progression</h4>
+      <ul>
+        <li>Erreichst du in <strong>beiden Sätzen das obere Wdh-Ziel</strong>, levelt die App die Übung automatisch hoch — dein Fortschritt über Monate.</li>
+        <li>Fühlt sich ein Level technisch unsauber an → unter „⚙️ Levels" manuell zurückstellen. Qualität vor Ego.</li>
+      </ul>
+      <h4>🏃 Cardio</h4>
+      <ul>
+        <li>Finisher bei <strong>2–3 Sessions pro Woche</strong> anschalten; an vollen Tagen einfach weglassen — der Kraftteil ist der Kern.</li>
+        <li>Dazu im Alltag viel gehen (~7.000+ Schritte) — kostet keine Trainingszeit.</li>
+      </ul>
+      <h4>😴 Regeneration — der unsichtbare Teil</h4>
+      <ul>
+        <li><strong>7–9 h Schlaf</strong> und ~<strong>1,6–2 g Protein pro kg</strong> Körpergewicht am Tag entscheiden mit über das Ergebnis.</li>
+        <li>Fühlst du dich nach 6–8 Wochen platt: eine lockere Woche einschieben (Sätze weit weg vom Versagen), dann wieder voll angreifen.</li>
+      </ul>
+    </div>
   </div>
 
   <div class="card hidden" id="historySection">
@@ -1138,6 +1180,16 @@ function toggleLevels() {
   levelsVisible = !levelsVisible;
   $('levelsList').classList.toggle('hidden', !levelsVisible);
   $('levelsToggleBtn').textContent = levelsVisible ? '⚙️ Levels verbergen ▴' : '⚙️ Deine Levels anzeigen ▾';
+}
+
+let guideVisible = false;
+
+function toggleGuide() {
+  guideVisible = !guideVisible;
+  $('programGuide').classList.toggle('hidden', !guideVisible);
+  $('guideToggleBtn').textContent = guideVisible
+    ? '📋 Programm-Guide verbergen ▴'
+    : '📋 Dein Programm — so holst du das Optimum raus ▾';
 }
 
 function changeLevel(pattern, delta) {
