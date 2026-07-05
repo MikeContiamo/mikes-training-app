@@ -3,6 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0d0d1a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Training">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
 <title>Mike's Training App</title>
 <style>
   :root {
@@ -34,45 +41,86 @@
     overflow-x: hidden;
   }
 
-  .screen { width: 100%; max-width: 480px; padding: 20px; display: none; flex-direction: column; gap: 16px; }
+  .screen { width: 100%; max-width: 480px; padding: 20px; display: none; flex-direction: column; gap: 14px; }
   .screen.active { display: flex; }
 
   /* ── START SCREEN ── */
   .app-title { text-align: center; }
-  .app-title h1 { font-size: 2rem; font-weight: 800; letter-spacing: -1px; }
-  .app-title .subtitle { color: var(--muted); font-size: 0.9rem; margin-top: 4px; }
+  .app-title h1 { font-size: 1.9rem; font-weight: 800; letter-spacing: -1px; }
+  .app-title .subtitle { color: var(--muted); font-size: 0.88rem; margin-top: 4px; }
 
-  .day-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .day-btn {
-    background: var(--surface);
-    border: 2px solid var(--border);
-    border-radius: var(--radius);
-    padding: 20px 16px;
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.2s;
-    color: var(--text);
-  }
-  .day-btn:hover, .day-btn.selected {
-    border-color: var(--work);
-    background: rgba(34,197,94,0.1);
-  }
-  .day-btn.day2.selected { border-color: var(--cardio); background: rgba(251,146,60,0.1); }
-  .day-btn .day-icon { font-size: 2rem; margin-bottom: 8px; }
-  .day-btn .day-label { font-weight: 700; font-size: 1rem; }
-  .day-btn .day-desc { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
-
-  .workout-preview {
+  .card {
     background: var(--surface);
     border-radius: var(--radius);
     padding: 16px;
     border: 1px solid var(--border);
   }
-  .workout-preview h3 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 12px; }
-  .preview-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.88rem; }
-  .preview-row:last-child { border-bottom: none; }
-  .preview-row .section-name { color: var(--muted); }
-  .preview-row .section-time { font-weight: 700; color: var(--work); }
+  .card h3 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 12px; }
+
+  .template-chips { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+  .tpl-chip {
+    background: var(--surface2);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 6px;
+    cursor: pointer;
+    text-align: center;
+    color: var(--text);
+    transition: all 0.2s;
+  }
+  .tpl-chip.selected { border-color: var(--work); background: rgba(34,197,94,0.12); }
+  .tpl-chip .tpl-letter { font-weight: 800; font-size: 1.1rem; }
+  .tpl-chip .tpl-name { font-size: 0.68rem; color: var(--muted); margin-top: 2px; }
+  .tpl-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.45; }
+  .tpl-desc strong { color: var(--text); }
+
+  .toggle-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 0 2px;
+  }
+  .toggle-label { font-size: 0.9rem; font-weight: 600; }
+  .toggle-sub { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+  .switch { position: relative; width: 50px; height: 28px; flex-shrink: 0; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .slider-toggle {
+    position: absolute; inset: 0; cursor: pointer;
+    background: var(--border); border-radius: 28px; transition: 0.2s;
+  }
+  .slider-toggle:before {
+    content: ""; position: absolute; height: 22px; width: 22px;
+    left: 3px; bottom: 3px; background: var(--text); border-radius: 50%; transition: 0.2s;
+  }
+  .switch input:checked + .slider-toggle { background: var(--cardio); }
+  .switch input:checked + .slider-toggle:before { transform: translateX(22px); }
+
+  .est-time { text-align: center; font-size: 0.85rem; color: var(--muted); }
+  .est-time strong { color: var(--work); font-size: 1rem; }
+
+  .week-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .week-stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px; text-align: center; }
+  .week-stat .val { font-size: 1.4rem; font-weight: 900; color: var(--work); }
+  .week-stat .lbl { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+
+  .levels-toggle-btn {
+    background: none; border: none; color: var(--muted); font-size: 0.8rem;
+    cursor: pointer; width: 100%; text-align: center; padding: 4px; font-family: inherit;
+  }
+  .level-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 9px 0; border-bottom: 1px solid var(--border); gap: 8px;
+  }
+  .level-row:last-child { border-bottom: none; }
+  .level-info { flex: 1; min-width: 0; }
+  .level-pattern { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); }
+  .level-ex-name { font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .level-ctrl { display: flex; align-items: center; gap: 8px; }
+  .level-num { font-size: 0.8rem; font-weight: 700; color: var(--work); min-width: 30px; text-align: center; }
+  .mini-btn {
+    width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--surface2); color: var(--text); font-size: 1.1rem; font-weight: 700;
+    cursor: pointer; line-height: 1;
+  }
+  .mini-btn:disabled { opacity: 0.25; }
 
   .start-btn {
     background: var(--work);
@@ -88,90 +136,52 @@
   }
   .start-btn:hover { opacity: 0.9; }
   .start-btn:active { transform: scale(0.98); }
-  .start-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
   /* ── WORKOUT SCREEN ── */
-  .workout-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+  .workout-header { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
   .section-label {
-    font-size: 0.78rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--muted);
-    flex: 1;
+    font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px;
+    color: var(--muted); flex: 1; min-width: 0;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .overall-time { font-size: 0.78rem; color: var(--muted); font-variant-numeric: tabular-nums; }
-
-  .progress-bar-outer {
-    height: 4px;
-    background: var(--border);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-  .progress-bar-inner {
-    height: 100%;
-    background: var(--work);
-    border-radius: 2px;
-    transition: width 1s linear;
+  .overall-time { font-size: 0.78rem; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .abort-btn {
+    background: none; border: none; color: var(--muted); font-size: 1.1rem;
+    cursor: pointer; padding: 2px 6px; line-height: 1;
   }
 
-  .timer-ring-wrap {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    padding: 8px 0;
-  }
+  .progress-bar-outer { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .progress-bar-inner { height: 100%; background: var(--work); border-radius: 2px; transition: width 1s linear; }
 
-  .ring-container {
-    position: relative;
-    width: 240px;
-    height: 240px;
-  }
-  .ring-container svg { transform: rotate(-90deg); }
+  .timer-ring-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 4px 0; }
+  .ring-container { position: relative; width: 220px; height: 220px; }
+  .ring-container svg { transform: rotate(-90deg); width: 100%; height: 100%; }
   .ring-bg { fill: none; stroke: var(--surface2); stroke-width: 10; }
   .ring-progress {
-    fill: none;
-    stroke-width: 10;
-    stroke-linecap: round;
-    transition: stroke-dashoffset 1s linear, stroke 0.3s;
+    fill: none; stroke-width: 10; stroke-linecap: round;
+    transition: stroke-dashoffset 0.3s linear, stroke 0.3s;
   }
   .ring-center {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
   }
   .ring-timer {
-    font-size: 4rem;
-    font-weight: 900;
-    letter-spacing: -3px;
-    font-variant-numeric: tabular-nums;
-    line-height: 1;
+    font-size: 3.6rem; font-weight: 900; letter-spacing: -3px;
+    font-variant-numeric: tabular-nums; line-height: 1;
   }
   .ring-timer.flash { animation: flash 0.3s ease; }
   @keyframes flash { 0%,100% { opacity:1; } 50% { opacity:0.2; } }
 
   .phase-badge {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-top: 6px;
+    display: inline-block; padding: 3px 10px; border-radius: 20px;
+    font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; margin-top: 6px;
   }
 
   .exercise-card {
     background: var(--surface);
     border-radius: var(--radius);
-    padding: 18px;
+    padding: 16px;
     border: 2px solid var(--border);
     text-align: center;
     transition: border-color 0.3s;
@@ -179,23 +189,33 @@
   .exercise-card.work-card { border-color: rgba(34,197,94,0.5); }
   .exercise-card.rest-card { border-color: rgba(96,165,250,0.5); }
   .exercise-card.cardio-card { border-color: rgba(251,146,60,0.5); }
+  .exercise-card.warmup-card { border-color: rgba(251,191,36,0.5); }
 
-  .exercise-name {
-    font-size: 1.4rem;
-    font-weight: 800;
-    line-height: 1.2;
-    margin-bottom: 6px;
-  }
+  .exercise-name { font-size: 1.35rem; font-weight: 800; line-height: 1.2; margin-bottom: 6px; }
+  .exercise-target { font-size: 0.95rem; font-weight: 700; color: var(--work); margin-bottom: 6px; }
   .exercise-detail { font-size: 0.82rem; color: var(--muted); line-height: 1.4; }
+  .level-chip {
+    display: inline-block; font-size: 0.68rem; font-weight: 700;
+    color: var(--muted); border: 1px solid var(--border); border-radius: 10px;
+    padding: 2px 8px; margin-bottom: 8px; letter-spacing: 0.5px;
+  }
+
+  /* Rep stepper (inside rest) */
+  .rep-stepper { display: none; align-items: center; justify-content: center; gap: 14px; margin-top: 12px; }
+  .rep-stepper.visible { display: flex; }
+  .stepper-btn {
+    width: 52px; height: 52px; border-radius: 14px;
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text); font-size: 1.6rem; font-weight: 800; cursor: pointer; line-height: 1;
+  }
+  .stepper-btn:active { transform: scale(0.94); }
+  .stepper-value { font-size: 2.2rem; font-weight: 900; min-width: 76px; text-align: center; font-variant-numeric: tabular-nums; }
+  .stepper-value small { font-size: 0.8rem; font-weight: 600; color: var(--muted); display: block; letter-spacing: 0.5px; }
 
   .next-up {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: var(--surface);
-    border-radius: var(--radius);
-    padding: 12px 16px;
-    border: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
+    background: var(--surface); border-radius: var(--radius);
+    padding: 12px 16px; border: 1px solid var(--border);
   }
   .next-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); white-space: nowrap; }
   .next-name { font-size: 0.9rem; font-weight: 600; }
@@ -206,7 +226,7 @@
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 14px;
+    padding: 16px 10px;
     font-size: 0.95rem;
     font-weight: 700;
     cursor: pointer;
@@ -214,127 +234,58 @@
     transition: background 0.2s;
   }
   .ctrl-btn:hover { background: var(--surface2); }
-  .ctrl-btn.primary { background: var(--work); color: #000; border-color: var(--work); }
-  .ctrl-btn.skip { font-size: 0.8rem; flex: 0.6; }
-  .ctrl-btn.audio-btn { flex: 0.6; }
+  .ctrl-btn:active { transform: scale(0.98); }
+  .ctrl-btn.primary { background: var(--work); color: #000; border-color: var(--work); flex: 1.8; font-size: 1.05rem; }
+  .ctrl-btn.primary.rest-mode { background: var(--rest); border-color: var(--rest); }
+  .ctrl-btn.icon-btn { flex: 0.5; }
 
   /* ── COMPLETE SCREEN ── */
-  .complete-header { text-align: center; padding: 20px 0 10px; }
-  .complete-header .trophy { font-size: 4rem; }
-  .complete-header h2 { font-size: 1.8rem; font-weight: 900; margin-top: 8px; }
+  .complete-header { text-align: center; padding: 16px 0 6px; }
+  .complete-header .trophy { font-size: 3.6rem; }
+  .complete-header h2 { font-size: 1.7rem; font-weight: 900; margin-top: 8px; }
   .complete-header p { color: var(--muted); margin-top: 4px; }
 
-  .stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
   .stat-card {
-    background: var(--surface);
-    border-radius: var(--radius);
-    padding: 16px;
-    text-align: center;
-    border: 1px solid var(--border);
+    background: var(--surface); border-radius: var(--radius);
+    padding: 14px 8px; text-align: center; border: 1px solid var(--border);
   }
-  .stat-value { font-size: 1.8rem; font-weight: 900; color: var(--work); }
-  .stat-label { font-size: 0.75rem; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat-value { font-size: 1.5rem; font-weight: 900; color: var(--work); }
+  .stat-label { font-size: 0.68rem; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
 
-  .rep-log-section {
-    background: var(--surface);
-    border-radius: var(--radius);
-    padding: 16px;
-    border: 1px solid var(--border);
+  .levelup-list { display: flex; flex-direction: column; gap: 8px; }
+  .levelup-item {
+    background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.4);
+    border-radius: 12px; padding: 10px 14px; font-size: 0.88rem; font-weight: 600;
   }
-  .rep-log-section h3 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 14px; }
-  .rep-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border);
-    gap: 12px;
-  }
-  .rep-row:last-child { border-bottom: none; }
-  .rep-ex-name { font-size: 0.88rem; font-weight: 600; flex: 1; }
-  .rep-input {
-    width: 60px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 6px 8px;
-    color: var(--text);
-    font-size: 0.95rem;
-    text-align: center;
-    font-weight: 700;
-  }
-  .rep-input:focus { outline: none; border-color: var(--work); }
-  .rep-sets { font-size: 0.75rem; color: var(--muted); white-space: nowrap; }
+  .leveldown-item { background: rgba(96,165,250,0.08); border-color: rgba(96,165,250,0.3); }
 
-  .save-btn {
-    background: var(--work);
-    color: #000;
-    border: none;
-    border-radius: var(--radius);
-    padding: 16px;
-    font-size: 1rem;
-    font-weight: 800;
-    cursor: pointer;
-    width: 100%;
-  }
+  .saved-msg { text-align: center; color: var(--work); font-weight: 700; font-size: 0.85rem; }
+
   .restart-btn {
-    background: transparent;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 14px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    cursor: pointer;
-    color: var(--muted);
-    width: 100%;
+    background: transparent; border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 14px; font-size: 0.95rem; font-weight: 600; cursor: pointer;
+    color: var(--muted); width: 100%;
   }
 
-  .saved-msg {
-    text-align: center;
-    color: var(--work);
-    font-weight: 700;
-    padding: 8px;
-    display: none;
-  }
-
-  /* ── HISTORY LOG ── */
-  .history-section {
-    background: var(--surface);
-    border-radius: var(--radius);
-    padding: 16px;
-    border: 1px solid var(--border);
-    display: none;
-  }
-  .history-section.visible { display: block; }
-  .history-section h3 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 12px; }
+  /* ── HISTORY ── */
   .history-entry {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 0.85rem;
+    display: flex; justify-content: space-between; gap: 8px;
+    padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.83rem;
   }
   .history-entry:last-child { border-bottom: none; }
-  .history-date { color: var(--muted); }
+  .history-date { color: var(--muted); white-space: nowrap; }
+
+  .hidden { display: none !important; }
 
   /* ── COUNTDOWN OVERLAY ── */
   .countdown-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-    display: none;
+    position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+    flex-direction: column; align-items: center; justify-content: center;
+    z-index: 100; display: none;
   }
   .countdown-overlay.visible { display: flex; }
-  .countdown-number {
-    font-size: 8rem;
-    font-weight: 900;
-    animation: countPop 1s ease;
-  }
+  .countdown-number { font-size: 8rem; font-weight: 900; animation: countPop 1s ease; }
   .countdown-text { color: var(--muted); font-size: 1rem; margin-top: 16px; }
   @keyframes countPop {
     0% { transform: scale(1.5); opacity: 0; }
@@ -358,54 +309,56 @@
 <div class="screen active" id="startScreen">
   <div class="app-title">
     <h1>💪 Mike's Training</h1>
-    <div class="subtitle">45 Min · Bodyweight · Kein Equipment</div>
+    <div class="subtitle">Minimum Effective Dose · Bodyweight · ~20 Min</div>
   </div>
 
-  <div>
-    <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:10px;">Wähle deinen Tag</div>
-    <div class="day-selector">
-      <button class="day-btn" id="day1Btn" onclick="selectDay(1)">
-        <div class="day-icon">🏃</div>
-        <div class="day-label">Tag 1</div>
-        <div class="day-desc">Steady State<br>Konstantes Cardio</div>
+  <div class="week-stats">
+    <div class="week-stat">
+      <div class="val" id="weekCount">0<span style="font-size:0.9rem;color:var(--muted)">/3</span></div>
+      <div class="lbl">Diese Woche</div>
+    </div>
+    <div class="week-stat">
+      <div class="val" id="streakCount">0</div>
+      <div class="lbl">Wochen-Streak</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Heutiges Workout</h3>
+    <div class="template-chips">
+      <button class="tpl-chip" id="tplA" onclick="selectTemplate('A')">
+        <div class="tpl-letter">A</div><div class="tpl-name">Klassisch</div>
       </button>
-      <button class="day-btn day2" id="day2Btn" onclick="selectDay(2)">
-        <div class="day-icon">⚡</div>
-        <div class="day-label">Tag 2</div>
-        <div class="day-desc">HIIT<br>Intervall-Cardio</div>
+      <button class="tpl-chip" id="tplB" onclick="selectTemplate('B')">
+        <div class="tpl-letter">B</div><div class="tpl-name">Exzentrisch</div>
+      </button>
+      <button class="tpl-chip" id="tplC" onclick="selectTemplate('C')">
+        <div class="tpl-letter">C</div><div class="tpl-name">Volumen</div>
       </button>
     </div>
-  </div>
-
-  <div class="workout-preview">
-    <h3>Workout-Überblick</h3>
-    <div class="preview-row">
-      <span>Warm-Up</span>
-      <span class="section-time">3 Min</span>
-    </div>
-    <div class="preview-row">
-      <span>Superset 1 · Squats + Push-ups</span>
-      <span class="section-time">12 Min</span>
-    </div>
-    <div class="preview-row">
-      <span>Superset 2 · Lunges/Bridges + Rows</span>
-      <span class="section-time">12 Min</span>
-    </div>
-    <div class="preview-row">
-      <span>Core Finisher · Plank</span>
-      <span class="section-time">3 Min</span>
-    </div>
-    <div class="preview-row" id="cardioPreviewRow">
-      <span id="cardioPreviewName">Cardio – wähle Tag</span>
-      <span class="section-time">15 Min</span>
+    <div class="tpl-desc" id="tplDesc"></div>
+    <div class="toggle-row">
+      <div>
+        <div class="toggle-label">🔥 Cardio-Finisher</div>
+        <div class="toggle-sub">10 Min Intervalle (8× 20s Vollgas / 40s locker)</div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="cardioToggle" onchange="onCardioToggle()">
+        <span class="slider-toggle"></span>
+      </label>
     </div>
   </div>
 
-  <button class="start-btn" id="startBtn" disabled onclick="startWorkout()">
-    Tag wählen ↑
-  </button>
+  <div class="est-time" id="estTime"></div>
 
-  <div class="history-section" id="historySection">
+  <button class="start-btn" id="startBtn" onclick="startWorkout()">▶ Workout starten</button>
+
+  <div class="card">
+    <button class="levels-toggle-btn" onclick="toggleLevels()" id="levelsToggleBtn">⚙️ Deine Levels anzeigen ▾</button>
+    <div id="levelsList" class="hidden"></div>
+  </div>
+
+  <div class="card hidden" id="historySection">
     <h3>Letzte Workouts</h3>
     <div id="historyList"></div>
   </div>
@@ -418,7 +371,8 @@
 <div class="screen" id="workoutScreen">
   <div class="workout-header">
     <div class="section-label" id="sectionLabel">–</div>
-    <div class="overall-time" id="overallTime">45:00</div>
+    <div class="overall-time" id="overallTime">⏱ 00:00</div>
+    <button class="abort-btn" onclick="abortWorkout()" title="Abbrechen">✕</button>
   </div>
 
   <div class="progress-bar-outer">
@@ -427,7 +381,7 @@
 
   <div class="timer-ring-wrap">
     <div class="ring-container">
-      <svg width="240" height="240" viewBox="0 0 240 240">
+      <svg viewBox="0 0 240 240">
         <circle class="ring-bg" cx="120" cy="120" r="108"/>
         <circle class="ring-progress" id="ringProgress" cx="120" cy="120" r="108"
           stroke-dasharray="678.58" stroke-dashoffset="0" stroke="var(--work)"/>
@@ -440,8 +394,15 @@
   </div>
 
   <div class="exercise-card" id="exerciseCard">
+    <div class="level-chip hidden" id="levelChip"></div>
     <div class="exercise-name" id="exerciseName">–</div>
+    <div class="exercise-target" id="exerciseTarget"></div>
     <div class="exercise-detail" id="exerciseDetail"></div>
+    <div class="rep-stepper" id="repStepper">
+      <button class="stepper-btn" onclick="stepReps(-1)">−</button>
+      <div class="stepper-value" id="stepperValue">12<small id="stepperUnit">WDH</small></div>
+      <button class="stepper-btn" onclick="stepReps(1)">+</button>
+    </div>
   </div>
 
   <div class="next-up" id="nextUp">
@@ -450,9 +411,9 @@
   </div>
 
   <div class="controls">
-    <button class="ctrl-btn audio-btn" id="audioBtn" onclick="toggleAudio()">🔊</button>
-    <button class="ctrl-btn primary" id="pauseBtn" onclick="togglePause()">⏸ Pause</button>
-    <button class="ctrl-btn skip" onclick="skipPhase()">Überspringen ⏭</button>
+    <button class="ctrl-btn icon-btn" id="audioBtn" onclick="toggleAudio()">🔊</button>
+    <button class="ctrl-btn icon-btn" id="pauseBtn" onclick="togglePause()">⏸</button>
+    <button class="ctrl-btn primary" id="primaryBtn" onclick="primaryAction()">–</button>
   </div>
 </div>
 
@@ -464,7 +425,7 @@
   <div class="complete-header">
     <div class="trophy">🏆</div>
     <h2>Workout Done!</h2>
-    <p id="completeSub">Tag 1 · Steady State</p>
+    <p id="completeSub">–</p>
   </div>
 
   <div class="stats-row">
@@ -473,110 +434,193 @@
       <div class="stat-label">Dauer</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value" id="statDay">–</div>
-      <div class="stat-label">Workout-Typ</div>
+      <div class="stat-value" id="statSets">–</div>
+      <div class="stat-label">Harte Sätze</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="statWeek">–</div>
+      <div class="stat-label">Diese Woche</div>
     </div>
   </div>
 
-  <div class="rep-log-section">
-    <h3>Wiederholungen loggen (optional)</h3>
-    <div class="rep-row">
-      <span class="rep-ex-name">Kniebeugen (Squats)</span>
-      <span class="rep-sets">3 Sätze</span>
-      <input type="number" class="rep-input" id="reps_squats" placeholder="–" min="0" max="999">
-    </div>
-    <div class="rep-row">
-      <span class="rep-ex-name">Liegestütze (Push-ups)</span>
-      <span class="rep-sets">3 Sätze</span>
-      <input type="number" class="rep-input" id="reps_pushups" placeholder="–" min="0" max="999">
-    </div>
-    <div class="rep-row">
-      <span class="rep-ex-name">Reverse Lunges/Glute Bridges</span>
-      <span class="rep-sets">3 Sätze</span>
-      <input type="number" class="rep-input" id="reps_lunges" placeholder="–" min="0" max="999">
-    </div>
-    <div class="rep-row">
-      <span class="rep-ex-name">Türrahmen-Rudern</span>
-      <span class="rep-sets">3 Sätze</span>
-      <input type="number" class="rep-input" id="reps_rows" placeholder="–" min="0" max="999">
-    </div>
-  </div>
+  <div class="levelup-list" id="levelupList"></div>
 
-  <button class="save-btn" onclick="saveLog()">💾 Workout speichern</button>
-  <div class="saved-msg" id="savedMsg">✅ Gespeichert!</div>
-  <button class="restart-btn" onclick="goHome()">← Neues Workout starten</button>
+  <div class="saved-msg">✅ Automatisch gespeichert</div>
+  <button class="restart-btn" onclick="goHome()">← Zurück zum Start</button>
 </div>
 
 
 <script>
+'use strict';
+// ══════════════════════════════════════════
+// CONFIG · Evidence-based minimum effective dose:
+// ~4 harte Sätze pro Muskelgruppe/Woche nahe am Muskelversagen (Iversen 2021),
+// Antagonisten-Supersets + 60s Pausen für Zeiteffizienz,
+// mechanische Progression (Level-Leitern) + Double Progression.
+// ══════════════════════════════════════════
+const CIRCUMFERENCE = 2 * Math.PI * 108;
+const FAST = new URLSearchParams(location.search).has('fast');
+const T = s => FAST ? Math.max(2, Math.round(s * 0.1)) : s;
+
+const PATTERNS = ['push', 'pull', 'squat', 'hinge', 'core'];
+
+const LADDERS = {
+  push: { label: 'Push (Brust/Schulter)', levels: [
+    { name: 'Wand-Liegestütze', detail: 'Hände schulterbreit an der Wand · Körper gerade · langsam zur Wand', unit: 'reps' },
+    { name: 'Erhöhte Liegestütze', detail: 'Hände auf Tisch/Sofalehne · Körperspannung · Brust zur Kante', unit: 'reps' },
+    { name: 'Knie-Liegestütze', detail: 'Knie am Boden · Hüfte gestreckt · Brust fast zum Boden', unit: 'reps' },
+    { name: 'Liegestütze', detail: 'Körper gerade wie ein Brett · Brust zur Matte · Ellbogen ~45°', unit: 'reps' },
+    { name: 'Liegestütze, Füße erhöht', detail: 'Füße auf Stuhl/Sofa · mehr Last auf Brust & Schultern', unit: 'reps' },
+    { name: 'Archer-Liegestütze', detail: 'Sehr breit greifen · zu einer Seite absenken · anderer Arm streckt', unit: 'reps' },
+  ]},
+  pull: { label: 'Pull (Rücken)', levels: [
+    { name: 'Türrahmen-Rudern (steil)', detail: 'Türrahmen greifen · leicht zurücklehnen · Brust zum Rahmen ziehen', unit: 'reps' },
+    { name: 'Türrahmen-Rudern (45°)', detail: 'Füße näher am Rahmen · Körper schräg · kontrolliert ziehen', unit: 'reps' },
+    { name: 'Tisch-Rudern (Knie gebeugt)', detail: 'Unter stabilen Tisch legen · Kante greifen · Brust zur Kante', unit: 'reps' },
+    { name: 'Tisch-Rudern (Beine gestreckt)', detail: 'Körper gerade · Schulterblätter zusammenziehen', unit: 'reps' },
+    { name: 'Tisch-Rudern, Füße erhöht', detail: 'Füße auf Stuhl · noch horizontaler · volle Kontrolle', unit: 'reps' },
+    { name: 'Einarmiges Türrahmen-Rudern', detail: 'Ein Arm · Körper weit zurücklehnen · langsam & stabil', unit: 'reps' },
+  ]},
+  squat: { label: 'Squat (Beine)', levels: [
+    { name: 'Kniebeugen', detail: 'Füße schulterbreit · tief runter · Fersen am Boden', unit: 'reps' },
+    { name: 'Tempo-Kniebeugen', detail: '3 Sek. runter · 1 Sek. Pause unten · explosiv hoch', unit: 'reps' },
+    { name: 'Split Squats', detail: 'Großer Ausfallschritt · hinteres Knie fast zum Boden · pro Seite', unit: 'reps' },
+    { name: 'Bulgarian Split Squats', detail: 'Hinterer Fuß auf Stuhl/Sofa · aufrecht bleiben · pro Seite', unit: 'reps' },
+    { name: 'Pistol-Progression (Stuhl)', detail: 'Einbeinig auf Stuhl absetzen & wieder aufstehen · pro Seite', unit: 'reps' },
+    { name: 'Pistol Squats (assistiert)', detail: 'Einbeinig · am Türrahmen leicht festhalten · pro Seite', unit: 'reps' },
+  ]},
+  hinge: { label: 'Hinge (Gesäß/Rücken)', levels: [
+    { name: 'Glute Bridges', detail: 'Rücken am Boden · Becken hoch · Gesäß oben fest anspannen', unit: 'reps' },
+    { name: 'Hip Thrusts (Sofa)', detail: 'Schultern auf Sofakante · Hüfte voll strecken · oben 1 Sek. halten', unit: 'reps' },
+    { name: 'Einbeinige Glute Bridges', detail: 'Ein Bein gestreckt · Becken gerade halten · pro Seite', unit: 'reps' },
+    { name: 'Einbeinige Hip Thrusts', detail: 'Schultern erhöht · ein Bein · Hüfte voll strecken · pro Seite', unit: 'reps' },
+    { name: 'Single-Leg RDL', detail: 'Einbeinig · Oberkörper kippt nach vorn · Rücken gerade · pro Seite', unit: 'reps' },
+    { name: 'Slider Leg Curls', detail: 'Handtuch unter Fersen · Brücke halten · Beine ausfahren & ranziehen', unit: 'reps' },
+  ]},
+  core: { label: 'Core (Rumpf)', levels: [
+    { name: 'Plank (Knie)', detail: 'Unterarmstütz auf Knien · Bauch fest · nicht durchhängen', unit: 'sec' },
+    { name: 'Plank', detail: 'Unterarmstütz · Körper gerade · Gesäß & Bauch anspannen', unit: 'sec' },
+    { name: 'Plank mit Reach', detail: 'Im Stütz abwechselnd Arm nach vorn strecken · Hüfte ruhig', unit: 'sec' },
+    { name: 'Side Plank', detail: 'Seitstütz · Hüfte hoch · auf halber Zeit Seite wechseln', unit: 'sec' },
+    { name: 'Hollow Hold', detail: 'Rücken in den Boden drücken · Arme & Beine schweben lassen', unit: 'sec' },
+    { name: 'V-Ups', detail: 'Gestreckt liegen · Hände & Füße treffen sich oben · kontrolliert', unit: 'reps' },
+  ]},
+};
+
+const TEMPLATES = {
+  A: { name: 'Klassisch', reps: [8, 15], holdSec: 40,
+       tempo: 'Kontrolliert: 2 Sek. runter, zügig hoch',
+       desc: '<strong>8–15 Wdh</strong> pro Satz, kontrolliertes Tempo. Jeder Satz bis <strong>1–2 Wdh vor Muskelversagen</strong>.' },
+  B: { name: 'Exzentrisch', reps: [6, 10], holdSec: 30,
+       tempo: 'Langsam: 4 Sek. runter, explosiv hoch',
+       desc: '<strong>6–10 Wdh</strong>, betont langsames Absenken (4 Sek.). Maximale Muskelspannung pro Wdh.' },
+  C: { name: 'Volumen', reps: [12, 20], holdSec: 55,
+       tempo: 'Flüssiges Tempo · keine Pause oben',
+       desc: '<strong>12–20 Wdh</strong>, flüssiges Tempo, kurze Sätze bis zum Brennen. Muskelausdauer & Pump.' },
+};
+const TEMPLATE_ORDER = ['A', 'B', 'C'];
+
+const DEFAULT_LEVELS = { push: 4, pull: 2, squat: 3, hinge: 1, core: 3 };
+const REST_SEC = 60;
+const CORE_REST_SEC = 45;
+const WORK_EST_SEC = 40; // Schätzung pro Wdh-Satz für die Fortschrittsanzeige
+
+// ══════════════════════════════════════════
+// STORAGE
+// ══════════════════════════════════════════
+const LS_LOG = 'mikeTrainingLog';
+const LS_LEVELS = 'mikeTrainingLevels';
+const LS_PREFS = 'mikeTrainingPrefs';
+
+function loadJSON(key, fallback) {
+  try { return JSON.parse(localStorage.getItem(key)) ?? fallback; }
+  catch (e) { return fallback; }
+}
+const saveJSON = (key, val) => localStorage.setItem(key, JSON.stringify(val));
+
+let levels = Object.assign({}, DEFAULT_LEVELS, loadJSON(LS_LEVELS, {}));
+let prefs = Object.assign({ cardio: true, nextTemplate: 'A' }, loadJSON(LS_PREFS, {}));
+
 // ══════════════════════════════════════════
 // WORKOUT BUILDER
 // ══════════════════════════════════════════
-const CIRCUMFERENCE = 2 * Math.PI * 108; // r=108
-
-function buildWorkout(day) {
+function buildWorkout(tplKey, withCardio) {
+  const tpl = TEMPLATES[tplKey];
   const phases = [];
+  const add = p => phases.push(p);
 
-  const add = (name, type, duration, section, detail = '', logKey = null) =>
-    phases.push({ name, type, duration, section, detail, logKey });
+  // Ramp-up (2 min): dient zugleich als exercise-spezifisches Aufwärmen
+  add({ kind: 'warmup', dur: T(60), name: 'Hampelmänner', section: 'Warm-Up 1/2',
+        detail: 'Locker aufwärmen · Puls leicht hoch' });
+  add({ kind: 'warmup', dur: T(60), name: 'Ausfallschritte + Armkreisen', section: 'Warm-Up 2/2',
+        detail: 'Dynamisch · große Bewegungen · Gelenke mobilisieren' });
 
-  // WARM-UP
-  add('Hampelmänner (Jumping Jacks)', 'work', 60, 'Warm-Up', 'Lockeres Aufwärmen · locker bleiben');
-  add('Kniebeugen + Armkreisen', 'work', 120, 'Warm-Up', 'Tief in die Hocke · Arme weit kreisen · Mobilität aktivieren');
-
-  // SUPERSET 1 (3 rounds × 240s = 12 min)
-  for (let r = 1; r <= 3; r++) {
-    add('Kniebeugen (Squats)', 'work', 60, `Superset 1 · Runde ${r}/3`,
-      '3 Sek. langsam runter · 1 Sek. explosiv hoch · 10–15 Wdh', 'squats');
-    add('Push-Ups aufbauen…', 'transition', 15, `Superset 1 · Runde ${r}/3`, 'Position wechseln');
-    add('Liegestütze (Push-ups)', 'work', 60, `Superset 1 · Runde ${r}/3`,
-      'Körper gerade · volle Bewegung · Brust zur Matte', 'pushups');
-    add(r < 3 ? 'Pause' : 'Superset 1 geschafft! 🎉', 'rest', 90,
-      `Superset 1 · Pause ${r}/3`, 'Durchatmen · Nächste Runde vorbereiten');
-  }
-
-  // SUPERSET 2 (3 rounds × 240s = 12 min)
-  const ss2A = ['Ausfallschritte rückwärts (Reverse Lunges)', 'Beckenheben (Glute Bridges)', 'Ausfallschritte rückwärts (Reverse Lunges)'];
-  const ss2ADetail = [
-    'Rücken gerade · Knie fast zum Boden · Wechsel-Beine · 10–15 Wdh pro Seite',
-    'Füße hüftbreit · Becken oben halten · Gesäß anspannen · 15 Wdh',
-    'Rücken gerade · Knie fast zum Boden · Wechsel-Beine · 10–15 Wdh pro Seite'
+  // Kraftblock: 2 Antagonisten-Supersets à 2 Sätze, dann Core
+  const pairs = [
+    { label: 'Superset 1', patterns: ['push', 'pull'] },
+    { label: 'Superset 2', patterns: ['squat', 'hinge'] },
   ];
-  for (let r = 1; r <= 3; r++) {
-    add(ss2A[r-1], 'work', 60, `Superset 2 · Runde ${r}/3`, ss2ADetail[r-1], 'lunges');
-    add('Türrahmen-Rudern aufbauen…', 'transition', 15, `Superset 2 · Runde ${r}/3`, 'Position wechseln');
-    add('Türrahmen-Rudern (Doorframe Rows)', 'work', 60, `Superset 2 · Runde ${r}/3`,
-      'Türrahmen greifen · Körper schräg zurück · Brust zur Tür ziehen', 'rows');
-    add(r < 3 ? 'Pause' : 'Superset 2 geschafft! 🔥', 'rest', 90,
-      `Superset 2 · Pause ${r}/3`, 'Arme ausschütteln · Schultern lockern');
-  }
-
-  // CORE FINISHER (2 rounds × 90s = 3 min)
-  for (let r = 1; r <= 2; r++) {
-    add('Plank mit Reach', 'work', 60, `Core Finisher · Runde ${r}/2`,
-      'Unterarmstütz · Hüfte tief · abwechselnd Arm nach vorne strecken');
-    add(r < 2 ? 'Pause' : 'Kraftteil abgeschlossen! 💪', 'rest', 30,
-      `Core · Pause ${r}/2`, 'Kurz verschnaufen');
-  }
-
-  // CARDIO
-  if (day === 1) {
-    add('Steady State Laufen 🏃', 'cardio', 900, 'Cardio – Tag 1',
-      '15 Min konstantes Tempo · moderat · Atemrhythmus halten');
-  } else {
-    add('Einlaufen (Jogging)', 'cardio', 180, 'Cardio – HIIT Tag 2', 'Lockeres Tempo · Körper auf Betriebstemperatur bringen');
-    for (let r = 1; r <= 6; r++) {
-      add('SPRINT! ⚡', 'work', 60, `HIIT · Runde ${r}/6`, 'Maximale Intensität! Voller Einsatz!');
-      add('Gehen (Erholung)', 'rest', 60, `HIIT · Runde ${r}/6`, 'Aktive Erholung · Puls senken');
+  for (const pair of pairs) {
+    for (let set = 1; set <= 2; set++) {
+      for (const p of pair.patterns) {
+        const lvl = levels[p];
+        const ex = LADDERS[p].levels[lvl - 1];
+        add({ kind: 'work-reps', pattern: p, set, name: ex.name,
+              section: `${pair.label} · Satz ${set}/2`,
+              detail: `${ex.detail} · ${tpl.tempo}`,
+              target: `${tpl.reps[0]}–${tpl.reps[1]} Wdh · 1–2 in Reserve`,
+              level: lvl });
+        add({ kind: 'rest', dur: T(REST_SEC), name: 'Pause', section: `${pair.label} · Satz ${set}/2`,
+              detail: 'Wdh eintragen · dann „Weiter" wenn bereit',
+              logFor: { pattern: p, set, unit: 'reps' } });
+      }
     }
-    add('Auslaufen (Cool-down)', 'cardio', 120, 'Cardio – Auslaufen', 'Sehr ruhiges Tempo · Puls runterbringen');
+  }
+
+  // Core: 2 Sätze (Halten = Zeit, V-Ups = Wdh)
+  const coreLvl = levels.core;
+  const coreEx = LADDERS.core.levels[coreLvl - 1];
+  for (let set = 1; set <= 2; set++) {
+    if (coreEx.unit === 'sec') {
+      add({ kind: 'work-time', pattern: 'core', set, dur: T(tpl.holdSec), name: coreEx.name,
+            section: `Core · Satz ${set}/2`, detail: coreEx.detail,
+            target: `${tpl.holdSec} Sek. halten`, level: coreLvl });
+      add({ kind: 'rest', dur: T(CORE_REST_SEC), name: 'Pause', section: `Core · Satz ${set}/2`,
+            detail: 'Wie lange gehalten? Eintragen · dann „Weiter"',
+            logFor: { pattern: 'core', set, unit: 'sec', full: tpl.holdSec } });
+    } else {
+      add({ kind: 'work-reps', pattern: 'core', set, name: coreEx.name,
+            section: `Core · Satz ${set}/2`, detail: `${coreEx.detail} · ${tpl.tempo}`,
+            target: `${tpl.reps[0]}–${tpl.reps[1]} Wdh · 1–2 in Reserve`, level: coreLvl });
+      add({ kind: 'rest', dur: T(CORE_REST_SEC), name: 'Pause', section: `Core · Satz ${set}/2`,
+            detail: 'Wdh eintragen · dann „Weiter"',
+            logFor: { pattern: 'core', set, unit: 'reps' } });
+    }
+  }
+
+  // Optionaler Cardio-Finisher (10 Min HIIT — zeiteffizienter als Steady State)
+  if (withCardio) {
+    add({ kind: 'cardio-easy', dur: T(60), name: 'Locker einlaufen 🏃', section: 'Cardio-Finisher',
+          detail: 'Lockeres Traben / auf der Stelle laufen' });
+    for (let r = 1; r <= 8; r++) {
+      add({ kind: 'cardio-hard', dur: T(20), name: 'VOLLGAS! ⚡', section: `HIIT · Runde ${r}/8`,
+            detail: 'Sprint auf der Stelle / High Knees / Burpees – maximale Intensität!' });
+      add({ kind: 'cardio-easy', dur: T(40), name: 'Locker (Erholung)', section: `HIIT · Runde ${r}/8`,
+            detail: 'Gehen · Atmung kontrollieren' });
+    }
+    add({ kind: 'cardio-easy', dur: T(60), name: 'Auslaufen', section: 'Cool-down',
+          detail: 'Sehr ruhiges Tempo · Puls runterbringen' });
   }
 
   return phases;
 }
 
+function estimateSec(phases) {
+  return phases.reduce((s, p) => s + (p.dur || T(WORK_EST_SEC)), 0);
+}
+
 // ══════════════════════════════════════════
-// AUDIO ENGINE (Web Audio API)
+// AUDIO + VIBRATION
 // ══════════════════════════════════════════
 let audioCtx = null;
 let audioEnabled = true;
@@ -600,192 +644,387 @@ function beep(freq, duration, vol = 0.3, type = 'sine') {
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
     osc.start(ctx.currentTime);
     osc.stop(ctx.currentTime + duration);
-  } catch(e) {}
+  } catch (e) {}
 }
+
+const vibrate = pattern => { try { navigator.vibrate && navigator.vibrate(pattern); } catch (e) {} };
 
 function playStartCue() {
-  beep(440, 0.1, 0.3);
-  setTimeout(() => beep(550, 0.1, 0.3), 120);
-  setTimeout(() => beep(660, 0.2, 0.4), 240);
+  beep(440, 0.1, 0.3); setTimeout(() => beep(550, 0.1, 0.3), 120); setTimeout(() => beep(660, 0.2, 0.4), 240);
+  vibrate([120, 60, 120]);
 }
-
 function playRestCue() {
-  beep(550, 0.15, 0.25);
-  setTimeout(() => beep(440, 0.3, 0.2), 150);
+  beep(550, 0.15, 0.25); setTimeout(() => beep(440, 0.3, 0.2), 150);
+  vibrate(80);
 }
-
 function playCountdownBeep(n) {
-  if (n === 0) {
-    beep(880, 0.4, 0.5, 'square');
-  } else {
-    beep(330, 0.15, 0.2);
-  }
+  if (n === 0) { beep(880, 0.4, 0.5, 'square'); vibrate(200); }
+  else { beep(330, 0.15, 0.2); vibrate(40); }
+}
+function playCompleteCue() {
+  [0, 150, 300, 500].forEach((t, i) => setTimeout(() => beep([523, 659, 784, 1047][i], 0.3, 0.4), t));
+  vibrate([150, 80, 150, 80, 300]);
 }
 
-function playCompleteCue() {
-  [0, 150, 300, 500].forEach((t, i) => {
-    setTimeout(() => beep([523, 659, 784, 1047][i], 0.3, 0.4), t);
-  });
+// ══════════════════════════════════════════
+// WAKE LOCK (verhindert Display-Sleep / Energiesparmodus)
+// ══════════════════════════════════════════
+let wakeLock = null;
+let workoutActive = false;
+
+async function acquireWakeLock() {
+  if (!('wakeLock' in navigator)) return;
+  try { wakeLock = await navigator.wakeLock.request('screen'); } catch (e) {}
 }
+function releaseWakeLock() {
+  if (wakeLock) { try { wakeLock.release(); } catch (e) {} wakeLock = null; }
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    if (workoutActive) {
+      acquireWakeLock();
+      tick(); // Timer sofort mit Echtzeit abgleichen
+    }
+    if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  }
+});
 
 // ══════════════════════════════════════════
 // STATE
 // ══════════════════════════════════════════
 let workout = [];
 let currentIdx = 0;
-let timeLeft = 0;
-let totalDuration = 0;
-let elapsedTotal = 0;
+let phaseEndsAt = null;     // Countdown-Phasen: Epoch-ms, wann die Phase endet
+let phaseStartedAt = null;  // Wdh-Phasen: Epoch-ms Start (Stoppuhr)
+let lastShownSec = null;
 let isPaused = false;
+let pauseStartedAt = null;
 let timerInterval = null;
-let selectedDay = null;
+let selectedTemplate = prefs.nextTemplate || 'A';
 let workoutStartTime = null;
+let totalEstimate = 1;
+let sessionSets = {};       // { push: [12, 11], ... }
+let stepperVal = 0;
 
 // ══════════════════════════════════════════
 // UI HELPERS
 // ══════════════════════════════════════════
+const $ = id => document.getElementById(id);
+
 function fmtTime(secs) {
+  secs = Math.max(0, Math.round(secs));
   const m = Math.floor(secs / 60).toString().padStart(2, '0');
   const s = (secs % 60).toString().padStart(2, '0');
   return `${m}:${s}`;
 }
 
-function phaseColor(type) {
-  return { work: 'var(--work)', rest: 'var(--rest)', transition: 'var(--transition)', cardio: 'var(--cardio)' }[type] || 'var(--muted)';
-}
-function phaseLabel(type) {
-  return { work: 'AKTIV', rest: 'PAUSE', transition: 'WECHSEL', cardio: 'CARDIO' }[type] || '–';
-}
-function cardClass(type) {
-  return { work: 'work-card', rest: 'rest-card', transition: 'rest-card', cardio: 'cardio-card' }[type] || '';
-}
+const PHASE_STYLE = {
+  'warmup':      { color: 'var(--transition)', label: 'WARM-UP', card: 'warmup-card' },
+  'work-reps':   { color: 'var(--work)',       label: 'AKTIV',   card: 'work-card' },
+  'work-time':   { color: 'var(--work)',       label: 'HALTEN',  card: 'work-card' },
+  'rest':        { color: 'var(--rest)',       label: 'PAUSE',   card: 'rest-card' },
+  'cardio-hard': { color: 'var(--cardio)',     label: 'VOLLGAS', card: 'cardio-card' },
+  'cardio-easy': { color: 'var(--rest)',       label: 'LOCKER',  card: 'rest-card' },
+};
 
-function updateUI() {
+function renderPhase() {
   const phase = workout[currentIdx];
   if (!phase) return;
+  const style = PHASE_STYLE[phase.kind];
 
-  // Section / overall time
-  document.getElementById('sectionLabel').textContent = phase.section;
-  const remaining = totalDuration - elapsedTotal - (workout[currentIdx].duration - timeLeft);
-  document.getElementById('overallTime').textContent = fmtTime(Math.max(0, remaining));
+  $('sectionLabel').textContent = phase.section;
 
-  // Progress bar
-  const elapsed = totalDuration - remaining;
-  document.getElementById('progressBar').style.width = `${Math.min(100, (elapsed / totalDuration) * 100)}%`;
+  const ring = $('ringProgress');
+  ring.style.stroke = style.color;
 
-  // Ring
-  const progress = timeLeft / phase.duration;
-  const offset = CIRCUMFERENCE * (1 - progress);
-  const ring = document.getElementById('ringProgress');
-  ring.style.strokeDashoffset = offset;
-  ring.style.stroke = phaseColor(phase.type);
+  const badge = $('phaseBadge');
+  badge.textContent = style.label;
+  badge.style.background = 'rgba(255,255,255,0.06)';
+  badge.style.color = style.color;
 
-  // Timer
-  const timerEl = document.getElementById('ringTimer');
-  timerEl.textContent = fmtTime(timeLeft);
+  const card = $('exerciseCard');
+  card.className = `exercise-card ${style.card}`;
+  $('exerciseName').textContent = phase.name;
+  $('exerciseDetail').textContent = phase.detail || '';
+  $('exerciseTarget').textContent = phase.target || '';
 
-  // Phase badge
-  const badge = document.getElementById('phaseBadge');
-  badge.textContent = phaseLabel(phase.type);
-  badge.style.background = phaseColor(phase.type) + '33';
-  badge.style.color = phaseColor(phase.type);
+  const chip = $('levelChip');
+  if (phase.level) {
+    chip.textContent = `LEVEL ${phase.level}/6`;
+    chip.classList.remove('hidden');
+  } else {
+    chip.classList.add('hidden');
+  }
 
-  // Exercise card
-  const card = document.getElementById('exerciseCard');
-  card.className = `exercise-card ${cardClass(phase.type)}`;
-  document.getElementById('exerciseName').textContent = phase.name;
-  document.getElementById('exerciseDetail').textContent = phase.detail;
+  // Stepper nur in Pausen mit Log-Aufgabe
+  const stepper = $('repStepper');
+  if (phase.kind === 'rest' && phase.logFor) {
+    const lf = phase.logFor;
+    stepperVal = prefillReps(lf);
+    $('stepperUnit').textContent = lf.unit === 'sec' ? 'SEK' : 'WDH';
+    $('stepperValue').firstChild.textContent = stepperVal;
+    stepper.classList.add('visible');
+    commitReps(); // Default sofort übernehmen, falls Pause durchläuft
+  } else {
+    stepper.classList.remove('visible');
+  }
 
-  // Next up
+  // Nächste Übung
   const next = workout[currentIdx + 1];
-  document.getElementById('nextName').textContent = next ? next.name : '🎉 Fertig!';
+  $('nextName').textContent = next ? next.name : '🎉 Fertig!';
 
-  // Flash on low time
-  if (timeLeft <= 3 && timeLeft > 0) {
-    timerEl.classList.add('flash');
-    setTimeout(() => timerEl.classList.remove('flash'), 300);
+  // Primär-Button
+  const btn = $('primaryBtn');
+  if (phase.kind === 'work-reps') {
+    btn.textContent = '✓ Fertig';
+    btn.className = 'ctrl-btn primary';
+  } else if (phase.kind === 'rest') {
+    btn.textContent = 'Weiter →';
+    btn.className = 'ctrl-btn primary rest-mode';
+  } else {
+    btn.textContent = 'Überspringen ⏭';
+    btn.className = 'ctrl-btn primary';
   }
 }
 
-// ══════════════════════════════════════════
-// TIMER ENGINE
-// ══════════════════════════════════════════
-function tick() {
-  if (isPaused) return;
+function renderTimer() {
+  const phase = workout[currentIdx];
+  if (!phase) return;
+  const now = Date.now();
+  const timerEl = $('ringTimer');
+  const ring = $('ringProgress');
 
-  if (timeLeft <= 3 && timeLeft > 0) playCountdownBeep(timeLeft);
-  if (timeLeft === 0) {
-    playCountdownBeep(0);
+  if (phase.dur) {
+    const remaining = Math.max(0, Math.ceil((phaseEndsAt - now) / 1000));
+    timerEl.textContent = fmtTime(remaining);
+    ring.style.strokeDashoffset = CIRCUMFERENCE * (1 - remaining / phase.dur);
+    if (remaining <= 3 && remaining > 0 && remaining !== lastShownSec) {
+      timerEl.classList.add('flash');
+      setTimeout(() => timerEl.classList.remove('flash'), 300);
+    }
+  } else {
+    const elapsed = Math.floor((now - phaseStartedAt) / 1000);
+    timerEl.textContent = fmtTime(elapsed);
+    ring.style.strokeDashoffset = 0; // voller Ring: kein Countdown, du bestimmst das Tempo
   }
 
-  if (timeLeft <= 0) {
-    elapsedTotal += workout[currentIdx].duration;
-    currentIdx++;
-    if (currentIdx >= workout.length) {
-      finishWorkout();
+  // Gesamtzeit (verstrichene Zeit) + Fortschritt
+  const elapsedTotal = (now - workoutStartTime) / 1000;
+  $('overallTime').textContent = '⏱ ' + fmtTime(elapsedTotal);
+  const done = workout.slice(0, currentIdx).reduce((s, p) => s + (p.dur || T(WORK_EST_SEC)), 0);
+  const curEst = phase.dur || T(WORK_EST_SEC);
+  const curProgress = phase.dur
+    ? curEst - Math.max(0, (phaseEndsAt - now) / 1000)
+    : Math.min(curEst, (now - phaseStartedAt) / 1000);
+  $('progressBar').style.width = `${Math.min(100, ((done + curProgress) / totalEstimate) * 100)}%`;
+}
+
+// ══════════════════════════════════════════
+// TIMER ENGINE (Zeitstempel-basiert, drift- & throttle-fest)
+// ══════════════════════════════════════════
+function enterPhase(idx, startAt) {
+  currentIdx = idx;
+  const phase = workout[currentIdx];
+  if (!phase) return;
+  lastShownSec = null;
+  if (phase.dur) {
+    phaseEndsAt = startAt + phase.dur * 1000;
+    phaseStartedAt = null;
+  } else {
+    phaseStartedAt = Math.max(startAt, Date.now());
+    phaseEndsAt = null;
+  }
+  renderPhase();
+  renderTimer();
+}
+
+function cueForPhase(phase) {
+  if (!phase) return;
+  if (phase.kind === 'rest' || phase.kind === 'cardio-easy') playRestCue();
+  else playStartCue();
+}
+
+function advancePhase(boundaryTime) {
+  const from = workout[currentIdx];
+  const nextIdx = currentIdx + 1;
+  if (nextIdx >= workout.length) { finishWorkout(); return; }
+  enterPhase(nextIdx, boundaryTime);
+  cueForPhase(workout[nextIdx]);
+}
+
+function tick() {
+  if (isPaused || !workoutActive) return;
+  const phase = workout[currentIdx];
+  if (!phase) return;
+  const now = Date.now();
+
+  if (phase.dur) {
+    const remaining = Math.ceil((phaseEndsAt - now) / 1000);
+    if (remaining !== lastShownSec) {
+      if (remaining >= 1 && remaining <= 3) playCountdownBeep(remaining);
+      lastShownSec = remaining;
+    }
+    if (remaining <= 0) {
+      playCountdownBeep(0);
+      // Verpasste Phasen nachholen (z.B. wenn der Tab im Hintergrund war):
+      // Kette abgelaufener Countdown-Phasen überspringen, Grenzen sauber addieren.
+      let boundary = phaseEndsAt;
+      let idx = currentIdx + 1;
+      while (idx < workout.length && workout[idx].dur && boundary + workout[idx].dur * 1000 <= now) {
+        boundary += workout[idx].dur * 1000;
+        idx++;
+      }
+      if (idx >= workout.length) { finishWorkout(); return; }
+      enterPhase(idx, boundary);
+      cueForPhase(workout[idx]);
       return;
     }
-    timeLeft = workout[currentIdx].duration;
-    const type = workout[currentIdx].type;
-    if (type === 'work' || type === 'cardio') playStartCue();
-    else playRestCue();
-  } else {
-    timeLeft--;
   }
-
-  updateUI();
+  renderTimer();
 }
 
 function startTimer() {
   if (timerInterval) clearInterval(timerInterval);
-  timerInterval = setInterval(tick, 1000);
+  timerInterval = setInterval(tick, 250);
 }
 
 function togglePause() {
+  if (!workoutActive) return;
   isPaused = !isPaused;
-  document.getElementById('pauseBtn').textContent = isPaused ? '▶ Weiter' : '⏸ Pause';
-  document.getElementById('pauseBtn').className = isPaused
-    ? 'ctrl-btn primary'
-    : 'ctrl-btn primary';
+  $('pauseBtn').textContent = isPaused ? '▶' : '⏸';
+  if (isPaused) {
+    pauseStartedAt = Date.now();
+  } else {
+    const pausedFor = Date.now() - pauseStartedAt;
+    if (phaseEndsAt) phaseEndsAt += pausedFor;
+    if (phaseStartedAt) phaseStartedAt += pausedFor;
+    workoutStartTime += pausedFor;
+  }
 }
 
-function skipPhase() {
-  elapsedTotal += workout[currentIdx].duration - timeLeft;
-  currentIdx++;
-  if (currentIdx >= workout.length) { finishWorkout(); return; }
-  timeLeft = workout[currentIdx].duration;
-  const type = workout[currentIdx].type;
-  if (type === 'work' || type === 'cardio') playStartCue();
-  else playRestCue();
-  updateUI();
+function primaryAction() {
+  if (!workoutActive || isPaused) return;
+  const phase = workout[currentIdx];
+  if (!phase) return;
+  try { getAudioCtx().resume(); } catch (e) {}
+  advancePhase(Date.now()); // Fertig / Weiter / Überspringen: alle drei = nächste Phase
 }
 
 function toggleAudio() {
   audioEnabled = !audioEnabled;
-  document.getElementById('audioBtn').textContent = audioEnabled ? '🔊' : '🔇';
-  // Resume AudioContext if needed
-  if (audioEnabled && audioCtx && audioCtx.state === 'suspended') {
-    audioCtx.resume();
+  $('audioBtn').textContent = audioEnabled ? '🔊' : '🔇';
+  if (audioEnabled && audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+}
+
+// ══════════════════════════════════════════
+// REP LOGGING (Stepper in der Pause)
+// ══════════════════════════════════════════
+function prefillReps(logFor) {
+  const prev = sessionSets[logFor.pattern];
+  if (prev && prev.length) return prev[prev.length - 1]; // Satz 1 dieser Session
+  if (logFor.unit === 'sec') return logFor.full;         // Halten: voll geschafft als Default
+  const hist = loadJSON(LS_LOG, []);
+  for (const e of hist) {
+    if (e.v === 2 && e.sets && e.sets[logFor.pattern] && e.sets[logFor.pattern].length) {
+      return e.sets[logFor.pattern][0];
+    }
   }
+  const [lo, hi] = TEMPLATES[selectedTemplate].reps;
+  return Math.round((lo + hi) / 2);
+}
+
+function stepReps(delta) {
+  stepperVal = Math.max(0, Math.min(999, stepperVal + delta));
+  $('stepperValue').firstChild.textContent = stepperVal;
+  commitReps();
+}
+
+function commitReps() {
+  const phase = workout[currentIdx];
+  if (!phase || !phase.logFor) return;
+  const { pattern, set } = phase.logFor;
+  if (!sessionSets[pattern]) sessionSets[pattern] = [];
+  sessionSets[pattern][set - 1] = stepperVal;
+}
+
+// ══════════════════════════════════════════
+// PROGRESSION ENGINE (Double Progression)
+// ══════════════════════════════════════════
+function applyProgression(tplKey) {
+  const tpl = TEMPLATES[tplKey];
+  const changes = [];
+  for (const p of PATTERNS) {
+    const vals = (sessionSets[p] || []).filter(v => typeof v === 'number');
+    if (vals.length < 2) continue;
+    const lvl = levels[p];
+    const unit = LADDERS[p].levels[lvl - 1].unit;
+    const top = unit === 'sec' ? tpl.holdSec : tpl.reps[1];
+    const bottom = unit === 'sec' ? Math.round(tpl.holdSec * 0.6) : tpl.reps[0];
+    if (Math.min(...vals) >= top && lvl < 6) {
+      levels[p] = lvl + 1;
+      changes.push({ pattern: p, dir: 'up', newName: LADDERS[p].levels[lvl].name });
+    } else if (Math.max(...vals) < bottom && lvl > 1) {
+      levels[p] = lvl - 1;
+      changes.push({ pattern: p, dir: 'down', newName: LADDERS[p].levels[lvl - 2].name });
+    }
+  }
+  saveJSON(LS_LEVELS, levels);
+  return changes;
+}
+
+// ══════════════════════════════════════════
+// WEEK STATS / STREAK
+// ══════════════════════════════════════════
+function isoWeekKey(ts) {
+  const d = new Date(ts);
+  d.setHours(0, 0, 0, 0);
+  d.setDate(d.getDate() + 3 - ((d.getDay() + 6) % 7)); // Donnerstag der ISO-Woche
+  const week1 = new Date(d.getFullYear(), 0, 4);
+  const week = 1 + Math.round(((d - week1) / 86400000 - 3 + ((week1.getDay() + 6) % 7)) / 7);
+  return `${d.getFullYear()}-W${week}`;
+}
+
+function weekStats() {
+  const hist = loadJSON(LS_LOG, []).filter(e => e.v === 2 && e.ts);
+  const nowKey = isoWeekKey(Date.now());
+  const thisWeek = hist.filter(e => isoWeekKey(e.ts) === nowKey).length;
+  // Streak: aufeinanderfolgende Wochen mit ≥1 Workout, rückwärts ab dieser Woche
+  const weeks = new Set(hist.map(e => isoWeekKey(e.ts)));
+  let streak = 0;
+  const cursor = new Date();
+  if (!weeks.has(isoWeekKey(cursor.getTime()))) cursor.setDate(cursor.getDate() - 7);
+  while (weeks.has(isoWeekKey(cursor.getTime()))) {
+    streak++;
+    cursor.setDate(cursor.getDate() - 7);
+  }
+  return { thisWeek, streak };
 }
 
 // ══════════════════════════════════════════
 // FLOW CONTROL
 // ══════════════════════════════════════════
-function selectDay(day) {
-  selectedDay = day;
-  document.getElementById('day1Btn').classList.toggle('selected', day === 1);
-  document.getElementById('day2Btn').classList.toggle('selected', day === 2);
-  document.getElementById('cardioPreviewName').textContent =
-    day === 1 ? 'Steady State Laufen (15 Min)' : 'HIIT-Intervalle (6 Runden)';
-  const btn = document.getElementById('startBtn');
-  btn.disabled = false;
-  btn.textContent = day === 1 ? '▶ Tag 1 starten' : '▶ Tag 2 starten';
+function selectTemplate(key) {
+  selectedTemplate = key;
+  for (const k of TEMPLATE_ORDER) $('tpl' + k).classList.toggle('selected', k === key);
+  $('tplDesc').innerHTML = TEMPLATES[key].desc;
+  updateEstimate();
+}
+
+function onCardioToggle() {
+  prefs.cardio = $('cardioToggle').checked;
+  saveJSON(LS_PREFS, prefs);
+  updateEstimate();
+}
+
+function updateEstimate() {
+  const est = estimateSec(buildWorkout(selectedTemplate, $('cardioToggle').checked));
+  $('estTime').innerHTML = `Geschätzte Dauer: <strong>~${Math.round(est / 60)} Min</strong>`;
 }
 
 function doCountdown(cb) {
-  const overlay = document.getElementById('countdownOverlay');
-  const numEl = document.getElementById('countdownNumber');
+  const overlay = $('countdownOverlay');
+  const numEl = $('countdownNumber');
   overlay.classList.add('visible');
   let n = 3;
   numEl.textContent = n;
@@ -798,7 +1037,6 @@ function doCountdown(cb) {
       cb();
     } else {
       numEl.textContent = n;
-      // re-trigger animation
       numEl.style.animation = 'none';
       numEl.offsetHeight;
       numEl.style.animation = '';
@@ -808,97 +1046,163 @@ function doCountdown(cb) {
 }
 
 function startWorkout() {
-  if (!selectedDay) return;
-
-  workout = buildWorkout(selectedDay);
-  totalDuration = workout.reduce((s, p) => s + p.duration, 0);
-  currentIdx = 0;
-  timeLeft = workout[0].duration;
-  elapsedTotal = 0;
+  workout = buildWorkout(selectedTemplate, $('cardioToggle').checked);
+  totalEstimate = estimateSec(workout);
+  sessionSets = {};
   isPaused = false;
+  workoutActive = true;
   workoutStartTime = Date.now();
+  $('pauseBtn').textContent = '⏸';
 
-  // Unlock AudioContext on user gesture
-  try { getAudioCtx().resume(); } catch(e) {}
-
+  try { getAudioCtx().resume(); } catch (e) {}
+  acquireWakeLock();
   showScreen('workoutScreen');
 
   doCountdown(() => {
+    workoutStartTime = Date.now();
+    enterPhase(0, Date.now());
     playStartCue();
-    updateUI();
     startTimer();
   });
 }
 
 function finishWorkout() {
   clearInterval(timerInterval);
+  workoutActive = false;
+  releaseWakeLock();
   playCompleteCue();
-  const elapsed = Math.round((Date.now() - workoutStartTime) / 1000);
-  document.getElementById('statDuration').textContent = fmtTime(elapsed);
-  document.getElementById('statDay').textContent = selectedDay === 1 ? 'Tag 1' : 'Tag 2';
-  document.getElementById('completeSub').textContent =
-    selectedDay === 1 ? 'Tag 1 · Steady State Cardio' : 'Tag 2 · HIIT Intervalle';
+
+  const durationSec = Math.round((Date.now() - workoutStartTime) / 1000);
+  const setsDone = Object.values(sessionSets).reduce((s, arr) => s + arr.filter(v => typeof v === 'number').length, 0);
+  const changes = applyProgression(selectedTemplate);
+
+  // Auto-Save
+  const entry = {
+    v: 2, ts: Date.now(),
+    date: new Date().toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' }),
+    template: selectedTemplate,
+    durationSec,
+    cardio: $('cardioToggle').checked,
+    sets: sessionSets,
+    levels: Object.assign({}, levels),
+  };
+  const hist = loadJSON(LS_LOG, []);
+  hist.unshift(entry);
+  saveJSON(LS_LOG, hist.slice(0, 60));
+
+  // Nächstes Template im Zyklus vormerken
+  prefs.nextTemplate = TEMPLATE_ORDER[(TEMPLATE_ORDER.indexOf(selectedTemplate) + 1) % 3];
+  saveJSON(LS_PREFS, prefs);
+
+  // Complete screen
+  const { thisWeek } = weekStats();
+  $('completeSub').textContent = `Workout ${selectedTemplate} · ${TEMPLATES[selectedTemplate].name}`;
+  $('statDuration').textContent = fmtTime(durationSec);
+  $('statSets').textContent = setsDone;
+  $('statWeek').textContent = thisWeek;
+  $('levelupList').innerHTML = changes.map(c => c.dir === 'up'
+    ? `<div class="levelup-item">🎉 Level Up! <strong>${LADDERS[c.pattern].label}</strong> → ${c.newName}</div>`
+    : `<div class="levelup-item leveldown-item">↩️ <strong>${LADDERS[c.pattern].label}</strong> → ${c.newName} (nächstes Mal wieder angreifen!)</div>`
+  ).join('');
+
   showScreen('completeScreen');
+}
+
+function abortWorkout() {
+  if (!confirm('Workout abbrechen? Nichts wird gespeichert.')) return;
+  clearInterval(timerInterval);
+  workoutActive = false;
+  releaseWakeLock();
+  goHome();
 }
 
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+  $(id).classList.add('active');
 }
 
 function goHome() {
   clearInterval(timerInterval);
-  selectedDay = null;
-  document.getElementById('day1Btn').classList.remove('selected');
-  document.getElementById('day2Btn').classList.remove('selected');
-  document.getElementById('startBtn').disabled = true;
-  document.getElementById('startBtn').textContent = 'Tag wählen ↑';
-  document.getElementById('savedMsg').style.display = 'none';
-  loadHistory();
+  workoutActive = false;
+  releaseWakeLock();
+  renderStartScreen();
   showScreen('startScreen');
 }
 
 // ══════════════════════════════════════════
-// HISTORY / LOGGING
+// START SCREEN RENDERING
 // ══════════════════════════════════════════
-function saveLog() {
-  const entry = {
-    date: new Date().toLocaleDateString('de-DE', { day:'2-digit', month:'2-digit', year:'numeric' }),
-    day: selectedDay,
-    duration: Math.round((Date.now() - workoutStartTime) / 1000),
-    reps: {
-      squats: document.getElementById('reps_squats').value || '–',
-      pushups: document.getElementById('reps_pushups').value || '–',
-      lunges: document.getElementById('reps_lunges').value || '–',
-      rows: document.getElementById('reps_rows').value || '–'
-    }
-  };
+let levelsVisible = false;
 
-  const history = JSON.parse(localStorage.getItem('mikeTrainingLog') || '[]');
-  history.unshift(entry);
-  localStorage.setItem('mikeTrainingLog', JSON.stringify(history.slice(0, 30)));
-
-  document.getElementById('savedMsg').style.display = 'block';
+function toggleLevels() {
+  levelsVisible = !levelsVisible;
+  $('levelsList').classList.toggle('hidden', !levelsVisible);
+  $('levelsToggleBtn').textContent = levelsVisible ? '⚙️ Levels verbergen ▴' : '⚙️ Deine Levels anzeigen ▾';
 }
 
-function loadHistory() {
-  const history = JSON.parse(localStorage.getItem('mikeTrainingLog') || '[]');
-  const section = document.getElementById('historySection');
-  const list = document.getElementById('historyList');
-  if (history.length === 0) { section.classList.remove('visible'); return; }
-  section.classList.add('visible');
-  list.innerHTML = history.slice(0, 5).map(e => `
-    <div class="history-entry">
+function changeLevel(pattern, delta) {
+  levels[pattern] = Math.max(1, Math.min(6, levels[pattern] + delta));
+  saveJSON(LS_LEVELS, levels);
+  renderLevels();
+}
+
+function renderLevels() {
+  $('levelsList').innerHTML = PATTERNS.map(p => {
+    const lvl = levels[p];
+    const ex = LADDERS[p].levels[lvl - 1];
+    return `<div class="level-row">
+      <div class="level-info">
+        <div class="level-pattern">${LADDERS[p].label}</div>
+        <div class="level-ex-name">${ex.name}</div>
+      </div>
+      <div class="level-ctrl">
+        <button class="mini-btn" onclick="changeLevel('${p}',-1)" ${lvl <= 1 ? 'disabled' : ''}>−</button>
+        <span class="level-num">${lvl}/6</span>
+        <button class="mini-btn" onclick="changeLevel('${p}',1)" ${lvl >= 6 ? 'disabled' : ''}>+</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderHistory() {
+  const hist = loadJSON(LS_LOG, []);
+  const section = $('historySection');
+  if (hist.length === 0) { section.classList.add('hidden'); return; }
+  section.classList.remove('hidden');
+  $('historyList').innerHTML = hist.slice(0, 6).map(e => {
+    if (e.v === 2) {
+      const sets = Object.values(e.sets || {}).reduce((s, a) => s + a.filter(v => typeof v === 'number').length, 0);
+      return `<div class="history-entry">
+        <span>${e.date} · <strong>Workout ${e.template}</strong>${e.cardio ? ' +🔥' : ''}</span>
+        <span class="history-date">${fmtTime(e.durationSec)} · ${sets} Sätze</span>
+      </div>`;
+    }
+    // Legacy-Einträge (altes Format)
+    return `<div class="history-entry">
       <span>${e.date} · <strong>Tag ${e.day}</strong></span>
-      <span class="history-date">${fmtTime(e.duration)} · Squats: ${e.reps.squats} · PU: ${e.reps.pushups}</span>
-    </div>
-  `).join('');
+      <span class="history-date">${fmtTime(e.duration)} (altes Programm)</span>
+    </div>`;
+  }).join('');
+}
+
+function renderStartScreen() {
+  const { thisWeek, streak } = weekStats();
+  $('weekCount').firstChild.textContent = thisWeek;
+  $('streakCount').textContent = streak;
+  $('cardioToggle').checked = !!prefs.cardio;
+  selectTemplate(prefs.nextTemplate && TEMPLATES[prefs.nextTemplate] ? prefs.nextTemplate : 'A');
+  renderLevels();
+  renderHistory();
 }
 
 // ══════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════
-loadHistory();
+renderStartScreen();
+
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
 </script>
 </body>
 </html>
