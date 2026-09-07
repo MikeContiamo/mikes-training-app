@@ -76,7 +76,8 @@ export function boot({ search = '', store = {}, htmlPath = null } = {}) {
     'pickFinisher', 'finisherRounds', 'sessionCount', 'resolvePattern', 'visiblePatterns',
     'observedHold', 'addSet', 'WARMUPS', 'FINISHERS', 'FINISHER_ORDER',
     'EXERCISE_GUIDE', 'openDetail', 'closeDetail', 'phasePattern', 'renderLevels',
-    'changeLevel', 'togglePause', 'repRange', 'hasEquipment', 'ACCESSORY_REST_SEC',
+    'changeLevel', 'togglePause', 'repRange', 'holdRange', 'hasEquipment',
+    'blockLabel', 'TEMPO', 'SEC_PER_REP',
     'LADDERS', 'TEMPLATES', 'PATTERNS', 'DEFAULT_LEVELS', 'TEMPLATE_ORDER',
   ];
   const getters = exposed.map(n => `  get ${n}() { return typeof ${n} === 'undefined' ? undefined : ${n}; },`).join('\n');

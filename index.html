@@ -392,7 +392,7 @@
 <div class="screen active" id="startScreen">
   <div class="app-title">
     <h1>💪 Mike's Training</h1>
-    <div class="subtitle">Minimum Effective Dose · Bodyweight + Hanteln · 18–24 Min</div>
+    <div class="subtitle">Minimum Effective Dose · 10 harte Sätze · ~19 Min</div>
   </div>
 
   <div class="week-stats">
@@ -413,7 +413,7 @@
     <div class="toggle-row">
       <div>
         <div class="toggle-label">🧗 Klimmzugstange vorhanden</div>
-        <div class="toggle-sub">Schaltet Klimmzüge frei · sonst Rudern am Tisch</div>
+        <div class="toggle-sub">Schaltet Klimmzüge frei · sonst Türrahmen/Hantel</div>
       </div>
       <label class="switch">
         <input type="checkbox" id="barToggle" onchange="onBarToggle()">
@@ -423,7 +423,7 @@
     <div class="toggle-row">
       <div>
         <div class="toggle-label">🏋️ Freihanteln vorhanden</div>
-        <div class="toggle-sub">Hantel-Block in B, C und D · bis 12,5 kg</div>
+        <div class="toggle-sub">Ersetzt schlecht dosierbare Übungen · bis 12,5 kg</div>
       </div>
       <label class="switch">
         <input type="checkbox" id="dumbbellToggle" onchange="onDumbbellToggle()">
@@ -461,50 +461,62 @@
       <h4>📅 Rhythmus</h4>
       <ul>
         <li><strong>3× pro Woche</strong>, immer ein Ruhetag dazwischen — z. B. <strong>Mo · Mi · Fr</strong>. Minimum: 2× pro Woche.</li>
-        <li>Die App rotiert automatisch <strong>A → B → C → D → E</strong> — einfach das vorgeschlagene Workout machen. Jedes Template setzt einen anderen Reiz und trainiert einen anderen Muster-Mix: Kraft-Technik, Muskelspannung, Ausdauer, Haltekraft, Explosivität.</li>
-        <li>Ein Zyklus dauert rund <strong>anderthalb Wochen</strong>. Dadurch kommt jede Woche eine andere Kombination — und Drücken und Ziehen werden über <span class="highlight">zwei Richtungen</span> verteilt (horizontal und vertikal), statt immer dieselbe Übung zu machen. Das Gesamtvolumen bleibt gleich, die Progression je Leiter läuft dafür etwas langsamer.</li>
-        <li>Auch Warm-Up und Finisher wechseln automatisch durch, damit die Session nicht zur Gewohnheit wird.</li>
-        <li>Drei der fünf Workouts (B, C, D) haben zusätzlich einen <strong>Hantel-Block</strong> — Details weiter unten.</li>
-        <li>Nie zwei Tage direkt hintereinander: Der Muskel wächst in den <strong>~48 h Erholung</strong>, nicht im Training.</li>
-      </ul>
-      <h4>🧗 Ausstattung</h4>
-      <ul>
-        <li>Der Kern geht ohne Geräte. Mit einer <strong>Klimmzugstange oder einem Türreck</strong> den Schalter oben umlegen — dann kommen echte Klimmzüge dazu (die stärkste Rückenübung überhaupt).</li>
-        <li>Ohne Stange ersetzt die App Klimmzüge automatisch durch Rudern am Tisch bzw. Türrahmen. Kein Loch im Programm.</li>
-        <li>Gleiches gilt für die Hanteln: Schalter aus, und <strong>B, C und D</strong> laufen als reine Körpergewichts-Workouts. Praktisch auf Reisen.</li>
-      </ul>
-      <h4>🏋️ Hantel-Block</h4>
-      <ul>
-        <li><strong>B, C und D</strong> haben nach dem Hauptteil einen Hantel-Block mit zwei Übungen à zwei Sätzen. <strong>A und E</strong> bleiben absichtlich reines Körpergewicht — so gibt es immer zwei Workouts, die überall funktionieren.</li>
-        <li>Die Hanteln füllen genau die Lücken, die Körpergewicht kaum erreicht: <strong>seitliche Schulter</strong> (Seitheben), <strong>direkte Armarbeit</strong> (Curls, Trizeps) und <strong>belastete Hüftstreckung</strong> (Kreuzheben). Kein Ersatz für Liegestütze, sondern eine Ergänzung.</li>
-        <li>Bei den Hanteln ist das <span class="highlight">Gewicht die Stufe</span>: 5 → 7,5 → 10 → 12,5 kg. Sonst gilt dieselbe Regel — beide Sätze am oberen Wdh-Ziel, dann legt die App eine Stufe drauf.</li>
-        <li>Bei 12,5 kg ist die Hantel am Limit. Danach geht es <strong>einarmig</strong> (Drücken, Trizeps), <strong>einbeinig</strong> (Kreuzheben) oder <strong>langsamer</strong> (3 Sek. ablassen bei Rudern und Curls) weiter — die Leiter endet also nicht am Gewicht.</li>
-        <li>Seitheben ist bewusst bei 12,5 kg gedeckelt und arbeitet stattdessen im Bereich <strong>12–20 Wdh</strong>. Die seitliche Schulter mag hohe Wiederholungen und saubere Technik lieber als schweres Schwingen.</li>
-        <li>Die Hantel-Sessions dauern rund <strong>6 Minuten länger</strong> (etwa 24 statt 18 Min ohne Cardio). Wenn die Zeit knapp ist: Hantel-Schalter aus oder Cardio weglassen.</li>
+        <li>Die App rotiert <strong>A → B → C → D</strong> und schlägt das nächste Workout selbst vor. Ein Zyklus dauert bei 3 Sessions pro Woche etwa <strong>anderthalb Wochen</strong> (bei 2 Sessions zwei Wochen), dadurch fällt nicht jede Woche dasselbe auf denselben Wochentag.</li>
+        <li>Jede Session hat <span class="highlight">zehn harte Sätze</span> und dauert rund 19 Minuten: zwei Minuten Warm-Up, zwei Supersets à zwei Sätze, dann der Abschlussblock.</li>
+        <li>Die vier Workouts unterscheiden sich nur darin, <strong>welche</strong> Muster drankommen — nicht in Wiederholungszahl oder Tempo. Das ist Absicht: nur so bleiben deine Zahlen über Monate vergleichbar.</li>
+        <li>In <strong>B und D stehen die Beine zuerst</strong>, damit sie bei Zeitmangel nicht immer als Erstes wegfallen.</li>
       </ul>
       <h4>🔥 Intensität — der wichtigste Hebel</h4>
       <ul>
         <li>Jeder Satz bis <span class="highlight">1–2 Wdh vor Muskelversagen</span>. Die letzten Wiederholungen müssen langsam und schwer sein — sonst zählt der Satz kaum.</li>
-        <li>Saubere Technik und volle Bewegungsamplitude schlagen hohe Wiederholungszahlen.</li>
+        <li>Saubere Technik und volle Bewegungsamplitude schlagen hohe Wiederholungszahlen. Bei Halte-Übungen ist das <strong>erste Nachgeben</strong> das Satzende, nicht der Ablauf der Uhr.</li>
+        <li>Tempo ist überall gleich: <strong>~2 Sekunden runter, ~1 Sekunde hoch</strong>. Kein wechselndes Tempo, weil sonst 10 langsame Wiederholungen mit 15 zügigen verglichen würden.</li>
       </ul>
       <h4>📈 Progression</h4>
       <ul>
-        <li>Erreichst du in <strong>beiden Sätzen das obere Wdh-Ziel</strong>, levelt die App die Übung automatisch hoch — dein Fortschritt über Monate.</li>
+        <li>Jede Übung hat ein <strong>festes Wiederholungsfenster</strong> (meist 8–15, Klimmzüge 5–10, Seitheben 12–20, Halten 20–40 Sek.). Schaffst du in <strong>beiden Sätzen das obere Ende</strong>, legt die App eine Stufe drauf. Bleibst du in beiden unter dem unteren Ende, geht sie eine zurück.</li>
         <li>Dafür muss der Wert <span class="highlight">bestätigt</span> sein: in der Pause auf − / + tippen oder den Weiter-Button drücken, der die Zahl anzeigt. Läuft die Pause unbestätigt durch, wird der Satz nicht gewertet — die App levelt nie auf Vermutungen.</li>
-        <li>Haltezeiten misst die Uhr selbst. Brichst du früh ab, wird genau das protokolliert; ein sofortiger Abbruch gilt als Auslassen und kostet kein Level.</li>
-        <li>Fühlt sich ein Level technisch unsauber an → unter „⚙️ Levels" manuell zurückstellen. Qualität vor Ego.</li>
+        <li>Haltezeiten misst die Uhr selbst, für jeden Satz getrennt. Ein sofortiger Abbruch gilt als Auslassen und kostet kein Level.</li>
+        <li>Bei <strong>einseitigen Übungen</strong> zählt die <strong>schwächere Seite</strong>. Sonst zieht die starke Seite dich auf eine Stufe, die die andere nicht trägt.</li>
+        <li>Nach einem Aufstieg darf der erste Satz schiefgehen. Schaffst du das untere Ende nicht sauber, stelle unter „⚙️ Levels" eine Stufe zurück und greif später wieder an. Qualität vor Ego.</li>
+      </ul>
+      <h4>🧭 Einmal kalibrieren, bevor du loslegst</h4>
+      <ul>
+        <li>Die Startwerte sind geraten, nicht gemessen. Geh einmal durch „⚙️ Levels" und stelle für jede Übung die Stufe ein, die du <strong>sauber im Fenster</strong> schaffst — mit 1–2 Wiederholungen Reserve. Das ist die halbe Miete für alles, was danach kommt.</li>
+        <li>Bei schweren Übungen (Pike Push-ups, Klimmzüge) vor dem ersten Satz eine <strong>leichte Probe derselben Bewegung</strong> machen. Zwei Minuten allgemeines Warm-Up ersetzen das nicht.</li>
+      </ul>
+      <h4>🧗 Ausstattung</h4>
+      <ul>
+        <li>Alles läuft ohne Geräte. <strong>Hanteln ersetzen</strong> dann die Übungen, die sich mit Möbeln schlecht dosieren lassen: Hantelrudern statt Türrahmen-Rudern, Kreuzheben statt Brücken, belastete Split Squats statt reinem Körpergewicht. <strong>Ersetzen, nicht ergänzen</strong> — die Session bleibt bei zehn Sätzen.</li>
+        <li>Eine <strong>Klimmzugstange</strong> bringt am meisten. Ohne sie fällt vertikales Ziehen weg, und die vier Workouts schrumpfen auf zwei verschiedene. Ein Türreck kostet wenig und ist der größte Einzelgewinn für dieses Programm.</li>
+        <li>Beide Schalter aus: alles läuft weiter auf Körpergewicht, nur mit weniger Abwechslung. Praktisch auf Reisen.</li>
+      </ul>
+      <h4>🏋️ Hanteln bis 12,5 kg</h4>
+      <ul>
+        <li>Die Stufe ist das Gewicht: 5 → 7,5 → 10 → 12,5 kg. Dieselbe Regel wie sonst — beide Sätze am oberen Ende, dann mehr Gewicht.</li>
+        <li>Bei <strong>12,5 kg endet die Leiter</strong>. Das ist ein ehrliches Plateau, kein Fehler: ab da steigern sich die Wiederholungen innerhalb des Fensters. Ein Kunstgriff, der die Last in Wahrheit senkt, wäre schlechter als ein Plateau.</li>
+        <li>Beim Kreuzheben geht es einbeinig mit <strong>demselben</strong> Gewicht weiter, nicht mit weniger — sonst wäre die „schwerere" Stufe leichter.</li>
+        <li>Seitheben ist die eine Übung, die es ohne Hanteln praktisch nicht gibt. Sie läuft bewusst bei <strong>12–20 Wdh</strong> und mit Kontrolle statt Schwung.</li>
+      </ul>
+      <h4>🚫 Was absichtlich fehlt</h4>
+      <ul>
+        <li><strong>Handstand-Liegestütze</strong> sind aus der automatischen Leiter raus. Sie sind eine eigene Fertigkeit mit Sturzrisiko und gehören nicht dazu, weil man ein Wiederholungsziel erreicht hat — schon gar nicht beim Alleintrainieren.</li>
+        <li><strong>Tischübungen</strong> sind raus (Tisch trägt nicht). Horizontales Ziehen läuft über Türrahmen oder Hantel.</li>
+        <li><strong>Direkte Armarbeit</strong> (Curls, Trizeps) ist raus: Arme arbeiten bei Drücken und Ziehen mit, und zwei Sätze alle anderthalb Wochen hätten kaum etwas gebracht. Wenn Arme ein eigenes Ziel werden, kommen sie zurück.</li>
+        <li><strong>Side Plank und V-Ups</strong> sind aus der Rumpf-Leiter raus, weil sie eine andere Aufgabe sind statt eine schwerere Stufe. Als Extra jederzeit sinnvoll.</li>
       </ul>
       <h4>🏃 Cardio</h4>
       <ul>
-        <li>Vier Varianten: <strong>HIIT</strong> (8× 20/40 — der Standard), <strong>20/10</strong> (8 Runden im Tabata-Zeitformat, kurz), <strong>Pyramide</strong> (Intervalle 30 → 60 → 30 Sek.) und <strong>EMOM</strong> (6× 30/30, gleichmäßiger). Auf „Auto" wechseln sie automatisch durch.</li>
-        <li>Nur das <em>Zeitformat</em> stammt von Tabata; im Original waren es maximale Intervalle auf dem Ergometer. Mit Burpees nach dem Kraftteil ist die Dosis eine andere — wähle eine Bewegung, die du wiederholbar kontrolliert hart machen kannst, statt jedes Mal auf Anschlag zu gehen.</li>
-        <li>Finisher bei <strong>2–3 Sessions pro Woche</strong> anschalten; an vollen Tagen einfach weglassen — der Kraftteil ist der Kern.</li>
+        <li>Der Finisher liegt <strong>außerhalb</strong> der 20 Minuten. Er kostet 6–11 Minuten zusätzlich — nur anschalten, wenn die Zeit da ist. Der Kraftteil ist der Kern.</li>
+        <li>Vier Varianten: <strong>HIIT</strong> (8× 20/40), <strong>20/10</strong> (8 Runden, kurz), <strong>Pyramide</strong> (30 → 60 → 30 Sek.) und <strong>EMOM</strong> (6× 30/30). Auf „Auto" wechseln sie durch.</li>
+        <li>Nur das <em>Zeitformat</em> von 20/10 stammt von Tabata; im Original waren es maximale Intervalle auf dem Ergometer. Wähle eine Bewegung, die du <strong>wiederholbar kontrolliert hart</strong> machen kannst, statt jedes Mal auf Anschlag zu gehen. Burpees belasten zusätzlich genau die Muskeln, die gerade gearbeitet haben.</li>
         <li>Dazu im Alltag viel gehen (~7.000+ Schritte) — kostet keine Trainingszeit.</li>
       </ul>
-      <h4>😴 Regeneration — der unsichtbare Teil</h4>
+      <h4>😴 Regeneration</h4>
       <ul>
         <li><strong>7–9 h Schlaf</strong> und ~<strong>1,6–2 g Protein pro kg</strong> Körpergewicht am Tag entscheiden mit über das Ergebnis.</li>
-        <li>Fühlst du dich nach 6–8 Wochen platt: eine lockere Woche einschieben (Sätze weit weg vom Versagen), dann wieder voll angreifen.</li>
+        <li>Ein Ruhetag zwischen den Sessions reicht bei zehn Sätzen. Eine feste Deload-Woche ist bei diesem Volumen nicht nötig — fühlst du dich über mehrere Sessions platt, mach eine Woche mit deutlich mehr Reserve und greif dann wieder an.</li>
+        <li>Eine schwache Session ist erst mal nur eine schwache Session: Schlaf, Stress und Tagesform zählen. Nicht sofort das Level zurückstellen.</li>
       </ul>
     </div>
   </div>
@@ -633,424 +645,214 @@ const CIRCUMFERENCE = 2 * Math.PI * 108;
 const FAST = new URLSearchParams(location.search).has('fast');
 const T = s => FAST ? Math.max(2, Math.round(s * 0.1)) : s;
 
-const PATTERNS = ['push', 'vpush', 'pull', 'vpull', 'squat', 'hinge', 'core',
-                  'dbpress', 'dbrow', 'dblateral', 'dbcurl', 'dbtricep', 'dbrdl'];
+const PATTERNS = ['push', 'vpush', 'pull', 'vpull', 'squat', 'hinge', 'core', 'dbrow', 'dbrdl', 'dbsquat', 'dblateral'];
 
+// Bewegungsleitern. Eine Stufe ist immer schwerer als die vorige und
+// bleibt in derselben Bewegungsfamilie — gesteigert wird über Hebel,
+// Unterstützung oder Gewicht, nie über eine andere Aufgabe.
+// Jede Leiter bringt ihr eigenes Wdh- bzw. Haltefenster mit: nur so sind
+// die Zahlen über Sessions hinweg vergleichbar.
 const LADDERS = {
-  push: { label: 'Push (Brust/Schulter)', levels: [
-    { name: 'Wand-Liegestütze', detail: 'Hände schulterbreit an der Wand · Körper gerade · langsam zur Wand', unit: 'reps' },
-    { name: 'Erhöhte Liegestütze', detail: 'Hände auf Tisch/Sofalehne · Körperspannung · Brust zur Kante', unit: 'reps' },
+  push: { label: 'Push (Brust/Schulter)', reps: [8, 15], levels: [
+    { name: 'Wand-Liegestütze', detail: 'Hände schulterbreit an der Wand · Körper gerade', unit: 'reps' },
+    { name: 'Erhöhte Liegestütze', detail: 'Hände auf Sofalehne/Fensterbank · immer dieselbe Höhe', unit: 'reps' },
     { name: 'Knie-Liegestütze', detail: 'Knie am Boden · Hüfte gestreckt · Brust fast zum Boden', unit: 'reps' },
-    { name: 'Liegestütze', detail: 'Körper gerade wie ein Brett · Brust zur Matte · Ellbogen ~45°', unit: 'reps' },
-    { name: 'Liegestütze, Füße erhöht', detail: 'Füße auf Stuhl/Sofa · mehr Last auf Brust & Schultern', unit: 'reps' },
-    { name: 'Archer-Liegestütze', detail: 'Sehr breit greifen · zu einer Seite absenken · anderer Arm streckt', unit: 'reps' },
+    { name: 'Liegestütze', detail: 'Körper gerade wie ein Brett · Brust zur Matte', unit: 'reps' },
+    { name: 'Liegestütze, Füße erhöht', detail: 'Füße auf Stuhl/Sofa · immer dieselbe Höhe', unit: 'reps' },
+    { name: 'Archer-Liegestütze', detail: 'Sehr breit greifen · zu einer Seite absenken · pro Seite', unit: 'reps', sides: 2 },
   ]},
-  vpush: { label: 'Vertical Push (Schulter)', levels: [
-    { name: 'Wand-Schulterdrücken', detail: 'Gesicht zur Wand · Hände auf Kopfhöhe · Körper hochdrücken', unit: 'reps' },
+  vpush: { label: 'Vertical Push (Schulter)', reps: [6, 12], levels: [
+    { name: 'Wand-Schulterdrücken', detail: 'Gesicht zur Wand · Hände auf Kopfhöhe', unit: 'reps' },
+    { name: 'Pike Push-ups, Hände erhöht', detail: 'Hände auf Stuhl/Sofalehne · Hüfte hoch', unit: 'reps' },
     { name: 'Pike Push-ups (Boden)', detail: 'Hüfte hoch, Dach-Position · Scheitel Richtung Boden', unit: 'reps' },
-    { name: 'Pike Push-ups, Füße erhöht', detail: 'Füße auf Stufe/Kiste · steiler · mehr Last auf die Schulter', unit: 'reps' },
-    { name: 'Pike Push-ups, Füße hoch', detail: 'Füße auf Stuhl/Sofa · Oberkörper fast senkrecht · tief absenken', unit: 'reps' },
-    { name: 'Wand-Handstand, Teilstrecke', detail: 'Bauch zur Wand hochlaufen · kleine kontrollierte Absenkung', unit: 'reps' },
-    { name: 'Handstand-Liegestütze (Wand)', detail: 'An der Wand · Kopf bis knapp über den Boden · volle Kontrolle', unit: 'reps' },
+    { name: 'Pike Push-ups, Füße erhöht', detail: 'Füße auf Stufe/Kiste · steiler · immer dieselbe Höhe', unit: 'reps' },
+    { name: 'Pike Push-ups, Füße hoch', detail: 'Füße auf Stuhl/Sofa · Oberkörper fast senkrecht', unit: 'reps' },
   ]},
-  pull: { label: 'Pull (Rücken)', levels: [
-    { name: 'Türrahmen-Rudern (steil)', detail: 'Türrahmen greifen · leicht zurücklehnen · Brust zum Rahmen ziehen', unit: 'reps' },
-    { name: 'Türrahmen-Rudern (45°)', detail: 'Füße näher am Rahmen · Körper schräg · kontrolliert ziehen', unit: 'reps' },
-    { name: 'Tisch-Rudern (Knie gebeugt)', detail: 'Unter stabilen Tisch legen · Kante greifen · Brust zur Kante', unit: 'reps' },
-    { name: 'Tisch-Rudern (Beine gestreckt)', detail: 'Körper gerade · Schulterblätter zusammenziehen', unit: 'reps' },
-    { name: 'Tisch-Rudern, Füße erhöht', detail: 'Füße auf Stuhl · noch horizontaler · volle Kontrolle', unit: 'reps' },
-    { name: 'Einarmiges Türrahmen-Rudern', detail: 'Ein Arm · Körper weit zurücklehnen · langsam & stabil', unit: 'reps' },
+  pull: { label: 'Pull (Rücken, horizontal)', reps: [8, 15], prefer: 'dbrow', levels: [
+    { name: 'Türrahmen-Rudern, aufrecht', detail: 'Griff auf Brusthöhe · Füße am Rahmen · nur leicht zurücklehnen', unit: 'reps', guide: 'Türrahmen-Rudern' },
+    { name: 'Türrahmen-Rudern, 45°', detail: 'Griff auf Brusthöhe · Füße eine halbe Fußlänge vor · Körper 45°', unit: 'reps', guide: 'Türrahmen-Rudern' },
+    { name: 'Türrahmen-Rudern, tief gegriffen', detail: 'Griff auf Hüfthöhe · weiter zurücklehnen · deutlich waagerechter', unit: 'reps', guide: 'Türrahmen-Rudern' },
   ]},
-  // Braucht eine Stange; ohne Stange fällt die Session auf Pull zurück.
-  vpull: { label: 'Vertical Pull (Klimmzug)', requires: 'bar', fallback: 'pull', levels: [
-    { name: 'Aktives Hängen', detail: 'An der Stange hängen · Schulterblätter aktiv nach unten ziehen', unit: 'sec' },
-    { name: 'Scapular Pulls', detail: 'Arme gestreckt · nur die Schulterblätter arbeiten · kleine Bewegung', unit: 'reps' },
-    { name: 'Negative Klimmzüge', detail: 'Oben starten (abspringen) · 4–5 Sek. langsam ablassen', unit: 'reps' },
-    { name: 'Klimmzüge, Fußhilfe', detail: 'Ein Fuß auf einem Stuhl · nur so viel helfen wie nötig, Hilfe schrittweise reduzieren', unit: 'reps' },
-    { name: 'Klimmzüge (Untergriff)', detail: 'Handflächen zu dir · Brust zur Stange · voll ausstrecken unten', unit: 'reps' },
-    { name: 'Klimmzüge (Obergriff)', detail: 'Handflächen weg · schulterbreit · saubere volle Amplitude', unit: 'reps' },
+  vpull: { label: 'Vertical Pull (Klimmzug)', reps: [5, 10], requires: 'bar', fallback: 'pull', levels: [
+    { name: 'Klimmzüge, viel Fußhilfe', detail: 'Fuß auf Stuhl · deutlich mitdrücken · voller Bewegungsumfang', unit: 'reps', guide: 'Klimmzüge mit Fußhilfe' },
+    { name: 'Klimmzüge, wenig Fußhilfe', detail: 'Fuß auf Stuhl · nur antippen, kaum helfen', unit: 'reps', guide: 'Klimmzüge mit Fußhilfe' },
+    { name: 'Klimmzüge (Untergriff)', detail: 'Handflächen zu dir · Brust zur Stange · unten voll ausstrecken', unit: 'reps' },
+    { name: 'Klimmzüge (Obergriff)', detail: 'Handflächen weg · schulterbreit · volle Amplitude', unit: 'reps' },
   ]},
-  squat: { label: 'Squat (Beine)', levels: [
+  squat: { label: 'Squat (Beine, knie-dominant)', reps: [8, 15], prefer: 'dbsquat', levels: [
     { name: 'Kniebeugen', detail: 'Füße schulterbreit · tief runter · Fersen am Boden', unit: 'reps' },
-    { name: 'Tempo-Kniebeugen', detail: '3 Sek. runter · 1 Sek. Pause unten · explosiv hoch', unit: 'reps' },
-    { name: 'Split Squats', detail: 'Großer Ausfallschritt · hinteres Knie fast zum Boden · pro Seite', unit: 'reps' },
-    { name: 'Bulgarian Split Squats', detail: 'Hinterer Fuß auf Stuhl/Sofa · aufrecht bleiben · pro Seite', unit: 'reps' },
-    { name: 'Pistol-Progression (Stuhl)', detail: 'Einbeinig auf Stuhl absetzen & wieder aufstehen · pro Seite', unit: 'reps' },
-    { name: 'Pistol Squats (assistiert)', detail: 'Einbeinig · am Türrahmen leicht festhalten · pro Seite', unit: 'reps' },
+    { name: 'Split Squats', detail: 'Großer Ausfallschritt · hinteres Knie fast zum Boden · pro Seite', unit: 'reps', sides: 2 },
+    { name: 'Bulgarian Split Squats', detail: 'Hinterer Fuß auf Stuhl/Sofa · aufrecht bleiben · pro Seite', unit: 'reps', sides: 2 },
   ]},
-  hinge: { label: 'Hinge (Gesäß/Rücken)', levels: [
+  hinge: { label: 'Hinge (Gesäß/Beinrückseite)', reps: [8, 15], prefer: 'dbrdl', levels: [
     { name: 'Glute Bridges', detail: 'Rücken am Boden · Becken hoch · Gesäß oben fest anspannen', unit: 'reps' },
-    { name: 'Hip Thrusts (Sofa)', detail: 'Schultern auf Sofakante · Hüfte voll strecken · oben 1 Sek. halten', unit: 'reps' },
-    { name: 'Einbeinige Glute Bridges', detail: 'Ein Bein gestreckt · Becken gerade halten · pro Seite', unit: 'reps' },
-    { name: 'Einbeinige Hip Thrusts', detail: 'Schultern erhöht · ein Bein · Hüfte voll strecken · pro Seite', unit: 'reps' },
-    { name: 'Single-Leg RDL', detail: 'Einbeinig · Oberkörper kippt nach vorn · Rücken gerade · pro Seite', unit: 'reps' },
-    { name: 'Slider Leg Curls', detail: 'Handtuch unter Fersen · Brücke halten · Beine ausfahren & ranziehen', unit: 'reps' },
+    { name: 'Hip Thrusts (Sofa)', detail: 'Schultern auf Sofakante · Hüfte voll strecken', unit: 'reps' },
+    { name: 'Einbeinige Glute Bridges', detail: 'Ein Bein gestreckt · Becken gerade halten · pro Seite', unit: 'reps', sides: 2 },
+    { name: 'Einbeinige Hip Thrusts', detail: 'Schultern erhöht · ein Bein · Hüfte voll strecken · pro Seite', unit: 'reps', sides: 2 },
   ]},
-  core: { label: 'Core (Rumpf)', levels: [
+  core: { label: 'Core (Rumpf)', hold: [20, 40], levels: [
     { name: 'Plank (Knie)', detail: 'Unterarmstütz auf Knien · Bauch fest · nicht durchhängen', unit: 'sec' },
     { name: 'Plank', detail: 'Unterarmstütz · Körper gerade · Gesäß & Bauch anspannen', unit: 'sec' },
     { name: 'Plank mit Reach', detail: 'Im Stütz abwechselnd Arm nach vorn strecken · Hüfte ruhig', unit: 'sec' },
-    { name: 'Side Plank', detail: 'Seitstütz · Hüfte hoch · auf halber Zeit Seite wechseln', unit: 'sec' },
-    { name: 'Hollow Hold', detail: 'Rücken in den Boden drücken · Arme & Beine schweben lassen', unit: 'sec' },
-    { name: 'V-Ups', detail: 'Gestreckt liegen · Hände & Füße treffen sich oben · kontrolliert', unit: 'reps' },
+    { name: 'Plank, Füße erhöht', detail: 'Füße auf Stuhl/Sofa · längerer Hebel · immer dieselbe Höhe', unit: 'sec' },
+    { name: 'Hollow Hold, Knie gebeugt', detail: 'Rücken in den Boden drücken · Knie 90° · Füße schweben', unit: 'sec' },
+    { name: 'Hollow Hold', detail: 'Arme über Kopf · Beine gestreckt · Rücken bleibt am Boden', unit: 'sec' },
   ]},
-
-  // ── Hantel-Leitern ──────────────────────────────────────────────────
-  // Hier ist die Stufe das Gewicht (verstellbare Hanteln bis 12,5 kg).
-  // Oberhalb von 12,5 kg geht es einarmig oder langsamer weiter, damit die
-  // Leiter am Hantel-Limit nicht endet. Alle Stufen teilen eine Anleitung.
-  dbpress: { label: 'Schulterdrücken (Hantel)', requires: 'dumbbells', levels: [
-    { name: 'Schulterdrücken · 5 kg', guide: 'Schulterdrücken (Hantel)', unit: 'reps',
-      detail: 'Beide Hanteln · 5 kg pro Hand · Einstieg, Technik einschleifen' },
-    { name: 'Schulterdrücken · 7,5 kg', guide: 'Schulterdrücken (Hantel)', unit: 'reps',
-      detail: 'Beide Hanteln · 7,5 kg pro Hand' },
-    { name: 'Schulterdrücken · 10 kg', guide: 'Schulterdrücken (Hantel)', unit: 'reps',
-      detail: 'Beide Hanteln · 10 kg pro Hand' },
-    { name: 'Schulterdrücken · 12,5 kg', guide: 'Schulterdrücken (Hantel)', unit: 'reps',
-      detail: 'Beide Hanteln · 12,5 kg pro Hand · das Hantel-Maximum' },
-    { name: 'Einarmig drücken · 10 kg', guide: 'Schulterdrücken (Hantel)', unit: 'reps',
-      detail: 'Eine Hantel, 10 kg · freie Hand an die Hüfte · Rumpf gegen das Kippen fest · pro Seite' },
-    { name: 'Einarmig drücken · 12,5 kg', guide: 'Schulterdrücken (Hantel)', unit: 'reps',
-      detail: 'Eine Hantel, 12,5 kg · Rumpf hält das Becken gerade · pro Seite' },
+  dbrow: { label: 'Hantelrudern (Rücken)', reps: [8, 12], requires: 'dumbbells', levels: [
+    { name: 'Einarmiges Rudern · 5 kg', detail: '5 kg · pro Seite', unit: 'reps', sides: 2, guide: 'Einarmiges Hantelrudern' },
+    { name: 'Einarmiges Rudern · 7,5 kg', detail: '7,5 kg · pro Seite', unit: 'reps', sides: 2, guide: 'Einarmiges Hantelrudern' },
+    { name: 'Einarmiges Rudern · 10 kg', detail: '10 kg · pro Seite', unit: 'reps', sides: 2, guide: 'Einarmiges Hantelrudern' },
+    { name: 'Einarmiges Rudern · 12,5 kg', detail: '12,5 kg · pro Seite', unit: 'reps', sides: 2, guide: 'Einarmiges Hantelrudern' },
   ]},
-  dbrow: { label: 'Hantelrudern (Rücken)', requires: 'dumbbells', ownTempo: true, levels: [
-    { name: 'Einarmiges Rudern · 5 kg', guide: 'Einarmiges Hantelrudern', unit: 'reps',
-      detail: '5 kg · pro Seite · Technik vor Gewicht' },
-    { name: 'Einarmiges Rudern · 7,5 kg', guide: 'Einarmiges Hantelrudern', unit: 'reps',
-      detail: '7,5 kg · pro Seite' },
-    { name: 'Einarmiges Rudern · 10 kg', guide: 'Einarmiges Hantelrudern', unit: 'reps',
-      detail: '10 kg · pro Seite' },
-    { name: 'Einarmiges Rudern · 12,5 kg', guide: 'Einarmiges Hantelrudern', unit: 'reps',
-      detail: '12,5 kg · pro Seite · das Hantel-Maximum' },
-    { name: 'Rudern · 12,5 kg, langsam', guide: 'Einarmiges Hantelrudern', unit: 'reps',
-      detail: '12,5 kg · oben 1 Sek. halten, in 3 Sek. ablassen · pro Seite' },
+  dbrdl: { label: 'Kreuzheben (Beinrückseite)', reps: [8, 15], requires: 'dumbbells', levels: [
+    { name: 'Kreuzheben · 2× 7,5 kg', detail: 'Beide Hanteln, 7,5 kg pro Hand · 15 kg Gesamtlast', unit: 'reps', guide: 'Rumänisches Kreuzheben' },
+    { name: 'Kreuzheben · 2× 10 kg', detail: 'Beide Hanteln, 10 kg pro Hand · 20 kg Gesamtlast', unit: 'reps', guide: 'Rumänisches Kreuzheben' },
+    { name: 'Kreuzheben · 2× 12,5 kg', detail: 'Beide Hanteln, 12,5 kg pro Hand · 25 kg · Gerätelimit beidbeinig', unit: 'reps', guide: 'Rumänisches Kreuzheben' },
+    { name: 'Einbeinig · 12,5 kg', detail: 'Einbeinig, 12,5 kg in der Gegenhand · pro Seite', unit: 'reps', sides: 2, guide: 'Rumänisches Kreuzheben' },
   ]},
-  // Seitheben schreibt den Wdh-Bereich selbst vor: 12,5 kg ist hier das
-  // Limit, also kommt der Reiz über Wiederholungen statt über Gewicht.
-  // ownTempo: Seitheben lebt von Kontrolle — das Template-Tempo würde hier
-  // das Gegenteil sagen ("flüssiges Tempo, keine Pause oben").
-  dblateral: { label: 'Seitheben (Schulter)', requires: 'dumbbells', reps: [12, 20], ownTempo: true, levels: [
-    { name: 'Seitheben · 2,5 kg', guide: 'Seitheben', unit: 'reps',
-      detail: '2,5 kg pro Hand · bewusst langsam, kein Schwung' },
-    { name: 'Seitheben · 5 kg', guide: 'Seitheben', unit: 'reps', detail: '5 kg pro Hand' },
-    { name: 'Seitheben · 7,5 kg', guide: 'Seitheben', unit: 'reps', detail: '7,5 kg pro Hand' },
-    { name: 'Seitheben · 10 kg', guide: 'Seitheben', unit: 'reps', detail: '10 kg pro Hand' },
-    { name: 'Seitheben · 12,5 kg', guide: 'Seitheben', unit: 'reps',
-      detail: '12,5 kg pro Hand · nur wenn die Technik sauber bleibt' },
+  dbsquat: { label: 'Beine mit Hanteln', reps: [8, 15], requires: 'dumbbells', levels: [
+    { name: 'Bulgarian Split Squat · 2× 5 kg', detail: '5 kg pro Hand · pro Seite', unit: 'reps', sides: 2, guide: 'Bulgarian Split Squat mit Hanteln' },
+    { name: 'Bulgarian Split Squat · 2× 7,5 kg', detail: '7,5 kg pro Hand · pro Seite', unit: 'reps', sides: 2, guide: 'Bulgarian Split Squat mit Hanteln' },
+    { name: 'Bulgarian Split Squat · 2× 10 kg', detail: '10 kg pro Hand · pro Seite', unit: 'reps', sides: 2, guide: 'Bulgarian Split Squat mit Hanteln' },
+    { name: 'Bulgarian Split Squat · 2× 12,5 kg', detail: '12,5 kg pro Hand · pro Seite', unit: 'reps', sides: 2, guide: 'Bulgarian Split Squat mit Hanteln' },
   ]},
-  dbcurl: { label: 'Bizeps-Curls', requires: 'dumbbells', ownTempo: true, levels: [
-    { name: 'Curls · 5 kg', guide: 'Bizeps-Curls', unit: 'reps', detail: '5 kg pro Hand · beide Arme gleichzeitig' },
-    { name: 'Curls · 7,5 kg', guide: 'Bizeps-Curls', unit: 'reps', detail: '7,5 kg pro Hand' },
-    { name: 'Curls · 10 kg', guide: 'Bizeps-Curls', unit: 'reps', detail: '10 kg pro Hand' },
-    { name: 'Curls · 12,5 kg', guide: 'Bizeps-Curls', unit: 'reps', detail: '12,5 kg pro Hand · das Hantel-Maximum' },
-    { name: 'Curls · 12,5 kg, langsam', guide: 'Bizeps-Curls', unit: 'reps',
-      detail: '12,5 kg · in 3 Sek. ablassen · die Absenkphase ist der Reiz' },
-  ]},
-  dbtricep: { label: 'Trizeps überkopf', requires: 'dumbbells', levels: [
-    { name: 'Trizeps überkopf · 5 kg', guide: 'Trizeps überkopf', unit: 'reps',
-      detail: 'Eine Hantel mit beiden Händen · 5 kg' },
-    { name: 'Trizeps überkopf · 7,5 kg', guide: 'Trizeps überkopf', unit: 'reps',
-      detail: 'Eine Hantel mit beiden Händen · 7,5 kg' },
-    { name: 'Trizeps überkopf · 10 kg', guide: 'Trizeps überkopf', unit: 'reps',
-      detail: 'Eine Hantel mit beiden Händen · 10 kg' },
-    { name: 'Trizeps überkopf · 12,5 kg', guide: 'Trizeps überkopf', unit: 'reps',
-      detail: 'Eine Hantel mit beiden Händen · 12,5 kg' },
-    { name: 'Trizeps einarmig · 10 kg', guide: 'Trizeps überkopf', unit: 'reps',
-      detail: 'Eine Hand, 10 kg · Ellbogen zeigt nach oben und bleibt dort · pro Seite' },
-  ]},
-  dbrdl: { label: 'Kreuzheben (Beinrückseite)', requires: 'dumbbells', levels: [
-    { name: 'Kreuzheben · 2× 7,5 kg', guide: 'Rumänisches Kreuzheben', unit: 'reps',
-      detail: 'Beide Hanteln, 7,5 kg pro Hand · vor den Oberschenkeln führen' },
-    { name: 'Kreuzheben · 2× 10 kg', guide: 'Rumänisches Kreuzheben', unit: 'reps',
-      detail: 'Beide Hanteln, 10 kg pro Hand' },
-    { name: 'Kreuzheben · 2× 12,5 kg', guide: 'Rumänisches Kreuzheben', unit: 'reps',
-      detail: 'Beide Hanteln, 12,5 kg pro Hand · das Hantel-Maximum beidbeinig' },
-    { name: 'Einbeinig · 7,5 kg', guide: 'Rumänisches Kreuzheben', unit: 'reps',
-      detail: 'Einbeinig, eine Hantel mit 7,5 kg · deutlich schwerer als beidbeinig · pro Seite' },
-    { name: 'Einbeinig · 10 kg', guide: 'Rumänisches Kreuzheben', unit: 'reps',
-      detail: 'Einbeinig, 10 kg · Becken gerade halten · pro Seite' },
-    { name: 'Einbeinig · 12,5 kg', guide: 'Rumänisches Kreuzheben', unit: 'reps',
-      detail: 'Einbeinig, 12,5 kg · pro Seite' },
+  dblateral: { label: 'Seitheben (Schulter)', reps: [12, 20], requires: 'dumbbells', fallback: 'core', ownTempo: true, levels: [
+    { name: 'Seitheben · 2,5 kg', detail: '2,5 kg pro Hand · bewusst langsam, kein Schwung', unit: 'reps', guide: 'Seitheben' },
+    { name: 'Seitheben · 5 kg', detail: '5 kg pro Hand · bewusst langsam, kein Schwung', unit: 'reps', guide: 'Seitheben' },
+    { name: 'Seitheben · 7,5 kg', detail: '7,5 kg pro Hand · bewusst langsam, kein Schwung', unit: 'reps', guide: 'Seitheben' },
+    { name: 'Seitheben · 10 kg', detail: '10 kg pro Hand · bewusst langsam, kein Schwung', unit: 'reps', guide: 'Seitheben' },
+    { name: 'Seitheben · 12,5 kg', detail: '12,5 kg pro Hand · bewusst langsam, kein Schwung', unit: 'reps', guide: 'Seitheben' },
   ]},
 };
 
 // Ausführliche Anleitung je Übung — Quelle für den ⓘ-Button.
-// Schlüssel ist der Übungsname aus LADDERS; ein Test prüft die 1:1-Abdeckung.
+// Schlüssel ist guide bzw. name aus LADDERS; ein Test prüft die
+// 1:1-Abdeckung in beide Richtungen.
 const EXERCISE_GUIDE = {
-  'Schulterdrücken (Hantel)': {
-    setup: 'Aufrecht stehen, Füße hüftbreit, Hanteln auf Schulterhöhe, Handflächen nach vorn, Ellbogen leicht vor dem Körper.',
-    steps: ['Rippen nach unten, Bauch und Gesäß anspannen — der untere Rücken darf nicht ausweichen.',
-            'Hanteln gerade nach oben drücken, bis die Arme lang sind und die Hanteln über der Schultermitte stehen.',
-            'Kontrolliert bis auf Schulterhöhe ablassen, unten nicht ablegen oder abfedern.'],
-    mistakes: ['Ins Hohlkreuz gehen und die Last über den Rücken drücken — der häufigste Fehler beim Überkopfdrücken.',
-               'Aus den Knien mitschwingen; bei Bedarf im Sitzen ausführen.',
-               'Nur halb ablassen, dadurch fehlt der schwerste Teil der Bewegung.'],
-    muscles: 'Vordere und seitliche Schulter, Trizeps, Rumpf',
-    breath: 'Vor dem Drücken einatmen, beim Hochdrücken ausatmen.',
-  },
-  'Einarmiges Hantelrudern': {
-    setup: 'Eine Hand und ein Knie auf Bank, Sofa oder Stuhl, Rücken waagerecht und gerade. Hantel in der freien Hand, Arm hängt lang.',
-    steps: ['Rücken gerade, Blick zum Boden, Becken waagerecht — nicht verdrehen.',
-            'Erst das Schulterblatt nach hinten/unten ziehen, dann den Ellbogen nach hinten Richtung Hüfte führen.',
-            'Oben eine Sekunde halten, dann kontrolliert bis zur vollen Streckung ablassen. Seiten getrennt.'],
-    mistakes: ['Den Oberkörper aufdrehen, um mehr Gewicht zu bewegen.',
-               'Die Hantel mit Schwung nach oben reißen statt zu ziehen.',
-               'Ellbogen weit nach außen führen — er bleibt nah am Körper.'],
-    muscles: 'Latissimus, oberer Rücken, hintere Schulter, Bizeps',
-    breath: 'Beim Ziehen ausatmen, beim Ablassen einatmen.',
-  },
-  'Seitheben': {
-    setup: 'Aufrecht stehen, Hanteln neben den Oberschenkeln, Ellbogen minimal gebeugt, Schultern tief.',
-    steps: ['Arme seitlich anheben, bis die Hände etwa auf Schulterhöhe sind — nicht höher.',
-            'Ellbogen führen die Bewegung, die Hände folgen; kleiner Finger leicht höher als der Daumen.',
-            'Oben kurz halten, dann deutlich langsamer ablassen als angehoben.'],
-    mistakes: ['Mit dem Oberkörper schwingen, um die Hanteln hochzuwerfen — hier zählt Kontrolle mehr als Gewicht.',
-               'Schultern zu den Ohren ziehen; sie bleiben bewusst tief.',
-               'Über Schulterhöhe heben, wodurch die Arbeit in den Nacken wandert.'],
-    muscles: 'Seitliche Schulter (der Teil, der mit Körpergewicht kaum erreichbar ist)',
-    breath: 'Beim Anheben ausatmen, beim Ablassen einatmen.',
-  },
-  'Bizeps-Curls': {
-    setup: 'Aufrecht stehen, Hanteln in den Händen, Arme lang, Handflächen nach vorn, Ellbogen nah am Körper.',
-    steps: ['Ellbogen bleiben am Rumpf fixiert — nur der Unterarm bewegt sich.',
-            'Hanteln bis kurz vor die Schulter anheben, oben den Bizeps bewusst anspannen.',
-            'Kontrolliert bis zur vollen Streckung ablassen, unten die Spannung halten.'],
-    mistakes: ['Mit dem Oberkörper zurücklehnen und die Hantel hochschwingen.',
-               'Ellbogen nach vorn wandern lassen; dann übernimmt die Schulter.',
-               'Nicht ganz ausstrecken — der untere Teil bringt den meisten Reiz.'],
-    muscles: 'Bizeps, Unterarmbeuger',
-    breath: 'Beim Anheben ausatmen, beim Ablassen einatmen.',
-  },
-  'Trizeps überkopf': {
-    setup: 'Aufrecht stehen oder sitzen, eine Hantel mit beiden Händen hinter dem Kopf, Ellbogen zeigen nach oben.',
-    steps: ['Oberarme senkrecht halten, Ellbogen bleiben oben und nah beieinander.',
-            'Hantel hinter dem Kopf absenken, bis die Ellbogen etwa 90° erreichen.',
-            'Über den Trizeps nach oben strecken, ohne die Ellbogen nach außen zu lassen.'],
-    mistakes: ['Ellbogen weit nach außen kippen — der Klassiker, sobald es schwer wird.',
-               'Ins Hohlkreuz gehen; Rippen unten, Bauch fest.',
-               'Zu weit absenken bei zu viel Gewicht: die Schulter mag den Endbereich nicht.'],
-    muscles: 'Trizeps (besonders der lange Kopf), Rumpf',
-    breath: 'Beim Absenken einatmen, beim Strecken ausatmen.',
-  },
-  'Rumänisches Kreuzheben': {
-    setup: 'Aufrecht stehen, Hanteln vor den Oberschenkeln, Füße hüftbreit, Knie ganz leicht gebeugt.',
-    steps: ['Hüfte nach hinten schieben und den Oberkörper nach vorn kippen — die Bewegung kommt aus der Hüfte, nicht aus dem Rücken.',
-            'Hanteln dicht an den Beinen entlang führen, bis die Beinrückseite deutlich zieht (meist etwa Kniehöhe).',
-            'Über Gesäß und Beinrückseite aufrichten, oben die Hüfte voll strecken.'],
-    mistakes: ['Runder Rücken beim Vorkippen — abbrechen und Gewicht reduzieren, das ist die Verletzungsstelle.',
-               'Daraus eine Kniebeuge machen; die Knie bleiben fast gestreckt.',
-               'Die Hanteln weit vom Körper weg führen, was den unteren Rücken belastet.'],
-    muscles: 'Beinrückseite, Gesäß, unterer Rücken, Rumpf',
-    breath: 'Beim Vorkippen einatmen, beim Aufrichten ausatmen.',
-  },
   'Wand-Liegestütze': {
-    setup: 'Eine Armlänge vor der Wand stehen, Hände schulterbreit auf Brusthöhe an die Wand.',
-    steps: ['Körper von Kopf bis Ferse zu einer geraden Linie spannen, Gesäß mitanspannen.', 'Ellbogen beugen und den Oberkörper kontrolliert zur Wand bringen, Ellbogen dabei ca. 45° vom Körper weg.', 'Brust fast bis zur Wand, kurz halten, dann kraftvoll wegdrücken.'],
-    mistakes: ['Hüfte knickt nach hinten ab — dann trägt der Rumpf nicht mit.', 'Ellbogen weit nach außen (90°) — belastet die Schulter unnötig.', 'Zu weit weg von der Wand stehen: es wird schwer, aber die Technik bricht.'],
+    setup: 'Eine Armlänge vor der Wand stehen, Hände schulterbreit auf Brusthöhe an der Wand.',
+    steps: ['Körper von Kopf bis Ferse zu einer geraden Linie spannen, Gesäß mitanspannen.', 'Ellbogen beugen und den Oberkörper kontrolliert zur Wand bringen, Ellbogen etwa 45° vom Körper weg.', 'Brust fast bis zur Wand, dann kraftvoll wegdrücken.'],
+    mistakes: ['Hüfte knickt nach hinten ab — dann trägt der Rumpf nicht mit.', 'Ellbogen weit nach außen (90°) — belastet die Schulter unnötig.', 'Abstand zur Wand von Satz zu Satz verändern; dann sind die Zahlen nicht vergleichbar.'],
     muscles: 'Brust, vordere Schulter, Trizeps',
     breath: 'Beim Absenken einatmen, beim Wegdrücken ausatmen.',
   },
   'Erhöhte Liegestütze': {
-    setup: 'Hände schulterbreit auf eine stabile Erhöhung — Tisch, Sofalehne, Treppenstufe. Je höher, je leichter.',
-    steps: ['Füße zurücksetzen, bis Körper und Beine eine gerade Linie bilden.', 'Schulterblätter leicht zusammen und nach unten ziehen, Rumpf fest.', 'Brust zur Kante absenken, Ellbogen ca. 45°, dann hochdrücken.'],
-    mistakes: ['Durchhängende Hüfte oder hochgeschobenes Gesäß.', 'Kopf in den Nacken legen — Blick bleibt schräg nach unten.', 'Wackelige Auflage: unbedingt etwas Rutschfestes wählen.'],
+    setup: 'Hände schulterbreit auf eine stabile Erhöhung — Sofalehne, Fensterbank, Treppenstufe. Je höher, je leichter.',
+    steps: ['Füße zurücksetzen, bis Körper und Beine eine gerade Linie bilden.', 'Schulterblätter leicht zusammen und nach unten ziehen, Rumpf fest.', 'Brust zur Kante absenken, Ellbogen etwa 45°, dann hochdrücken.'],
+    mistakes: ['Durchhängende Hüfte oder hochgeschobenes Gesäß.', 'Kopf in den Nacken legen — Blick bleibt schräg nach unten.', 'Höhe wechseln, ohne es zu notieren: dieselbe Wiederholungszahl bedeutet dann etwas anderes. Immer dieselbe Auflage benutzen.'],
     muscles: 'Brust, vordere Schulter, Trizeps',
     breath: 'Unten einatmen, beim Drücken ausatmen.',
   },
   'Knie-Liegestütze': {
     setup: 'Vierfüßlerstand, Hände etwas breiter als schulterbreit, Knie am Boden (weich unterlegen).',
     steps: ['Knie so weit zurücksetzen, dass Hüfte und Oberkörper eine Linie bilden — Hüfte gestreckt.', 'Bauch und Gesäß anspannen, damit der untere Rücken nicht durchhängt.', 'Brust fast bis zum Boden absenken, dann hochdrücken.'],
-    mistakes: ['Hüfte gebeugt (Po nach hinten) — das ist die häufigste Abkürzung und macht die Übung viel leichter.', 'Nur halb absenken; die letzten Zentimeter sind der eigentliche Reiz.', 'Ellbogen komplett nach außen abspreizen.'],
+    mistakes: ['Hüfte gebeugt (Po nach hinten) — die häufigste Abkürzung, macht die Übung deutlich leichter.', 'Nur halb absenken; die letzten Zentimeter sind der eigentliche Reiz.', 'Ellbogen komplett nach außen abspreizen.'],
     muscles: 'Brust, vordere Schulter, Trizeps',
     breath: 'Absenken einatmen, drücken ausatmen.',
   },
   'Liegestütze': {
     setup: 'Stütz auf Händen und Fußballen, Hände etwas breiter als schulterbreit, direkt unter der Brust.',
-    steps: ['Ganzer Körper ein Brett: Gesäß, Bauch und Oberschenkel gleichzeitig anspannen.', 'Kontrolliert absenken, bis die Brust knapp über dem Boden ist, Ellbogen ca. 45°.', 'Ohne Schwung hochdrücken, oben nicht ganz durchdrücken und die Spannung halten.'],
-    mistakes: ['Hüfte hängt durch oder wandert nach oben.', 'Kopf schiebt vor, Kinn zieht zum Boden statt der Brust.', 'Nur Teilstrecke: lieber Level zurück und dafür voll absenken.'],
+    steps: ['Ganzer Körper ein Brett: Gesäß, Bauch und Oberschenkel gleichzeitig anspannen.', 'Kontrolliert absenken, bis die Brust knapp über dem Boden ist, Ellbogen etwa 45°.', 'Ohne Schwung hochdrücken, oben die Spannung halten.'],
+    mistakes: ['Hüfte hängt durch oder wandert nach oben.', 'Kopf schiebt vor, Kinn zieht zum Boden statt der Brust.', 'Nur Teilstrecke: lieber eine Stufe zurück und dafür voll absenken.'],
     muscles: 'Brust, vordere Schulter, Trizeps, Rumpf',
     breath: 'Unten einatmen, beim Drücken kräftig ausatmen.',
   },
   'Liegestütze, Füße erhöht': {
-    setup: 'Füße auf Stuhl, Sofa oder Stufe, Hände am Boden. Je höher die Füße, je mehr Last auf Brust und Schulter.',
-    steps: ['Körperspannung aufbauen, bevor die Füße hochkommen — Rumpf muss die Position halten.', 'Schulterblätter stabil, Brust in Richtung Boden absenken.', 'Kontrolliert hochdrücken, Hüfte bleibt gestreckt.'],
-    mistakes: ['Hohlkreuz, weil der Rumpf die schräge Position nicht hält.', 'Zu hoch angefangen — bei über Hüfthöhe wird es zur Schulterübung.', 'Hände zu weit vorn: Belastung wandert in die Schulter.'],
+    setup: 'Füße auf Stuhl, Sofa oder Stufe, Hände am Boden. Immer dieselbe Höhe benutzen.',
+    steps: ['Körperspannung aufbauen, bevor die Füße hochkommen.', 'Schulterblätter stabil, Brust in Richtung Boden absenken.', 'Kontrolliert hochdrücken, Hüfte bleibt gestreckt.'],
+    mistakes: ['Hohlkreuz, weil der Rumpf die schräge Position nicht hält.', 'Fußhöhe von Session zu Session ändern — das verfälscht den Vergleich.', 'Hände zu weit vorn: Belastung wandert in die Schulter.'],
     muscles: 'Obere Brust, vordere Schulter, Trizeps, Rumpf',
     breath: 'Unten einatmen, oben ausatmen.',
   },
   'Archer-Liegestütze': {
     setup: 'Liegestütz mit deutlich breiterem Griff als üblich, Hände leicht nach außen gedreht.',
     steps: ['Zu einer Seite absenken, das Gewicht auf diesem Arm, Ellbogen beugt.', 'Der andere Arm bleibt fast gestreckt und dient nur als Stütze.', 'Über den beugenden Arm hochdrücken, dann die Seite wechseln.'],
-    mistakes: ['Der gestreckte Arm drückt kräftig mit — dann fehlt der einseitige Reiz.', 'Oberkörper verdreht sich; Brust bleibt zum Boden gerichtet.', 'Zu tief bei zu breitem Griff: Vorsicht mit der Schulter, langsam steigern.'],
+    mistakes: ['Der gestreckte Arm drückt kräftig mit — dann fehlt der einseitige Reiz.', 'Oberkörper verdreht sich; die Brust bleibt zum Boden gerichtet.', 'Seiten unterschiedlich oft machen. Immer die schwächere Seite zählen.'],
     muscles: 'Brust, vordere Schulter, Trizeps — einseitig betont',
     breath: 'Absenken einatmen, drücken ausatmen.',
   },
   'Wand-Schulterdrücken': {
-    setup: 'Mit dem Gesicht zur Wand, Hände auf Kopfhöhe an die Wand, Füße etwa 30 cm entfernt.',
-    steps: ['Körper gerade, Rumpf fest, Blick zur Wand.', 'Ellbogen beugen und den Kopf zur Wand bringen, Ellbogen bleiben eher nach vorn.', 'Über die Schultern wegdrücken, Arme oben lang machen.'],
+    setup: 'Mit dem Gesicht zur Wand, Hände auf Kopfhöhe an der Wand, Füße etwa 30 cm entfernt.',
+    steps: ['Körper gerade, Rumpf fest, Blick zur Wand.', 'Ellbogen beugen und den Kopf zur Wand bringen, Ellbogen eher nach vorn.', 'Über die Schultern wegdrücken, Arme oben lang machen.'],
     mistakes: ['Hohlkreuz — Rippen nach unten, Bauch aktiv.', 'Ellbogen weit nach außen: die Schulter mag den engeren Winkel lieber.', 'Zu nah an der Wand, dadurch kaum Bewegungsumfang.'],
     muscles: 'Vordere und seitliche Schulter, Trizeps',
     breath: 'Zur Wand einatmen, wegdrücken ausatmen.',
   },
+  'Pike Push-ups, Hände erhöht': {
+    setup: 'Hände auf einen Stuhl oder eine Sofalehne, Hüfte hoch, Körper im umgedrehten V. Die Erhöhung nimmt Last von der Schulter.',
+    steps: ['Schultern über den Händen, Finger gespreizt, Rumpf fest.', 'Ellbogen beugen und den Scheitel Richtung Auflage führen — nicht die Brust.', 'Über die Schultern hochdrücken, Hüftposition nicht verändern.'],
+    mistakes: ['Der Oberkörper wandert nach vorn, es wird ein schräger Liegestütz.', 'Hüfte sinkt ab, damit geht die Last von der Schulter weg.', 'Auflagehöhe wechseln, ohne es zu merken — immer dieselbe benutzen.'],
+    muscles: 'Schultern, Trizeps, oberer Rücken',
+    breath: 'Absenken einatmen, drücken ausatmen.',
+  },
   'Pike Push-ups (Boden)': {
-    setup: 'Aus dem Liegestütz die Hüfte hoch schieben, bis Körper ein umgedrehtes V bildet. Beine so gerade wie möglich.',
-    steps: ['Hände schulterbreit, Finger gespreizt, Schultern über den Händen.', 'Ellbogen beugen und den Scheitel Richtung Boden führen — nicht die Brust.', 'Kurz vor dem Boden umkehren und über die Schultern hochdrücken.'],
-    mistakes: ['Der Oberkörper wandert nach vorn und es wird ein normaler Liegestütz.', 'Hüfte sinkt ab, dadurch geht die Last von der Schulter weg.', 'Kopf schlägt auf: langsam absenken, letzten Zentimeter kontrollieren.'],
+    setup: 'Aus dem Liegestütz die Hüfte hoch schieben, bis der Körper ein umgedrehtes V bildet. Beine so gerade wie möglich.',
+    steps: ['Hände schulterbreit, Schultern über den Händen.', 'Ellbogen beugen und den Scheitel Richtung Boden führen.', 'Kurz vor dem Boden umkehren und über die Schultern hochdrücken.'],
+    mistakes: ['Der Oberkörper wandert nach vorn und es wird ein normaler Liegestütz.', 'Hüfte sinkt ab.', 'Kopf schlägt auf: die letzten Zentimeter bewusst kontrollieren.'],
     muscles: 'Schultern, Trizeps, oberer Rücken',
     breath: 'Absenken einatmen, drücken ausatmen.',
   },
   'Pike Push-ups, Füße erhöht': {
     setup: 'Füße auf eine niedrige Stufe oder Kiste, Hüfte hoch — der Oberkörper steht steiler als am Boden.',
-    steps: ['V-Position aufbauen, Schultern direkt über den Händen.', 'Scheitel kontrolliert Richtung Boden, Ellbogen nach vorn/außen etwa 45°.', 'Kraftvoll hochdrücken, Position der Hüfte nicht verändern.'],
+    steps: ['V-Position aufbauen, Schultern direkt über den Händen.', 'Scheitel kontrolliert Richtung Boden, Ellbogen etwa 45°.', 'Kraftvoll hochdrücken, Hüftposition halten.'],
     mistakes: ['Beim Drücken die Hüfte nach vorn kippen — verschiebt die Arbeit in die Brust.', 'Zu große Erhöhung auf einmal; in kleinen Schritten steigern.', 'Handgelenke schmerzen: Hände etwas weiter auseinander, Finger aktiv eingraben.'],
     muscles: 'Schultern, Trizeps, oberer Rücken',
     breath: 'Unten einatmen, oben ausatmen.',
   },
   'Pike Push-ups, Füße hoch': {
-    setup: 'Füße auf Stuhl oder Sofa, Hüfte senkrecht über den Schultern — fast eine Handstand-Position.',
+    setup: 'Füße auf Stuhl oder Sofa, Hüfte fast senkrecht über den Schultern.',
     steps: ['Hände etwas vor die Schultern setzen, damit die Position stabil ist.', 'Tief absenken, bis der Kopf knapp über dem Boden ist.', 'Über die Schultern hochdrücken, Rumpf die ganze Zeit fest.'],
-    mistakes: ['Rücken fällt ins Hohlkreuz, weil die Rumpfspannung fehlt.', 'Zu wenig Tiefe — hier lohnt der volle Bewegungsumfang besonders.', 'Zu früh auf dieses Level: erst wenn Level 3 mit voller Tiefe sauber läuft.'],
+    mistakes: ['Rücken fällt ins Hohlkreuz, weil die Rumpfspannung fehlt.', 'Zu wenig Tiefe — hier lohnt der volle Bewegungsumfang besonders.', 'Zu früh auf dieser Stufe: erst wenn die vorige mit voller Tiefe sauber läuft.'],
     muscles: 'Schultern, Trizeps, oberer Rücken, Rumpf',
     breath: 'Unten einatmen, beim Drücken ausatmen.',
   },
-  'Wand-Handstand, Teilstrecke': {
-    setup: 'Mit dem Bauch zur Wand in den Handstand hochlaufen, Hände 15–20 cm von der Wand.',
-    steps: ['Körper lang machen, Rippen nach unten, Gesäß anspannen — keine Bananen-Form.', 'Ellbogen ein kleines Stück beugen und wieder strecken; nur eine Teilstrecke.', 'Absenktiefe erst erhöhen, wenn die kleine Strecke völlig kontrolliert ist.'],
-    mistakes: ['Kopf zieht nach hinten in den Nacken; Blick zwischen die Hände.', 'Ellbogen kippen nach außen, sobald es schwer wird.', 'Ohne Ausweg üben: immer wissen, wie man seitlich abrollt oder abgeht.'],
-    muscles: 'Schultern, Trizeps, Rumpf',
-    breath: 'Einatmen beim Absenken, ausatmen beim Drücken. Nicht die Luft anhalten.',
-  },
-  'Handstand-Liegestütze (Wand)': {
-    setup: 'Handstand an der Wand, Hände etwa schulterbreit, Fersen leicht an der Wand.',
-    steps: ['Ganzkörperspannung: Bauch, Gesäß, Beine gestreckt.', 'Kontrolliert absenken, bis der Kopf knapp über dem Boden ist.', 'Explosiv, aber sauber hochdrücken, Ellbogen zum Schluss strecken.'],
-    mistakes: ['Durchhängen im Rücken und die Bewegung mit Schwung retten.', 'Ellbogen weit nach außen.', 'Ohne Matte unter dem Kopf üben.'],
-    muscles: 'Schultern, Trizeps, oberer Rücken, Rumpf',
-    breath: 'Vor dem Absenken einatmen, beim Drücken ausatmen.',
-  },
-  'Türrahmen-Rudern (steil)': {
-    setup: 'Beide Seiten eines Türrahmens greifen, Füße direkt am Rahmen, nur leicht zurücklehnen.',
-    steps: ['Arme strecken, Körper gerade, Gesäß angespannt.', 'Schulterblätter zuerst zusammenziehen, dann die Arme beugen.', 'Brust zum Rahmen ziehen, kurz halten, langsam zurücklassen.'],
-    mistakes: ['Nur mit den Armen ziehen und die Schulterblätter vergessen.', 'Hüfte knickt ein, es wird ein Kniebeugen-Ziehen.', 'Türrahmen ungeeignet: nur an tragfähigen Kanten greifen.'],
-    muscles: 'Oberer Rücken, Latissimus, Bizeps',
+  'Türrahmen-Rudern': {
+    setup: 'Beide Seiten eines Türrahmens auf der gewählten Höhe greifen, Füße direkt am Rahmen. Der Körperwinkel bestimmt die Schwierigkeit: je waagerechter, je schwerer.',
+    steps: ['Arme strecken, Körper von Kopf bis Ferse gerade, Gesäß angespannt.', 'Schulterblätter zuerst zusammenziehen, dann die Arme beugen.', 'Brust zum Rahmen ziehen, oben eine Sekunde halten, langsam in die volle Streckung zurücklassen.'],
+    mistakes: ['Nur mit den Armen ziehen und die Schulterblätter vergessen.', 'Hüfte knickt ein — es wird ein Ziehen aus der Kniebeuge.', 'Fußposition und Griffhöhe wechseln, ohne sie festzulegen: dann sind die Wiederholungen nicht vergleichbar. Fußabstand markieren.'],
+    muscles: 'Oberer Rücken, Latissimus, Bizeps, hintere Schulter',
     breath: 'Ziehen ausatmen, zurücklassen einatmen.',
   },
-  'Türrahmen-Rudern (45°)': {
-    setup: 'Türrahmen greifen, Füße näher heranstellen, Körper etwa 45° schräg nach hinten.',
-    steps: ['Körper von Kopf bis Ferse gerade, Fersen am Boden.', 'Schulterblätter zusammen, dann Brust zum Rahmen ziehen.', 'Oben eine Sekunde halten, dann kontrolliert in die Streckung.'],
-    mistakes: ['Mit der Hüfte pumpen, um hochzukommen.', 'Nicht ganz ausstrecken unten — der Latissimus braucht die Länge.', 'Schultern ziehen zu den Ohren; bewusst nach unten halten.'],
-    muscles: 'Oberer Rücken, Latissimus, Bizeps, hintere Schulter',
-    breath: 'Ziehen ausatmen, ablassen einatmen.',
-  },
-  'Tisch-Rudern (Knie gebeugt)': {
-    setup: 'Unter einen stabilen Tisch legen, Kante etwas breiter als schulterbreit greifen, Knie gebeugt, Füße flach.',
-    steps: ['Rumpf anspannen, Hüfte gestreckt halten — Körper eine Linie von Knie bis Kopf.', 'Schulterblätter zusammenziehen, dann Brust zur Tischkante ziehen.', 'Langsam ablassen, Arme unten vollständig strecken.'],
-    mistakes: ['Hüfte hängt durch.', 'Kinn oder Bauch zur Kante statt der Brust.', 'Wackeliger oder leichter Tisch — vorher Belastbarkeit prüfen.'],
-    muscles: 'Oberer Rücken, Latissimus, Bizeps',
-    breath: 'Ziehen ausatmen, ablassen einatmen.',
-  },
-  'Tisch-Rudern (Beine gestreckt)': {
-    setup: 'Wie zuvor, aber Beine gestreckt, Fersen am Boden.',
-    steps: ['Ganzer Körper gerade und fest, Gesäß angespannt.', 'Schulterblätter zuerst, dann Arme — Brust zur Kante.', 'Oben kurz halten, kontrolliert in die volle Streckung ablassen.'],
-    mistakes: ['Der Rumpf gibt nach und die Hüfte sinkt.', 'Zu schnelles Ablassen; die exzentrische Phase ist die Hälfte der Arbeit.', 'Griff zu breit, wodurch der Bewegungsumfang klein wird.'],
-    muscles: 'Oberer Rücken, Latissimus, Bizeps, Rumpf',
-    breath: 'Ziehen ausatmen, ablassen einatmen.',
-  },
-  'Tisch-Rudern, Füße erhöht': {
-    setup: 'Beine gestreckt, Füße auf einen Stuhl — der Körper liegt fast horizontal unter der Tischkante.',
-    steps: ['Position aufbauen und den Rumpf fest machen, bevor der erste Zug kommt.', 'Schulterblätter zusammen, Brust zur Kante ziehen.', 'Sehr kontrolliert ablassen, unten voll ausstrecken.'],
-    mistakes: ['Hohlkreuz in der horizontalen Position.', 'Nur halb ziehen, weil es schwer ist — dann eher Level zurück.', 'Füße rutschen vom Stuhl: rutschfest positionieren.'],
-    muscles: 'Oberer Rücken, Latissimus, Bizeps, Rumpf',
-    breath: 'Ziehen ausatmen, ablassen einatmen.',
-  },
-  'Einarmiges Türrahmen-Rudern': {
-    setup: 'Mit einer Hand den Türrahmen greifen, Füße nah an den Rahmen, Körper weit zurücklehnen.',
-    steps: ['Freier Arm vor dem Körper, Rumpf gegen das Verdrehen anspannen.', 'Schulterblatt der Zugseite zuerst nach hinten/unten, dann den Arm beugen.', 'Brust zur Hand ziehen, langsam zurücklassen. Seiten gleich oft.'],
-    mistakes: ['Oberkörper dreht sich auf — Brust bleibt nach vorn gerichtet.', 'Mit Schwung aus der Hüfte arbeiten.', 'Griffkraft ist zuerst am Ende: das ist normal, dann eher Sätze kürzen als Technik opfern.'],
-    muscles: 'Latissimus, oberer Rücken, Bizeps, Rumpf (Anti-Rotation)',
-    breath: 'Ziehen ausatmen, ablassen einatmen.',
-  },
-  'Aktives Hängen': {
-    setup: 'An der Stange hängen, Griff schulterbreit, Daumen um die Stange.',
-    steps: ['Zuerst passiv hängen, Schultern an den Ohren.', 'Dann Schulterblätter aktiv nach unten ziehen, Brust leicht heben — der Körper hebt sich ein paar Zentimeter.', 'Diese aktive Position halten, Beine ruhig, Rumpf fest.'],
-    mistakes: ['Nur passiv hängen — das ist eine Dehnung, kein Satz.', 'Schaukeln; Beine leicht nach vorn und Bauch anspannen stabilisiert.', 'Griff zu locker: bewusst zudrücken, das trainiert mit.'],
-    muscles: 'Latissimus, Schulterblatt-Stabilisatoren, Griffkraft, Rumpf',
-    breath: 'Ruhig und gleichmäßig weiteratmen, nicht pressen.',
-  },
-  'Scapular Pulls': {
-    setup: 'Aktives Hängen als Startposition, Arme bleiben gestreckt.',
-    steps: ['Aus dem passiven Hang die Schulterblätter nach unten und hinten ziehen.', 'Körper hebt sich nur wenige Zentimeter — die Ellbogen bleiben gestreckt.', 'Kontrolliert zurück in den passiven Hang, dann wieder.'],
-    mistakes: ['Die Ellbogen beugen und daraus einen halben Klimmzug machen.', 'Mit Schwung arbeiten; die Bewegung ist klein und langsam.', 'Zu wenig Umfang: bewusst am Ende jeder Wdh nach unten ziehen.'],
-    muscles: 'Schulterblatt-Stabilisatoren, unterer Latissimus, Griffkraft',
-    breath: 'Ziehen ausatmen, ablassen einatmen.',
-  },
-  'Negative Klimmzüge': {
-    setup: 'Oben starten: auf einen Stuhl steigen oder hochspringen, Kinn über der Stange.',
-    steps: ['Oben die Spannung aufbauen, Schulterblätter unten und hinten.', 'In 4–5 Sekunden gleichmäßig ablassen, bis die Arme voll gestreckt sind.', 'Wieder hochsteigen und die nächste Wdh beginnen — die Absenkphase ist der Reiz.'],
-    mistakes: ['Am Ende einfach fallen lassen; genau die letzten Zentimeter bringen am meisten.', 'Zu schnell ablassen (unter 2 Sekunden).', 'Schultern locker lassen — bewusst aktiv bleiben, um die Gelenke zu schützen.'],
+  'Klimmzüge mit Fußhilfe': {
+    setup: 'Stange greifen, ein Fuß auf einem Stuhl oder einer Kiste. Der Fuß hilft genau so viel, dass die letzten Wiederholungen knapp gelingen.',
+    steps: ['Aus der vollen Streckung starten, Schultern aktiv nach unten ziehen.', 'Ziehen und mit dem Fuß nur so viel nachhelfen wie nötig — Ellbogen nach unten denken, Brust zur Stange.', 'Kinn über die Stange, dann in 2–3 Sekunden bis zur vollen Streckung ablassen.'],
+    mistakes: ['Mit dem Bein den ganzen Weg drücken. Die Hilfe ist eine Krücke, kein Antrieb.', 'Unten nicht ausstrecken und die Spannung in die Schultern fallen lassen.', 'Die Hilfe nie reduzieren. Alle paar Wochen bewusst weniger nachhelfen — das ist die eigentliche Progression.'],
     muscles: 'Latissimus, oberer Rücken, Bizeps, Griffkraft',
-    breath: 'Oben einatmen, während des Ablassens langsam ausatmen.',
-  },
-  'Klimmzüge, Fußhilfe': {
-    setup: 'Stange greifen, ein Fuß auf einem Stuhl oder einer Kiste — so viel Hilfe wie nötig, aber nicht mehr.',
-    steps: ['Aus der aktiven Hängeposition starten, Arme gestreckt.', 'Ziehen und mit dem Fuß nur so viel nachhelfen, dass die letzten Wdh knapp gelingen.', 'Kinn über die Stange, dann kontrolliert in die volle Streckung ablassen.'],
-    mistakes: ['Mit dem Bein den ganzen Weg drücken — Hilfe minimal dosieren.', 'Nicht voll ausstrecken unten.', 'Hilfe nie reduzieren: alle paar Wochen bewusst weniger nachhelfen.'],
-    muscles: 'Latissimus, oberer Rücken, Bizeps',
     breath: 'Ziehen ausatmen, ablassen einatmen.',
   },
   'Klimmzüge (Untergriff)': {
     setup: 'Stange mit den Handflächen zu dir greifen, etwa schulterbreit.',
     steps: ['Aus der vollen Streckung starten, Schulterblätter erst nach unten ziehen.', 'Brust zur Stange führen, Ellbogen nach unten denken — nicht nur das Kinn hochschieben.', 'Oben kurz halten, dann in 2–3 Sekunden ablassen bis zur vollen Streckung.'],
-    mistakes: ['Mit den Beinen kippen (Kipping) — für Kraftaufbau kontraproduktiv.', 'Nur bis zur Nase ziehen; Kinn deutlich über die Stange.', 'Unten die Spannung verlieren und in die Schultern fallen.'],
+    mistakes: ['Mit den Beinen kippen (Kipping) — für Kraftaufbau kontraproduktiv.', 'Nur bis zur Nase ziehen; das Kinn gehört deutlich über die Stange.', 'Halbe Wiederholungen im müden Zustand: Satz lieber beenden.'],
     muscles: 'Latissimus, Bizeps, oberer Rücken',
     breath: 'Ziehen ausatmen, ablassen einatmen.',
   },
   'Klimmzüge (Obergriff)': {
     setup: 'Stange mit den Handflächen weg vom Körper greifen, schulterbreit bis etwas breiter.',
     steps: ['Volle Streckung unten, aber aktive Schultern.', 'Ellbogen nach unten und hinten ziehen, Brust zur Stange, leicht nach hinten lehnen.', 'Kinn über die Stange, kontrolliert ablassen bis die Arme lang sind.'],
-    mistakes: ['Schwung aus der Hüfte.', 'Griff zu breit — schränkt den Bewegungsumfang ein und belastet die Schulter.', 'Halbe Wdh im müden Zustand: Satz lieber beenden.'],
+    mistakes: ['Schwung aus der Hüfte.', 'Griff zu breit — schränkt den Bewegungsumfang ein und belastet die Schulter.', 'Vor dem ersten schweren Satz nicht aufwärmen: eine leichte Probe mit Fußhilfe voranstellen.'],
     muscles: 'Latissimus, oberer Rücken, hintere Schulter, Bizeps',
     breath: 'Ziehen ausatmen, ablassen einatmen.',
   },
   'Kniebeugen': {
     setup: 'Füße schulterbreit, Fußspitzen leicht nach außen, Arme vor dem Körper als Gegengewicht.',
     steps: ['Hüfte nach hinten und unten, Knie folgen über den Füßen.', 'So tief wie möglich, ohne dass der untere Rücken rund wird — Fersen bleiben am Boden.', 'Über die ganze Fußsohle nach oben drücken, oben Gesäß anspannen.'],
-    mistakes: ['Fersen heben sich; Fußstellung etwas breiter oder mehr nach außen versuchen.', 'Knie fallen nach innen — bewusst nach außen denken.', 'Nur halb tief: Tiefe ist hier der wichtigste Faktor.'],
+    mistakes: ['Fersen heben sich; Fußstellung etwas breiter oder mehr nach außen versuchen.', 'Knie fallen nach innen.', 'Nur halb tief: die Tiefe ist hier der wichtigste Faktor.'],
     muscles: 'Oberschenkelvorderseite, Gesäß, Rumpf',
     breath: 'Runter einatmen, hoch ausatmen.',
   },
-  'Tempo-Kniebeugen': {
-    setup: 'Wie die normale Kniebeuge, aber mit vorgegebenem Tempo.',
-    steps: ['In 3 Sekunden gleichmäßig nach unten.', 'Eine Sekunde in der tiefsten Position halten, ohne die Spannung zu verlieren.', 'Zügig, aber kontrolliert nach oben.'],
-    mistakes: ['Unten „abfedern" statt halten.', 'Das Tempo nur in der ersten Wdh einhalten.', 'Im Halten die Luft anhalten und pressen.'],
-    muscles: 'Oberschenkelvorderseite, Gesäß, Rumpf',
-    breath: 'Beim Absenken einatmen, im Halten ruhig weiteratmen, beim Hochdrücken ausatmen.',
-  },
   'Split Squats': {
-    setup: 'Großer Ausfallschritt, Oberkörper aufrecht, Gewicht überwiegend auf dem vorderen Bein.',
-    steps: ['Senkrecht absenken, bis das hintere Knie fast den Boden berührt.', 'Vorderes Schienbein bleibt möglichst senkrecht, Rumpf aufrecht.', 'Über das vordere Bein hochdrücken. Alle Wdh einer Seite, dann wechseln.'],
-    mistakes: ['Zu kleiner Schritt — dann kippt das Knie weit nach vorn.', 'Oberkörper fällt nach vorn.', 'Nach hinten drücken statt nach oben.'],
-    muscles: 'Oberschenkelvorderseite, Gesäß, Hüftbeuger-Dehnung hinten',
+    setup: 'Großer Ausfallschritt, Oberkörper aufrecht, Gewicht überwiegend auf dem vorderen Bein. Schrittlänge festlegen und beibehalten.',
+    steps: ['Senkrecht absenken, bis das hintere Knie fast den Boden berührt.', 'Vorderes Schienbein möglichst senkrecht, Rumpf aufrecht.', 'Über das vordere Bein hochdrücken. Alle Wiederholungen einer Seite, dann wechseln.'],
+    mistakes: ['Zu kleiner Schritt — dann kippt das Knie weit nach vorn.', 'Oberkörper fällt nach vorn.', 'Seiten unterschiedlich oft machen. Für die Progression zählt die schwächere Seite.'],
+    muscles: 'Oberschenkelvorderseite, Gesäß',
     breath: 'Runter einatmen, hoch ausatmen.',
   },
   'Bulgarian Split Squats': {
     setup: 'Hinterer Fußrücken auf Stuhl oder Sofa, vorderes Bein einen großen Schritt davor.',
     steps: ['Aufrecht bleiben, Gewicht auf dem vorderen Fuß, Rumpf fest.', 'Kontrolliert absenken, bis der vordere Oberschenkel etwa waagerecht ist.', 'Über das vordere Bein hochdrücken, oben Gesäß anspannen. Seiten getrennt.'],
-    mistakes: ['Abstand zu klein: Knie schiebt weit vor und die Hüfte kommt nicht in Länge.', 'Auf dem hinteren Bein mitdrücken.', 'Wegkippen zur Seite — Blick auf einen festen Punkt, Rumpf aktiv.'],
+    mistakes: ['Abstand zu klein: das Knie schiebt weit vor und die Hüfte kommt nicht in Länge.', 'Auf dem hinteren Bein mitdrücken.', 'Wegkippen zur Seite — Blick auf einen festen Punkt, Rumpf aktiv.'],
     muscles: 'Gesäß, Oberschenkelvorderseite, Hüftstabilisatoren',
-    breath: 'Runter einatmen, hoch ausatmen.',
-  },
-  'Pistol-Progression (Stuhl)': {
-    setup: 'Vor einem Stuhl stehen, ein Bein nach vorn gestreckt, auf dem anderen Bein balancieren.',
-    steps: ['Kontrolliert auf dem Standbein absenken, bis das Gesäß den Stuhl berührt.', 'Nicht absetzen und ausruhen — nur antippen.', 'Einbeinig wieder aufstehen. Seiten getrennt zählen.'],
-    mistakes: ['Sich auf den Stuhl fallen lassen und mit Schwung hochkommen.', 'Das gestreckte Bein am Boden mithelfen lassen.', 'Ferse hebt sich; Beweglichkeit im Sprunggelenk begrenzt die Übung häufig.'],
-    muscles: 'Oberschenkelvorderseite, Gesäß, Hüftstabilisatoren, Balance',
-    breath: 'Runter einatmen, hoch ausatmen.',
-  },
-  'Pistol Squats (assistiert)': {
-    setup: 'Einbeinig stehen, eine Hand leicht am Türrahmen, anderes Bein nach vorn gestreckt.',
-    steps: ['Langsam ganz nach unten, bis das Gesäß fast die Ferse berührt.', 'Die Hand hilft nur zum Balancieren, nicht zum Ziehen.', 'Einbeinig wieder hochkommen. Seiten getrennt.'],
-    mistakes: ['Sich am Rahmen hochziehen — dann ist es keine Beinübung mehr.', 'Runder Rücken in der tiefsten Position.', 'Zu früh auf diesem Level: erst wenn die Stuhl-Variante sauber sitzt.'],
-    muscles: 'Oberschenkelvorderseite, Gesäß, Hüftstabilisatoren, Balance',
     breath: 'Runter einatmen, hoch ausatmen.',
   },
   'Glute Bridges': {
@@ -1075,37 +877,23 @@ const EXERCISE_GUIDE = {
     breath: 'Heben ausatmen, ablassen einatmen.',
   },
   'Einbeinige Hip Thrusts': {
-    setup: 'Schultern auf der Sofakante, ein Fuß am Boden, das andere Bein gestreckt oder angezogen.',
+    setup: 'Schultern auf der Sofakante, ein Fuß am Boden, das andere Bein angezogen.',
     steps: ['Über die Ferse des Standbeins die Hüfte hochdrücken.', 'Becken bleibt gerade, keine Rotation.', 'Oben voll strecken und anspannen, dann kontrolliert ablassen. Seiten getrennt.'],
-    mistakes: ['Becken verdreht sich.', 'Hohlkreuz statt Hüftstreckung.', 'Position rutscht weg; Sofa muss stabil stehen.'],
+    mistakes: ['Becken verdreht sich.', 'Hohlkreuz statt Hüftstreckung.', 'Position rutscht weg; das Sofa muss stabil stehen.'],
     muscles: 'Gesäß, Beinrückseite, Rumpf',
     breath: 'Drücken ausatmen, ablassen einatmen.',
   },
-  'Single-Leg RDL': {
-    setup: 'Auf einem Bein stehen, Knie minimal gebeugt, Rumpf fest.',
-    steps: ['Hüfte nach hinten schieben und den Oberkörper nach vorn kippen — Rücken bleibt gerade.', 'Das freie Bein streckt nach hinten, Körper wird zu einer langen Linie.', 'Bis zur Spannungsgrenze in der Beinrückseite, dann über das Gesäß aufrichten. Seiten getrennt.'],
-    mistakes: ['Runder Rücken beim Vorkippen.', 'Hüfte dreht auf; Beckenknochen bleiben zum Boden gerichtet.', 'Kniebeuge statt Hüftbeuge — die Bewegung kommt aus der Hüfte.'],
-    muscles: 'Beinrückseite, Gesäß, Rumpf, Balance',
-    breath: 'Beim Vorkippen einatmen, beim Aufrichten ausatmen.',
-  },
-  'Slider Leg Curls': {
-    setup: 'Auf dem Rücken, Handtücher unter den Fersen auf glattem Boden, Becken angehoben.',
-    steps: ['Brückenposition halten — Hüfte bleibt oben, Gesäß aktiv.', 'Fersen langsam wegschieben, bis die Beine fast gestreckt sind.', 'Über die Beinrückseite die Fersen wieder heranziehen, ohne die Hüfte absinken zu lassen.'],
-    mistakes: ['Hüfte sinkt beim Ausfahren ab — dann macht die Übung kaum noch etwas.', 'Zu schnell; das langsame Ausfahren ist der Reiz.', 'Krampfneigung in der Beinrückseite: Umfang verkleinern und aufbauen.'],
-    muscles: 'Beinrückseite, Gesäß, Rumpf',
-    breath: 'Ausfahren einatmen, heranziehen ausatmen.',
-  },
   'Plank (Knie)': {
     setup: 'Unterarmstütz, Ellbogen unter den Schultern, Knie am Boden.',
-    steps: ['Unterarme parallel, Hände zu leichten Fäusten oder flach.', 'Bauch und Gesäß anspannen, Becken leicht nach hinten kippen — kein Hohlkreuz.', 'Von Kopf bis Knie eine gerade Linie halten, ruhig weiteratmen.'],
+    steps: ['Unterarme parallel, Hände flach oder zu leichten Fäusten.', 'Bauch und Gesäß anspannen, Becken leicht nach hinten kippen — kein Hohlkreuz.', 'Von Kopf bis Knie eine gerade Linie halten, ruhig weiteratmen.'],
     mistakes: ['Gesäß nach oben schieben, um es leichter zu machen.', 'Schultern rutschen vor die Ellbogen.', 'Die Luft anhalten.'],
-    muscles: 'Gerade Bauchmuskulatur, Rumpf-Stabilisatoren, Schultern',
+    muscles: 'Gerade Bauchmuskulatur, tiefe Rumpfmuskulatur, Schultern',
     breath: 'Ruhig und gleichmäßig weiteratmen — nicht pressen.',
   },
   'Plank': {
     setup: 'Unterarmstütz auf Unterarmen und Fußballen, Ellbogen unter den Schultern.',
     steps: ['Becken leicht nach hinten kippen, Rippen nach unten, Bauch fest.', 'Gesäß und Oberschenkel gleichzeitig anspannen.', 'Gerade Linie von Kopf bis Ferse halten, Blick zum Boden.'],
-    mistakes: ['Hüfte hängt durch — der häufigste Fehler und schlecht für den Rücken.', 'Gesäß zu hoch (Zelt-Form).', 'Zeit halten, aber ohne Spannung: 20 Sekunden fest sind mehr wert als 60 Sekunden schlaff.'],
+    mistakes: ['Hüfte hängt durch — der häufigste Fehler und schlecht für den Rücken.', 'Gesäß zu hoch (Zelt-Form).', 'Zeit halten ohne Spannung: 20 Sekunden fest sind mehr wert als 60 Sekunden schlaff. Beim ersten Nachgeben abbrechen und die Zeit eintragen.'],
     muscles: 'Gerade Bauchmuskulatur, tiefe Rumpfmuskulatur, Schultern',
     breath: 'Ruhig weiteratmen, Spannung dabei halten.',
   },
@@ -1116,63 +904,82 @@ const EXERCISE_GUIDE = {
     muscles: 'Gerade und schräge Bauchmuskulatur, Rumpf (Anti-Rotation), Schultern',
     breath: 'Gleichmäßig weiteratmen, besonders beim Strecken.',
   },
-  'Side Plank': {
-    setup: 'Seitlage, Ellbogen unter der Schulter, Beine gestreckt übereinander.',
-    steps: ['Hüfte anheben, bis Körper von Kopf bis Fuß eine Linie bildet.', 'Untere Schulter aktiv wegdrücken, oberer Arm an der Hüfte oder nach oben.', 'Nach der halben Zeit die Seite wechseln.'],
-    mistakes: ['Hüfte sinkt nach vorn oder unten.', 'Nur eine Seite trainieren.', 'Auf der Schulter „hängen" statt sie aktiv zu stabilisieren.'],
-    muscles: 'Schräge Bauchmuskulatur, Hüftstabilisatoren, Schulter',
-    breath: 'Ruhig weiteratmen; Bauch bleibt fest.',
+  'Plank, Füße erhöht': {
+    setup: 'Unterarmstütz, Füße auf einem Stuhl oder Sofa. Die Erhöhung verlängert den Hebel und macht die Halteposition deutlich schwerer.',
+    steps: ['Erst am Boden die Spannung aufbauen, dann die Füße hochsetzen.', 'Becken nach hinten kippen, Rippen unten — in dieser Position kippt der Rücken leicht ins Hohlkreuz.', 'Gerade Linie halten, Blick zum Boden, ruhig atmen.'],
+    mistakes: ['Hohlkreuz, weil der Rumpf den längeren Hebel nicht hält.', 'Gesäß nach oben ausweichen.', 'Fußhöhe wechseln — immer dieselbe Auflage benutzen, sonst sind die Zeiten nicht vergleichbar.'],
+    muscles: 'Gerade Bauchmuskulatur, tiefe Rumpfmuskulatur, Schultern',
+    breath: 'Ruhig weiteratmen; beim ersten Nachgeben beenden.',
   },
-  'Hollow Hold': {
-    setup: 'Auf dem Rücken liegen, Arme über dem Kopf, Beine gestreckt.',
-    steps: ['Zuerst den unteren Rücken in den Boden drücken — das ist die eigentliche Arbeit.', 'Dann Schulterblätter und Beine wenige Zentimeter vom Boden lösen.', 'Position halten. Wird der Rücken hohl: Beine höher oder Knie leicht beugen.'],
-    mistakes: ['Hohlkreuz — dann arbeitet der Rücken statt des Bauchs.', 'Beine so tief, dass die Position nicht zu halten ist.', 'Kopf in den Nacken; Kinn leicht zur Brust.'],
+  'Hollow Hold, Knie gebeugt': {
+    setup: 'Auf dem Rücken liegen, Arme neben dem Körper oder vor der Brust, Knie etwa 90° gebeugt.',
+    steps: ['Zuerst den unteren Rücken in den Boden drücken — das ist die eigentliche Arbeit.', 'Dann Schulterblätter und Füße wenige Zentimeter vom Boden lösen.', 'Position halten. Wird der Rücken hohl: Knie näher heranziehen.'],
+    mistakes: ['Hohlkreuz — dann arbeitet der Rücken statt des Bauchs. Das ist das Abbruchkriterium.', 'Kopf in den Nacken; Kinn leicht zur Brust.', 'Beine so tief, dass die Position nicht zu halten ist.'],
     muscles: 'Gerade Bauchmuskulatur, Hüftbeuger, tiefe Rumpfmuskulatur',
     breath: 'Flach und ruhig weiteratmen, ohne die Spannung zu verlieren.',
   },
-  'V-Ups': {
-    setup: 'Ausgestreckt auf dem Rücken, Arme über dem Kopf, Beine gestreckt.',
-    steps: ['Arme und Beine gleichzeitig heben und in der Mitte über der Hüfte zusammenführen.', 'Beine möglichst gerade, Hände Richtung Füße.', 'Kontrolliert zurück in die gestreckte Lage, ohne Schwung zu holen.'],
-    mistakes: ['Mit den Armen Schwung holen und sich hochschleudern.', 'Knie stark beugen, um es leichter zu machen — dann eher Level zurück.', 'Ruckartige Bewegung im Nacken.'],
-    muscles: 'Gerade Bauchmuskulatur, Hüftbeuger',
-    breath: 'Beim Zusammenführen ausatmen, beim Ablassen einatmen.',
+  'Hollow Hold': {
+    setup: 'Auf dem Rücken liegen, Arme über dem Kopf, Beine gestreckt.',
+    steps: ['Unteren Rücken in den Boden drücken und dort halten.', 'Schulterblätter und Beine wenige Zentimeter vom Boden lösen.', 'Position halten; sobald der Rücken hohl wird, ist der Satz zu Ende.'],
+    mistakes: ['Der untere Rücken hebt sich vom Boden — sobald das passiert, ist der Satz zu Ende.', 'Beine so tief, dass die Position nicht zu halten ist — lieber eine Stufe zurück.', 'Kopf in den Nacken drücken statt Kinn leicht zur Brust.'],
+    muscles: 'Gerade Bauchmuskulatur, Hüftbeuger, tiefe Rumpfmuskulatur',
+    breath: 'Flach weiteratmen, ohne die Spannung zu verlieren.',
+  },
+  'Einarmiges Hantelrudern': {
+    setup: 'Eine Hand und ein Knie auf Sofa oder Stuhl, Rücken waagerecht und gerade. Hantel in der freien Hand, Arm hängt lang. Ersetzt das Möbelrudern, weil sich das Gewicht exakt dosieren lässt.',
+    steps: ['Rücken gerade, Blick zum Boden, Becken waagerecht — nicht verdrehen.', 'Erst das Schulterblatt nach hinten und unten ziehen, dann den Ellbogen nach hinten Richtung Hüfte führen.', 'Oben eine Sekunde halten, dann kontrolliert bis zur vollen Streckung ablassen. Seiten getrennt.'],
+    mistakes: ['Den Oberkörper aufdrehen, um mehr Gewicht zu bewegen.', 'Die Hantel mit Schwung nach oben reißen statt zu ziehen.', 'Ellbogen weit nach außen führen — er bleibt nah am Körper.'],
+    muscles: 'Latissimus, oberer Rücken, hintere Schulter, Bizeps',
+    breath: 'Beim Ziehen ausatmen, beim Ablassen einatmen.',
+  },
+  'Rumänisches Kreuzheben': {
+    setup: 'Aufrecht stehen, Hanteln vor den Oberschenkeln, Füße hüftbreit, Knie ganz leicht gebeugt. Ersetzt die Brücken, weil sich hier echte Last aufbauen lässt.',
+    steps: ['Hüfte nach hinten schieben und den Oberkörper nach vorn kippen — die Bewegung kommt aus der Hüfte, nicht aus dem Rücken.', 'Hanteln dicht an den Beinen entlang führen, bis die Beinrückseite deutlich zieht (meist etwa Kniehöhe).', 'Über Gesäß und Beinrückseite aufrichten, oben die Hüfte voll strecken.'],
+    mistakes: ['Runder Rücken beim Vorkippen — abbrechen und Gewicht reduzieren, das ist die Verletzungsstelle.', 'Daraus eine Kniebeuge machen; die Knie bleiben fast gestreckt.', 'Die Hanteln weit vom Körper weg führen, was den unteren Rücken belastet.'],
+    muscles: 'Beinrückseite, Gesäß, unterer Rücken, Rumpf',
+    breath: 'Beim Vorkippen einatmen, beim Aufrichten ausatmen.',
+  },
+  'Bulgarian Split Squat mit Hanteln': {
+    setup: 'Hinterer Fußrücken auf Stuhl oder Sofa, vorderes Bein einen großen Schritt davor, in jeder Hand eine Hantel. Zwei Hanteln ergeben bis zu 25 kg Zusatzlast — auf einem Bein ist das erheblich.',
+    steps: ['Aufrecht bleiben, Hanteln hängen neben dem Körper, Rumpf fest.', 'Kontrolliert absenken, bis der vordere Oberschenkel etwa waagerecht ist.', 'Über das vordere Bein hochdrücken, oben Gesäß anspannen. Seiten getrennt.'],
+    mistakes: ['Auf dem hinteren Bein mitdrücken.', 'Nach vorn zusammenfallen, weil die Hanteln nach vorn ziehen — Brust bleibt offen.', 'Seiten unterschiedlich oft machen. Für die Progression zählt die schwächere Seite.'],
+    muscles: 'Gesäß, Oberschenkelvorderseite, Hüftstabilisatoren, Rumpf',
+    breath: 'Runter einatmen, hoch ausatmen.',
+  },
+  'Seitheben': {
+    setup: 'Aufrecht stehen, Hanteln neben den Oberschenkeln, Ellbogen minimal gebeugt, Schultern tief. Die seitliche Schulter ist mit Körpergewicht praktisch nicht erreichbar — das ist der Grund für diese Übung.',
+    steps: ['Arme seitlich anheben, bis die Hände etwa auf Schulterhöhe sind — nicht höher.', 'Ellbogen führen die Bewegung, die Hände folgen.', 'Oben kurz halten, dann deutlich langsamer ablassen als angehoben.'],
+    mistakes: ['Mit dem Oberkörper schwingen, um die Hanteln hochzuwerfen — hier zählt Kontrolle mehr als Gewicht.', 'Schultern zu den Ohren ziehen; sie bleiben bewusst tief.', 'Über Schulterhöhe heben, wodurch die Arbeit in den Nacken wandert.'],
+    muscles: 'Seitliche Schulter',
+    breath: 'Beim Anheben ausatmen, beim Ablassen einatmen.',
   },
 };
 
-// Jedes Template bringt ein eigenes Wdh-Schema UND einen eigenen Muster-Mix.
-// Die Leitern bleiben pro Muster stabil — variiert wird das Drumherum, damit
-// die Double Progression weiter vergleichbare Zahlen bekommt.
+// Templates unterscheiden sich nur noch darin, WELCHE Muster drankommen.
+// Wdh-Fenster, Haltezeiten und Tempo sind bewusst identisch: vorher hing das
+// Fenster am Template, dadurch ergaben dieselben 8/8 Wdh in einem Template
+// einen Aufstieg und im anderen einen Abstieg. Das Level hat damit die
+// Templatewahl gemessen statt die Kraft.
+// Beine stehen in B und D zuerst, damit sie bei Zeitmangel nicht immer
+// als Erstes wegfallen.
+const TEMPO = 'Kontrolliert: ~2 Sek. runter, ~1 Sek. hoch';
+const SEC_PER_REP = 3;   // Grundlage der Dauerschätzung
+
 const TEMPLATES = {
-  A: { name: 'Klassisch', reps: [8, 15], holdSec: 40,
-       tempo: 'Kontrolliert: 2 Sek. runter, zügig hoch',
-       focus: 'Ganzkörper · horizontal',
-       mix: [['push', 'pull'], ['squat', 'hinge']],
-       desc: '<strong>8–15 Wdh</strong> pro Satz, kontrolliertes Tempo. Jeder Satz bis <strong>1–2 Wdh vor Muskelversagen</strong>.' },
-  B: { name: 'Exzentrisch', reps: [6, 10], holdSec: 30,
-       tempo: 'Langsam: 4 Sek. runter, explosiv hoch',
-       focus: 'Vertikal · Schulter & Klimmzug',
-       mix: [['vpush', 'vpull'], ['hinge', 'squat']],
-       accessory: ['dbcurl', 'dbtricep'],
-       desc: '<strong>6–10 Wdh</strong>, betont langsames Absenken (4 Sek.). Maximale Muskelspannung pro Wdh.' },
-  C: { name: 'Volumen', reps: [12, 20], holdSec: 55,
-       tempo: 'Flüssiges Tempo · keine Pause oben',
-       focus: 'Ganzkörper · Zug vertikal',
-       mix: [['push', 'vpull'], ['squat', 'hinge']],
-       accessory: ['dblateral', 'dbrow'],
-       desc: '<strong>12–20 Wdh</strong>, flüssiges Tempo, kurze Sätze bis zum Brennen. Muskelausdauer & Pump.' },
-  D: { name: 'Isometrie', reps: [6, 12], holdSec: 50,
-       tempo: 'Unten 2 Sek. anhalten, dann kontrolliert hoch',
-       focus: 'Schulter & Rücken · Pausen unter Last',
-       mix: [['vpush', 'pull'], ['hinge', 'squat']],
-       accessory: ['dbpress', 'dbrdl'],
-       desc: '<strong>6–12 Wdh</strong> mit <strong>2 Sek. Pause im schwersten Punkt</strong>. Kein Schwung, reine Muskelarbeit.' },
-  E: { name: 'Power', reps: [5, 8], holdSec: 35,
-       tempo: 'Runter kontrolliert, hoch so explosiv wie möglich',
-       focus: 'Ganzkörper · explosiv',
-       mix: [['push', 'pull'], ['squat', 'hinge']],
-       desc: '<strong>5–8 Wdh</strong>, jede Wdh <strong>explosiv</strong> nach oben. Satz beenden, sobald das Tempo einbricht.' },
+  A: { name: 'Horizontal', focus: 'Horizontal drücken & ziehen',
+       mix: [['push', 'pull'], ['squat', 'hinge']], trunk: 'core',
+       desc: 'Liegestütze und Rudern, dazu Beine und Rumpf. Die Grundsession.' },
+  B: { name: 'Vertikal', focus: 'Beine zuerst, dann vertikal',
+       mix: [['hinge', 'squat'], ['vpush', 'vpull']], trunk: 'dblateral',
+       desc: 'Beine voran, danach Überkopfdrücken und Klimmzüge. Abschluss: Seitheben.' },
+  C: { name: 'Mix 1', focus: 'Druck horizontal, Zug vertikal',
+       mix: [['push', 'vpull'], ['squat', 'hinge']], trunk: 'core',
+       desc: 'Liegestütze mit Klimmzügen kombiniert, dazu Beine und Rumpf.' },
+  D: { name: 'Mix 2', focus: 'Beine zuerst, Druck vertikal',
+       mix: [['hinge', 'squat'], ['vpush', 'pull']], trunk: 'dblateral',
+       desc: 'Beine voran, danach Überkopfdrücken und Rudern. Abschluss: Seitheben.' },
 };
-const TEMPLATE_ORDER = ['A', 'B', 'C', 'D', 'E'];
+const TEMPLATE_ORDER = ['A', 'B', 'C', 'D'];
 
 // Warm-Up rotiert mit, damit die zwei Minuten nicht zur Gewohnheit werden.
 const WARMUPS = [
@@ -1195,15 +1002,14 @@ const FINISHERS = {
 };
 const FINISHER_ORDER = ['hiit', 'tabata', 'pyramide', 'emom'];
 
-// Hantel-Startwerte bewusst konservativ — die Progression hebt sie schnell an.
-const DEFAULT_LEVELS = { push: 4, vpush: 2, pull: 2, vpull: 3, squat: 3, hinge: 1, core: 3,
-                         dbpress: 2, dbrow: 2, dblateral: 1, dbcurl: 2, dbtricep: 1, dbrdl: 2 };
+// Konservative Startwerte. Vor der ersten Session unter „⚙️ Levels"
+// gegenprüfen: die Stufe muss sauber im Wdh-Fenster machbar sein.
+const DEFAULT_LEVELS = { push: 4, vpush: 3, pull: 2, vpull: 1, squat: 2, hinge: 1, core: 2, dbrow: 2, dbrdl: 1, dbsquat: 2, dblateral: 1 };
 const REST_SEC = 60;
 // Ein Halt, der fast sofort abgebrochen wird, ist ein Auslassen und kein
 // Scheitern — er darf weder hoch- noch runterleveln.
 const MIN_ATTEMPT_FRAC = 0.2;
 const CORE_REST_SEC = 45;
-const ACCESSORY_REST_SEC = 45;
 const WORK_EST_SEC = 40; // Schätzung pro Wdh-Satz für die Fortschrittsanzeige
 
 // ══════════════════════════════════════════
@@ -1238,16 +1044,27 @@ function hasEquipment(ladder) {
   return true;
 }
 
-function resolvePattern(p) {
+// Sind Hanteln da, gewinnt die fein dosierbare Hantel-Variante: Hantelrudern
+// statt Möbelrudern, belastetes Kreuzheben statt Brücken, belastete Split
+// Squats statt reinem Körpergewicht. Ersetzen, nicht ergänzen — das hält die
+// Session bei zehn Sätzen. Ohne die nötige Ausrüstung greift der Fallback.
+function resolvePattern(p, depth) {
   const l = LADDERS[p];
-  return hasEquipment(l) ? p : (l.fallback || null);
+  if (!l) return null;
+  const d = depth || 0;
+  if (d > 4) return null;
+  if (l.prefer && hasEquipment(LADDERS[l.prefer])) return resolvePattern(l.prefer, d + 1);
+  if (hasEquipment(l)) return p;
+  return l.fallback ? resolvePattern(l.fallback, d + 1) : null;
 }
 
-// Manche Leitern schreiben ihren Wdh-Bereich selbst vor — Seitheben etwa
-// bleibt im hohen Bereich, weil 12,5 kg dort die Obergrenze ist.
-function repRange(tpl, pattern) {
-  const l = LADDERS[pattern];
-  return (l && l.reps) || tpl.reps;
+// Fenster und Tempo kommen von der Übung, nicht vom Template.
+function repRange(pattern) { return LADDERS[pattern].reps; }
+function holdRange(pattern) { return LADDERS[pattern].hold; }
+
+// Kurzname für das Abschlussblock-Label: „Core (Rumpf)" -> „Core"
+function blockLabel(pattern) {
+  return LADDERS[pattern].label.replace(/\s*\(.*\)$/, '');
 }
 
 function pickFinisher(rotation) {
@@ -1264,26 +1081,34 @@ function finisherRounds(key) {
 }
 
 // Ein Satz plus Pause. Einheitlich für alle Muster, weil manche Leitern
-// gemischt sind (Aktives Hängen und Plank zählen Sekunden, nicht Wdh).
+// Sekunden statt Wiederholungen zählen. Die Dauerschätzung rechnet mit
+// Wiederholungen × Tempo × Seiten statt mit einer Pauschale — einseitige und
+// langsame Sätze wurden vorher massiv unterschätzt.
 function addSet(phases, tpl, p, set, label, restSec) {
   const ladder = LADDERS[p];
   const lvl = Math.max(1, Math.min(ladder.levels.length, levels[p] || 1));
   const ex = ladder.levels[lvl - 1];
-  const rr = repRange(tpl, p);
+  const sides = ex.sides || 1;
   const section = `${label} · Satz ${set}/2`;
   if (ex.unit === 'sec') {
-    phases.push({ kind: 'work-time', pattern: p, set, dur: T(tpl.holdSec), name: ex.name,
-                  section, detail: ex.detail, target: `${tpl.holdSec} Sek. halten`, level: lvl });
+    const [lo, hi] = holdRange(p);
+    phases.push({ kind: 'work-time', pattern: p, set, dur: T(hi), name: ex.name, section,
+                  detail: ex.detail, level: lvl, sides,
+                  target: `${lo}–${hi} Sek. halten · beim ersten Nachgeben beenden` });
     phases.push({ kind: 'rest', dur: T(restSec), name: 'Pause', section,
-                  detail: 'Wie lange gehalten? Eintragen · dann „Weiter"',
-                  logFor: { pattern: p, set, unit: 'sec', full: tpl.holdSec } });
+                  detail: 'Gehaltene Zeit prüfen · dann „Weiter"',
+                  logFor: { pattern: p, set, unit: 'sec', full: hi } });
   } else {
+    const [lo, hi] = repRange(p);
     phases.push({ kind: 'work-reps', pattern: p, set, name: ex.name, section,
-                  detail: ladder.ownTempo ? ex.detail : `${ex.detail} · ${tpl.tempo}`,
-                  target: `${rr[0]}–${rr[1]} Wdh · 1–2 in Reserve`, level: lvl });
+                  detail: ladder.ownTempo ? ex.detail : `${ex.detail} · ${TEMPO}`,
+                  target: `${lo}–${hi} Wdh${sides > 1 ? ' pro Seite' : ''} · 1–2 in Reserve`,
+                  level: lvl, sides,
+                  est: Math.round(((lo + hi) / 2) * SEC_PER_REP * sides) });
     phases.push({ kind: 'rest', dur: T(restSec), name: 'Pause', section,
-                  detail: 'Wdh eintragen · dann „Weiter" wenn bereit',
-                  logFor: { pattern: p, set, unit: 'reps' } });
+                  detail: sides > 1 ? 'Schwächere Seite eintragen · dann „Weiter"'
+                                    : 'Wdh eintragen · dann „Weiter" wenn bereit',
+                  logFor: { pattern: p, set, unit: 'reps', sides } });
   }
 }
 
@@ -1306,16 +1131,14 @@ function buildWorkout(tplKey, withCardio, opts) {
     }
   });
 
-  // Hantel-Block: nur in den Templates, die einen haben, und nur mit Hanteln
-  const acc = (tpl.accessory || []).map(resolvePattern).filter(Boolean);
-  if (acc.length) {
+  // Abschlussblock: Rumpf oder Seitheben, je Template — kein Zusatzblock,
+  // sondern zwei der insgesamt zehn Satzplätze.
+  const trunk = resolvePattern(tpl.trunk);
+  if (trunk) {
     for (let set = 1; set <= 2; set++) {
-      for (const p of acc) addSet(phases, tpl, p, set, 'Hantel-Block', ACCESSORY_REST_SEC);
+      addSet(phases, tpl, trunk, set, blockLabel(trunk), CORE_REST_SEC);
     }
   }
-
-  // Core: 2 Sätze
-  for (let set = 1; set <= 2; set++) addSet(phases, tpl, 'core', set, 'Core', CORE_REST_SEC);
 
   // Optionaler Finisher (Intervalle — zeiteffizienter als Steady State)
   if (withCardio) {
@@ -1338,7 +1161,7 @@ function buildWorkout(tplKey, withCardio, opts) {
 }
 
 function estimateSec(phases) {
-  return phases.reduce((s, p) => s + (p.dur || T(WORK_EST_SEC)), 0);
+  return phases.reduce((s, p) => s + (p.dur || T(p.est || WORK_EST_SEC)), 0);
 }
 
 // ══════════════════════════════════════════
@@ -1558,8 +1381,8 @@ function renderTimer() {
   // Gesamtzeit (verstrichene Zeit) + Fortschritt
   const elapsedTotal = (now - workoutStartTime) / 1000;
   $('overallTime').textContent = '⏱ ' + fmtTime(elapsedTotal);
-  const done = workout.slice(0, currentIdx).reduce((s, p) => s + (p.dur || T(WORK_EST_SEC)), 0);
-  const curEst = phase.dur || T(WORK_EST_SEC);
+  const done = workout.slice(0, currentIdx).reduce((s, p) => s + (p.dur || T(p.est || WORK_EST_SEC)), 0);
+  const curEst = phase.dur || T(phase.est || WORK_EST_SEC);
   const curProgress = phase.dur
     ? curEst - Math.max(0, (phaseEndsAt - now) / 1000)
     : Math.min(curEst, (now - phaseStartedAt) / 1000);
@@ -1790,7 +1613,7 @@ function prefillReps(logFor) {
     const val = historySetValue(e, logFor);
     if (val !== null) return val;
   }
-  const [lo, hi] = TEMPLATES[selectedTemplate].reps;
+  const [lo, hi] = repRange(logFor.pattern);
   return Math.round((lo + hi) / 2);
 }
 
@@ -1830,9 +1653,9 @@ function applyProgression(tplKey) {
     if (vals.length < 2) continue;
     const lvl = levels[p];
     const unit = LADDERS[p].levels[lvl - 1].unit;
-    const rr = repRange(tpl, p);
-    const top = unit === 'sec' ? tpl.holdSec : rr[1];
-    const bottom = unit === 'sec' ? Math.round(tpl.holdSec * 0.6) : rr[0];
+    const range = unit === 'sec' ? holdRange(p) : repRange(p);
+    const top = range[1];
+    const bottom = range[0];
     if (Math.min(...vals) >= top && lvl < LADDERS[p].levels.length) {
       levels[p] = lvl + 1;
       changes.push({ pattern: p, dir: 'up', newName: LADDERS[p].levels[lvl].name });
