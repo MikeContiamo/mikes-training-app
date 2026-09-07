@@ -1,7 +1,7 @@
 // Service Worker: offline-fähig + installierbar.
 // Strategie: stale-while-revalidate — sofort aus dem Cache antworten,
 // im Hintergrund aktualisieren, damit neue Versionen beim nächsten Öffnen da sind.
-const CACHE = 'mikes-training-v3';
+const CACHE = 'mikes-training-v4';
 const ASSETS = [
   './',
   './index.html',

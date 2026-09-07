@@ -1,7 +1,7 @@
 {
   "name": "Mike's Training",
   "short_name": "Training",
-  "description": "Minimum Effective Dose Bodyweight-Training · ~20 Min",
+  "description": "Minimum Effective Dose · Bodyweight + Hanteln · 18–24 Min",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

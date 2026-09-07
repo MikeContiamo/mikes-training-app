@@ -392,7 +392,7 @@
 <div class="screen active" id="startScreen">
   <div class="app-title">
     <h1>💪 Mike's Training</h1>
-    <div class="subtitle">Minimum Effective Dose · Bodyweight · ~20 Min</div>
+    <div class="subtitle">Minimum Effective Dose · Bodyweight + Hanteln · 18–24 Min</div>
   </div>
 
   <div class="week-stats">
@@ -412,11 +412,21 @@
     <div class="tpl-desc" id="tplDesc"></div>
     <div class="toggle-row">
       <div>
-        <div class="toggle-label">🏋️ Klimmzugstange vorhanden</div>
+        <div class="toggle-label">🧗 Klimmzugstange vorhanden</div>
         <div class="toggle-sub">Schaltet Klimmzüge frei · sonst Rudern am Tisch</div>
       </div>
       <label class="switch">
         <input type="checkbox" id="barToggle" onchange="onBarToggle()">
+        <span class="slider-toggle"></span>
+      </label>
+    </div>
+    <div class="toggle-row">
+      <div>
+        <div class="toggle-label">🏋️ Freihanteln vorhanden</div>
+        <div class="toggle-sub">Hantel-Block in B, C und D · bis 12,5 kg</div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="dumbbellToggle" onchange="onDumbbellToggle()">
         <span class="slider-toggle"></span>
       </label>
     </div>
@@ -454,12 +464,23 @@
         <li>Die App rotiert automatisch <strong>A → B → C → D → E</strong> — einfach das vorgeschlagene Workout machen. Jedes Template setzt einen anderen Reiz und trainiert einen anderen Muster-Mix: Kraft-Technik, Muskelspannung, Ausdauer, Haltekraft, Explosivität.</li>
         <li>Ein Zyklus dauert rund <strong>anderthalb Wochen</strong>. Dadurch kommt jede Woche eine andere Kombination — und Drücken und Ziehen werden über <span class="highlight">zwei Richtungen</span> verteilt (horizontal und vertikal), statt immer dieselbe Übung zu machen. Das Gesamtvolumen bleibt gleich, die Progression je Leiter läuft dafür etwas langsamer.</li>
         <li>Auch Warm-Up und Finisher wechseln automatisch durch, damit die Session nicht zur Gewohnheit wird.</li>
+        <li>Drei der fünf Workouts (B, C, D) haben zusätzlich einen <strong>Hantel-Block</strong> — Details weiter unten.</li>
         <li>Nie zwei Tage direkt hintereinander: Der Muskel wächst in den <strong>~48 h Erholung</strong>, nicht im Training.</li>
       </ul>
-      <h4>🏋️ Ausstattung</h4>
+      <h4>🧗 Ausstattung</h4>
       <ul>
-        <li>Alles geht ohne Geräte. Mit einer <strong>Klimmzugstange oder einem Türreck</strong> den Schalter oben umlegen — dann kommen echte Klimmzüge dazu (die stärkste Rückenübung überhaupt).</li>
+        <li>Der Kern geht ohne Geräte. Mit einer <strong>Klimmzugstange oder einem Türreck</strong> den Schalter oben umlegen — dann kommen echte Klimmzüge dazu (die stärkste Rückenübung überhaupt).</li>
         <li>Ohne Stange ersetzt die App Klimmzüge automatisch durch Rudern am Tisch bzw. Türrahmen. Kein Loch im Programm.</li>
+        <li>Gleiches gilt für die Hanteln: Schalter aus, und <strong>B, C und D</strong> laufen als reine Körpergewichts-Workouts. Praktisch auf Reisen.</li>
+      </ul>
+      <h4>🏋️ Hantel-Block</h4>
+      <ul>
+        <li><strong>B, C und D</strong> haben nach dem Hauptteil einen Hantel-Block mit zwei Übungen à zwei Sätzen. <strong>A und E</strong> bleiben absichtlich reines Körpergewicht — so gibt es immer zwei Workouts, die überall funktionieren.</li>
+        <li>Die Hanteln füllen genau die Lücken, die Körpergewicht kaum erreicht: <strong>seitliche Schulter</strong> (Seitheben), <strong>direkte Armarbeit</strong> (Curls, Trizeps) und <strong>belastete Hüftstreckung</strong> (Kreuzheben). Kein Ersatz für Liegestütze, sondern eine Ergänzung.</li>
+        <li>Bei den Hanteln ist das <span class="highlight">Gewicht die Stufe</span>: 5 → 7,5 → 10 → 12,5 kg. Sonst gilt dieselbe Regel — beide Sätze am oberen Wdh-Ziel, dann legt die App eine Stufe drauf.</li>
+        <li>Bei 12,5 kg ist die Hantel am Limit. Danach geht es <strong>einarmig</strong> (Drücken, Trizeps), <strong>einbeinig</strong> (Kreuzheben) oder <strong>langsamer</strong> (3 Sek. ablassen bei Rudern und Curls) weiter — die Leiter endet also nicht am Gewicht.</li>
+        <li>Seitheben ist bewusst bei 12,5 kg gedeckelt und arbeitet stattdessen im Bereich <strong>12–20 Wdh</strong>. Die seitliche Schulter mag hohe Wiederholungen und saubere Technik lieber als schweres Schwingen.</li>
+        <li>Die Hantel-Sessions dauern rund <strong>6 Minuten länger</strong> (etwa 24 statt 18 Min ohne Cardio). Wenn die Zeit knapp ist: Hantel-Schalter aus oder Cardio weglassen.</li>
       </ul>
       <h4>🔥 Intensität — der wichtigste Hebel</h4>
       <ul>
@@ -611,7 +632,8 @@ const CIRCUMFERENCE = 2 * Math.PI * 108;
 const FAST = new URLSearchParams(location.search).has('fast');
 const T = s => FAST ? Math.max(2, Math.round(s * 0.1)) : s;
 
-const PATTERNS = ['push', 'vpush', 'pull', 'vpull', 'squat', 'hinge', 'core'];
+const PATTERNS = ['push', 'vpush', 'pull', 'vpull', 'squat', 'hinge', 'core',
+                  'dbpress', 'dbrow', 'dblateral', 'dbcurl', 'dbtricep', 'dbrdl'];
 
 const LADDERS = {
   push: { label: 'Push (Brust/Schulter)', levels: [
@@ -671,11 +693,155 @@ const LADDERS = {
     { name: 'Hollow Hold', detail: 'Rücken in den Boden drücken · Arme & Beine schweben lassen', unit: 'sec' },
     { name: 'V-Ups', detail: 'Gestreckt liegen · Hände & Füße treffen sich oben · kontrolliert', unit: 'reps' },
   ]},
+
+  // ── Hantel-Leitern ──────────────────────────────────────────────────
+  // Hier ist die Stufe das Gewicht (verstellbare Hanteln bis 12,5 kg).
+  // Oberhalb von 12,5 kg geht es einarmig oder langsamer weiter, damit die
+  // Leiter am Hantel-Limit nicht endet. Alle Stufen teilen eine Anleitung.
+  dbpress: { label: 'Schulterdrücken (Hantel)', requires: 'dumbbells', levels: [
+    { name: 'Schulterdrücken · 5 kg', guide: 'Schulterdrücken (Hantel)', unit: 'reps',
+      detail: 'Beide Hanteln · 5 kg pro Hand · Einstieg, Technik einschleifen' },
+    { name: 'Schulterdrücken · 7,5 kg', guide: 'Schulterdrücken (Hantel)', unit: 'reps',
+      detail: 'Beide Hanteln · 7,5 kg pro Hand' },
+    { name: 'Schulterdrücken · 10 kg', guide: 'Schulterdrücken (Hantel)', unit: 'reps',
+      detail: 'Beide Hanteln · 10 kg pro Hand' },
+    { name: 'Schulterdrücken · 12,5 kg', guide: 'Schulterdrücken (Hantel)', unit: 'reps',
+      detail: 'Beide Hanteln · 12,5 kg pro Hand · das Hantel-Maximum' },
+    { name: 'Einarmig drücken · 10 kg', guide: 'Schulterdrücken (Hantel)', unit: 'reps',
+      detail: 'Eine Hantel, 10 kg · freie Hand an die Hüfte · Rumpf gegen das Kippen fest · pro Seite' },
+    { name: 'Einarmig drücken · 12,5 kg', guide: 'Schulterdrücken (Hantel)', unit: 'reps',
+      detail: 'Eine Hantel, 12,5 kg · Rumpf hält das Becken gerade · pro Seite' },
+  ]},
+  dbrow: { label: 'Hantelrudern (Rücken)', requires: 'dumbbells', levels: [
+    { name: 'Einarmiges Rudern · 5 kg', guide: 'Einarmiges Hantelrudern', unit: 'reps',
+      detail: '5 kg · pro Seite · Technik vor Gewicht' },
+    { name: 'Einarmiges Rudern · 7,5 kg', guide: 'Einarmiges Hantelrudern', unit: 'reps',
+      detail: '7,5 kg · pro Seite' },
+    { name: 'Einarmiges Rudern · 10 kg', guide: 'Einarmiges Hantelrudern', unit: 'reps',
+      detail: '10 kg · pro Seite' },
+    { name: 'Einarmiges Rudern · 12,5 kg', guide: 'Einarmiges Hantelrudern', unit: 'reps',
+      detail: '12,5 kg · pro Seite · das Hantel-Maximum' },
+    { name: 'Rudern · 12,5 kg, langsam', guide: 'Einarmiges Hantelrudern', unit: 'reps',
+      detail: '12,5 kg · oben 1 Sek. halten, in 3 Sek. ablassen · pro Seite' },
+  ]},
+  // Seitheben schreibt den Wdh-Bereich selbst vor: 12,5 kg ist hier das
+  // Limit, also kommt der Reiz über Wiederholungen statt über Gewicht.
+  // ownTempo: Seitheben lebt von Kontrolle — das Template-Tempo würde hier
+  // das Gegenteil sagen ("flüssiges Tempo, keine Pause oben").
+  dblateral: { label: 'Seitheben (Schulter)', requires: 'dumbbells', reps: [12, 20], ownTempo: true, levels: [
+    { name: 'Seitheben · 2,5 kg', guide: 'Seitheben', unit: 'reps',
+      detail: '2,5 kg pro Hand · bewusst langsam, kein Schwung' },
+    { name: 'Seitheben · 5 kg', guide: 'Seitheben', unit: 'reps', detail: '5 kg pro Hand' },
+    { name: 'Seitheben · 7,5 kg', guide: 'Seitheben', unit: 'reps', detail: '7,5 kg pro Hand' },
+    { name: 'Seitheben · 10 kg', guide: 'Seitheben', unit: 'reps', detail: '10 kg pro Hand' },
+    { name: 'Seitheben · 12,5 kg', guide: 'Seitheben', unit: 'reps',
+      detail: '12,5 kg pro Hand · nur wenn die Technik sauber bleibt' },
+  ]},
+  dbcurl: { label: 'Bizeps-Curls', requires: 'dumbbells', levels: [
+    { name: 'Curls · 5 kg', guide: 'Bizeps-Curls', unit: 'reps', detail: '5 kg pro Hand · beide Arme gleichzeitig' },
+    { name: 'Curls · 7,5 kg', guide: 'Bizeps-Curls', unit: 'reps', detail: '7,5 kg pro Hand' },
+    { name: 'Curls · 10 kg', guide: 'Bizeps-Curls', unit: 'reps', detail: '10 kg pro Hand' },
+    { name: 'Curls · 12,5 kg', guide: 'Bizeps-Curls', unit: 'reps', detail: '12,5 kg pro Hand · das Hantel-Maximum' },
+    { name: 'Curls · 12,5 kg, langsam', guide: 'Bizeps-Curls', unit: 'reps',
+      detail: '12,5 kg · in 3 Sek. ablassen · die Absenkphase ist der Reiz' },
+  ]},
+  dbtricep: { label: 'Trizeps überkopf', requires: 'dumbbells', levels: [
+    { name: 'Trizeps überkopf · 5 kg', guide: 'Trizeps überkopf', unit: 'reps',
+      detail: 'Eine Hantel mit beiden Händen · 5 kg' },
+    { name: 'Trizeps überkopf · 7,5 kg', guide: 'Trizeps überkopf', unit: 'reps',
+      detail: 'Eine Hantel mit beiden Händen · 7,5 kg' },
+    { name: 'Trizeps überkopf · 10 kg', guide: 'Trizeps überkopf', unit: 'reps',
+      detail: 'Eine Hantel mit beiden Händen · 10 kg' },
+    { name: 'Trizeps überkopf · 12,5 kg', guide: 'Trizeps überkopf', unit: 'reps',
+      detail: 'Eine Hantel mit beiden Händen · 12,5 kg' },
+    { name: 'Trizeps einarmig · 10 kg', guide: 'Trizeps überkopf', unit: 'reps',
+      detail: 'Eine Hand, 10 kg · Ellbogen zeigt nach oben und bleibt dort · pro Seite' },
+  ]},
+  dbrdl: { label: 'Kreuzheben (Beinrückseite)', requires: 'dumbbells', levels: [
+    { name: 'Kreuzheben · 2× 7,5 kg', guide: 'Rumänisches Kreuzheben', unit: 'reps',
+      detail: 'Beide Hanteln, 7,5 kg pro Hand · vor den Oberschenkeln führen' },
+    { name: 'Kreuzheben · 2× 10 kg', guide: 'Rumänisches Kreuzheben', unit: 'reps',
+      detail: 'Beide Hanteln, 10 kg pro Hand' },
+    { name: 'Kreuzheben · 2× 12,5 kg', guide: 'Rumänisches Kreuzheben', unit: 'reps',
+      detail: 'Beide Hanteln, 12,5 kg pro Hand · das Hantel-Maximum beidbeinig' },
+    { name: 'Einbeinig · 7,5 kg', guide: 'Rumänisches Kreuzheben', unit: 'reps',
+      detail: 'Einbeinig, eine Hantel mit 7,5 kg · deutlich schwerer als beidbeinig · pro Seite' },
+    { name: 'Einbeinig · 10 kg', guide: 'Rumänisches Kreuzheben', unit: 'reps',
+      detail: 'Einbeinig, 10 kg · Becken gerade halten · pro Seite' },
+    { name: 'Einbeinig · 12,5 kg', guide: 'Rumänisches Kreuzheben', unit: 'reps',
+      detail: 'Einbeinig, 12,5 kg · pro Seite' },
+  ]},
 };
 
 // Ausführliche Anleitung je Übung — Quelle für den ⓘ-Button.
 // Schlüssel ist der Übungsname aus LADDERS; ein Test prüft die 1:1-Abdeckung.
 const EXERCISE_GUIDE = {
+  'Schulterdrücken (Hantel)': {
+    setup: 'Aufrecht stehen, Füße hüftbreit, Hanteln auf Schulterhöhe, Handflächen nach vorn, Ellbogen leicht vor dem Körper.',
+    steps: ['Rippen nach unten, Bauch und Gesäß anspannen — der untere Rücken darf nicht ausweichen.',
+            'Hanteln gerade nach oben drücken, bis die Arme lang sind und die Hanteln über der Schultermitte stehen.',
+            'Kontrolliert bis auf Schulterhöhe ablassen, unten nicht ablegen oder abfedern.'],
+    mistakes: ['Ins Hohlkreuz gehen und die Last über den Rücken drücken — der häufigste Fehler beim Überkopfdrücken.',
+               'Aus den Knien mitschwingen; bei Bedarf im Sitzen ausführen.',
+               'Nur halb ablassen, dadurch fehlt der schwerste Teil der Bewegung.'],
+    muscles: 'Vordere und seitliche Schulter, Trizeps, Rumpf',
+    breath: 'Vor dem Drücken einatmen, beim Hochdrücken ausatmen.',
+  },
+  'Einarmiges Hantelrudern': {
+    setup: 'Eine Hand und ein Knie auf Bank, Sofa oder Stuhl, Rücken waagerecht und gerade. Hantel in der freien Hand, Arm hängt lang.',
+    steps: ['Rücken gerade, Blick zum Boden, Becken waagerecht — nicht verdrehen.',
+            'Erst das Schulterblatt nach hinten/unten ziehen, dann den Ellbogen nach hinten Richtung Hüfte führen.',
+            'Oben eine Sekunde halten, dann kontrolliert bis zur vollen Streckung ablassen. Seiten getrennt.'],
+    mistakes: ['Den Oberkörper aufdrehen, um mehr Gewicht zu bewegen.',
+               'Die Hantel mit Schwung nach oben reißen statt zu ziehen.',
+               'Ellbogen weit nach außen führen — er bleibt nah am Körper.'],
+    muscles: 'Latissimus, oberer Rücken, hintere Schulter, Bizeps',
+    breath: 'Beim Ziehen ausatmen, beim Ablassen einatmen.',
+  },
+  'Seitheben': {
+    setup: 'Aufrecht stehen, Hanteln neben den Oberschenkeln, Ellbogen minimal gebeugt, Schultern tief.',
+    steps: ['Arme seitlich anheben, bis die Hände etwa auf Schulterhöhe sind — nicht höher.',
+            'Ellbogen führen die Bewegung, die Hände folgen; kleiner Finger leicht höher als der Daumen.',
+            'Oben kurz halten, dann deutlich langsamer ablassen als angehoben.'],
+    mistakes: ['Mit dem Oberkörper schwingen, um die Hanteln hochzuwerfen — hier zählt Kontrolle mehr als Gewicht.',
+               'Schultern zu den Ohren ziehen; sie bleiben bewusst tief.',
+               'Über Schulterhöhe heben, wodurch die Arbeit in den Nacken wandert.'],
+    muscles: 'Seitliche Schulter (der Teil, der mit Körpergewicht kaum erreichbar ist)',
+    breath: 'Beim Anheben ausatmen, beim Ablassen einatmen.',
+  },
+  'Bizeps-Curls': {
+    setup: 'Aufrecht stehen, Hanteln in den Händen, Arme lang, Handflächen nach vorn, Ellbogen nah am Körper.',
+    steps: ['Ellbogen bleiben am Rumpf fixiert — nur der Unterarm bewegt sich.',
+            'Hanteln bis kurz vor die Schulter anheben, oben den Bizeps bewusst anspannen.',
+            'Kontrolliert bis zur vollen Streckung ablassen, unten die Spannung halten.'],
+    mistakes: ['Mit dem Oberkörper zurücklehnen und die Hantel hochschwingen.',
+               'Ellbogen nach vorn wandern lassen; dann übernimmt die Schulter.',
+               'Nicht ganz ausstrecken — der untere Teil bringt den meisten Reiz.'],
+    muscles: 'Bizeps, Unterarmbeuger',
+    breath: 'Beim Anheben ausatmen, beim Ablassen einatmen.',
+  },
+  'Trizeps überkopf': {
+    setup: 'Aufrecht stehen oder sitzen, eine Hantel mit beiden Händen hinter dem Kopf, Ellbogen zeigen nach oben.',
+    steps: ['Oberarme senkrecht halten, Ellbogen bleiben oben und nah beieinander.',
+            'Hantel hinter dem Kopf absenken, bis die Ellbogen etwa 90° erreichen.',
+            'Über den Trizeps nach oben strecken, ohne die Ellbogen nach außen zu lassen.'],
+    mistakes: ['Ellbogen weit nach außen kippen — der Klassiker, sobald es schwer wird.',
+               'Ins Hohlkreuz gehen; Rippen unten, Bauch fest.',
+               'Zu weit absenken bei zu viel Gewicht: die Schulter mag den Endbereich nicht.'],
+    muscles: 'Trizeps (besonders der lange Kopf), Rumpf',
+    breath: 'Beim Absenken einatmen, beim Strecken ausatmen.',
+  },
+  'Rumänisches Kreuzheben': {
+    setup: 'Aufrecht stehen, Hanteln vor den Oberschenkeln, Füße hüftbreit, Knie ganz leicht gebeugt.',
+    steps: ['Hüfte nach hinten schieben und den Oberkörper nach vorn kippen — die Bewegung kommt aus der Hüfte, nicht aus dem Rücken.',
+            'Hanteln dicht an den Beinen entlang führen, bis die Beinrückseite deutlich zieht (meist etwa Kniehöhe).',
+            'Über Gesäß und Beinrückseite aufrichten, oben die Hüfte voll strecken.'],
+    mistakes: ['Runder Rücken beim Vorkippen — abbrechen und Gewicht reduzieren, das ist die Verletzungsstelle.',
+               'Daraus eine Kniebeuge machen; die Knie bleiben fast gestreckt.',
+               'Die Hanteln weit vom Körper weg führen, was den unteren Rücken belastet.'],
+    muscles: 'Beinrückseite, Gesäß, unterer Rücken, Rumpf',
+    breath: 'Beim Vorkippen einatmen, beim Aufrichten ausatmen.',
+  },
   'Wand-Liegestütze': {
     setup: 'Eine Armlänge vor der Wand stehen, Hände schulterbreit auf Brusthöhe an die Wand.',
     steps: ['Körper von Kopf bis Ferse zu einer geraden Linie spannen, Gesäß mitanspannen.', 'Ellbogen beugen und den Oberkörper kontrolliert zur Wand bringen, Ellbogen dabei ca. 45° vom Körper weg.', 'Brust fast bis zur Wand, kurz halten, dann kraftvoll wegdrücken.'],
@@ -985,16 +1151,19 @@ const TEMPLATES = {
        tempo: 'Langsam: 4 Sek. runter, explosiv hoch',
        focus: 'Vertikal · Schulter & Klimmzug',
        mix: [['vpush', 'vpull'], ['hinge', 'squat']],
+       accessory: ['dbcurl', 'dbtricep'],
        desc: '<strong>6–10 Wdh</strong>, betont langsames Absenken (4 Sek.). Maximale Muskelspannung pro Wdh.' },
   C: { name: 'Volumen', reps: [12, 20], holdSec: 55,
        tempo: 'Flüssiges Tempo · keine Pause oben',
        focus: 'Ganzkörper · Zug vertikal',
        mix: [['push', 'vpull'], ['squat', 'hinge']],
+       accessory: ['dblateral', 'dbrow'],
        desc: '<strong>12–20 Wdh</strong>, flüssiges Tempo, kurze Sätze bis zum Brennen. Muskelausdauer & Pump.' },
   D: { name: 'Isometrie', reps: [6, 12], holdSec: 50,
        tempo: 'Unten 2 Sek. anhalten, dann kontrolliert hoch',
        focus: 'Schulter & Rücken · Pausen unter Last',
        mix: [['vpush', 'pull'], ['hinge', 'squat']],
+       accessory: ['dbpress', 'dbrdl'],
        desc: '<strong>6–12 Wdh</strong> mit <strong>2 Sek. Pause im schwersten Punkt</strong>. Kein Schwung, reine Muskelarbeit.' },
   E: { name: 'Power', reps: [5, 8], holdSec: 35,
        tempo: 'Runter kontrolliert, hoch so explosiv wie möglich',
@@ -1025,12 +1194,15 @@ const FINISHERS = {
 };
 const FINISHER_ORDER = ['hiit', 'tabata', 'pyramide', 'emom'];
 
-const DEFAULT_LEVELS = { push: 4, vpush: 2, pull: 2, vpull: 3, squat: 3, hinge: 1, core: 3 };
+// Hantel-Startwerte bewusst konservativ — die Progression hebt sie schnell an.
+const DEFAULT_LEVELS = { push: 4, vpush: 2, pull: 2, vpull: 3, squat: 3, hinge: 1, core: 3,
+                         dbpress: 2, dbrow: 2, dblateral: 1, dbcurl: 2, dbtricep: 1, dbrdl: 2 };
 const REST_SEC = 60;
 // Ein Halt, der fast sofort abgebrochen wird, ist ein Auslassen und kein
 // Scheitern — er darf weder hoch- noch runterleveln.
 const MIN_ATTEMPT_FRAC = 0.2;
 const CORE_REST_SEC = 45;
+const ACCESSORY_REST_SEC = 45;
 const WORK_EST_SEC = 40; // Schätzung pro Wdh-Satz für die Fortschrittsanzeige
 
 // ══════════════════════════════════════════
@@ -1047,7 +1219,7 @@ function loadJSON(key, fallback) {
 const saveJSON = (key, val) => localStorage.setItem(key, JSON.stringify(val));
 
 let levels = Object.assign({}, DEFAULT_LEVELS, loadJSON(LS_LEVELS, {}));
-let prefs = Object.assign({ cardio: true, nextTemplate: 'A', bar: false, finisher: 'auto' }, loadJSON(LS_PREFS, {}));
+let prefs = Object.assign({ cardio: true, nextTemplate: 'A', bar: false, dumbbells: true, finisher: 'auto' }, loadJSON(LS_PREFS, {}));
 
 // ══════════════════════════════════════════
 // WORKOUT BUILDER
@@ -1056,11 +1228,25 @@ function sessionCount() {
   return loadJSON(LS_LOG, []).filter(e => e.v >= 2).length;
 }
 
-// Ohne Stange gibt es keine Klimmzüge — die Session fällt auf das horizontale
-// Muster zurück, statt eine Übung anzubieten, die gar nicht durchführbar ist.
+// Fehlt die nötige Ausrüstung, greift der Fallback (Klimmzug → Rudern).
+// Ohne Fallback entfällt der Slot, statt eine undurchführbare Übung anzubieten.
+function hasEquipment(ladder) {
+  if (!ladder || !ladder.requires) return true;
+  if (ladder.requires === 'bar') return !!prefs.bar;
+  if (ladder.requires === 'dumbbells') return !!prefs.dumbbells;
+  return true;
+}
+
 function resolvePattern(p) {
   const l = LADDERS[p];
-  return l && l.requires === 'bar' && !prefs.bar ? l.fallback : p;
+  return hasEquipment(l) ? p : (l.fallback || null);
+}
+
+// Manche Leitern schreiben ihren Wdh-Bereich selbst vor — Seitheben etwa
+// bleibt im hohen Bereich, weil 12,5 kg dort die Obergrenze ist.
+function repRange(tpl, pattern) {
+  const l = LADDERS[pattern];
+  return (l && l.reps) || tpl.reps;
 }
 
 function pickFinisher(rotation) {
@@ -1082,6 +1268,7 @@ function addSet(phases, tpl, p, set, label, restSec) {
   const ladder = LADDERS[p];
   const lvl = Math.max(1, Math.min(ladder.levels.length, levels[p] || 1));
   const ex = ladder.levels[lvl - 1];
+  const rr = repRange(tpl, p);
   const section = `${label} · Satz ${set}/2`;
   if (ex.unit === 'sec') {
     phases.push({ kind: 'work-time', pattern: p, set, dur: T(tpl.holdSec), name: ex.name,
@@ -1091,8 +1278,8 @@ function addSet(phases, tpl, p, set, label, restSec) {
                   logFor: { pattern: p, set, unit: 'sec', full: tpl.holdSec } });
   } else {
     phases.push({ kind: 'work-reps', pattern: p, set, name: ex.name, section,
-                  detail: `${ex.detail} · ${tpl.tempo}`,
-                  target: `${tpl.reps[0]}–${tpl.reps[1]} Wdh · 1–2 in Reserve`, level: lvl });
+                  detail: ladder.ownTempo ? ex.detail : `${ex.detail} · ${tpl.tempo}`,
+                  target: `${rr[0]}–${rr[1]} Wdh · 1–2 in Reserve`, level: lvl });
     phases.push({ kind: 'rest', dur: T(restSec), name: 'Pause', section,
                   detail: 'Wdh eintragen · dann „Weiter" wenn bereit',
                   logFor: { pattern: p, set, unit: 'reps' } });
@@ -1112,11 +1299,19 @@ function buildWorkout(tplKey, withCardio, opts) {
 
   // Kraftblock: 2 Antagonisten-Supersets à 2 Sätze, Muster kommen vom Template
   tpl.mix.forEach((pair, i) => {
-    const patterns = pair.map(resolvePattern);
+    const patterns = pair.map(resolvePattern).filter(Boolean);
     for (let set = 1; set <= 2; set++) {
       for (const p of patterns) addSet(phases, tpl, p, set, `Superset ${i + 1}`, REST_SEC);
     }
   });
+
+  // Hantel-Block: nur in den Templates, die einen haben, und nur mit Hanteln
+  const acc = (tpl.accessory || []).map(resolvePattern).filter(Boolean);
+  if (acc.length) {
+    for (let set = 1; set <= 2; set++) {
+      for (const p of acc) addSet(phases, tpl, p, set, 'Hantel-Block', ACCESSORY_REST_SEC);
+    }
+  }
 
   // Core: 2 Sätze
   for (let set = 1; set <= 2; set++) addSet(phases, tpl, 'core', set, 'Core', CORE_REST_SEC);
@@ -1507,13 +1702,15 @@ function openDetail(pattern, level) {
   if (typeof lvl !== 'number') lvl = levels[p] || 1;
   lvl = Math.max(1, Math.min(max, lvl));
   const ex = ladder.levels[lvl - 1];
-  const g = EXERCISE_GUIDE[ex.name];
+  const g = EXERCISE_GUIDE[ex.guide || ex.name];
 
   $('sheetKicker').textContent = `${ladder.label} · Level ${lvl}/${max}`;
   $('sheetTitle').textContent = ex.name;
 
   const li = arr => arr.map(x => `<li>${x}</li>`).join('');
   const out = [];
+  // Die Stufe selbst zuerst — bei Gewichtsstufen steht hier das Gewicht.
+  if (ex.detail) out.push(`<h4>Diese Stufe</h4><p>${ex.detail}</p>`);
   if (g) {
     out.push(`<h4>Aufbau</h4><p>${g.setup}</p>`);
     out.push(`<h4>Ausführung</h4><ol>${li(g.steps)}</ol>`);
@@ -1630,8 +1827,9 @@ function applyProgression(tplKey) {
     if (vals.length < 2) continue;
     const lvl = levels[p];
     const unit = LADDERS[p].levels[lvl - 1].unit;
-    const top = unit === 'sec' ? tpl.holdSec : tpl.reps[1];
-    const bottom = unit === 'sec' ? Math.round(tpl.holdSec * 0.6) : tpl.reps[0];
+    const rr = repRange(tpl, p);
+    const top = unit === 'sec' ? tpl.holdSec : rr[1];
+    const bottom = unit === 'sec' ? Math.round(tpl.holdSec * 0.6) : rr[0];
     if (Math.min(...vals) >= top && lvl < LADDERS[p].levels.length) {
       levels[p] = lvl + 1;
       changes.push({ pattern: p, dir: 'up', newName: LADDERS[p].levels[lvl].name });
@@ -1718,6 +1916,13 @@ function onCardioToggle() {
 
 function onBarToggle() {
   prefs.bar = $('barToggle').checked;
+  saveJSON(LS_PREFS, prefs);
+  renderLevels();
+  updateEstimate();
+}
+
+function onDumbbellToggle() {
+  prefs.dumbbells = $('dumbbellToggle').checked;
   saveJSON(LS_PREFS, prefs);
   renderLevels();
   updateEstimate();
@@ -1870,7 +2075,7 @@ function changeLevel(pattern, delta) {
 }
 
 function visiblePatterns() {
-  return PATTERNS.filter(p => !(LADDERS[p].requires === 'bar' && !prefs.bar));
+  return PATTERNS.filter(p => hasEquipment(LADDERS[p]));
 }
 
 function renderLevels() {
@@ -1920,6 +2125,7 @@ function renderStartScreen() {
   $('streakCount').textContent = streak;
   $('cardioToggle').checked = !!prefs.cardio;
   $('barToggle').checked = !!prefs.bar;
+  $('dumbbellToggle').checked = !!prefs.dumbbells;
   selectTemplate(prefs.nextTemplate && TEMPLATES[prefs.nextTemplate] ? prefs.nextTemplate : 'A');
   renderFinisherChips();
   renderLevels();

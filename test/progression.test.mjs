@@ -190,12 +190,12 @@ test('Satz 2 startet beim Ergebnis von Satz 1', () => {
 console.log('\nWorkout-Aufbau & Wochenlogik');
 
 test('jedes Template: Warm-Up + eigener Muster-Mix, je 2 Sätze', () => {
-  const { api } = boot({ store: { mikeTrainingPrefs: JSON.stringify({ bar: true }) } });
+  const { api } = boot({ store: { mikeTrainingPrefs: JSON.stringify({ bar: true, dumbbells: true }) } });
   api.setState({ levels: api.DEFAULT_LEVELS });
   for (const k of api.TEMPLATE_ORDER) {
     const w = api.buildWorkout(k, false, { rotation: 0 });
     assert.equal(w.filter(p => p.kind === 'warmup').length, 2, k + ': Warm-Up');
-    const want = [...api.TEMPLATES[k].mix.flat(), 'core'];
+    const want = [...api.TEMPLATES[k].mix.flat(), ...(api.TEMPLATES[k].accessory || []), 'core'];
     for (const p of want) {
       const n = w.filter(x => x.logFor && x.logFor.pattern === p).length;
       assert.equal(n, 2, `${k}/${p}: 2 Sätze erwartet, ${n} gefunden`);
@@ -213,6 +213,7 @@ test('die 5 Templates decken alle Muster ab und variieren den Mix', () => {
   const mixes = new Set();
   for (const k of api.TEMPLATE_ORDER) {
     api.TEMPLATES[k].mix.flat().forEach(p => seen.add(p));
+    (api.TEMPLATES[k].accessory || []).forEach(p => seen.add(p));
     mixes.add(JSON.stringify(api.TEMPLATES[k].mix));
   }
   seen.add('core');
@@ -321,15 +322,145 @@ test('isoWeekKey trifft ISO-Wochengrenzen', () => {
   assert.equal(api.isoWeekKey(new Date(2025, 11, 29).getTime()), '2026-W1');
 });
 
+console.log('\nHanteln');
+
+test('Hantel-Block genau in B, C und D', () => {
+  const { api } = boot({ store: { mikeTrainingPrefs: JSON.stringify({ bar: true, dumbbells: true }) } });
+  api.setState({ levels: api.DEFAULT_LEVELS });
+  const withDb = api.TEMPLATE_ORDER.filter(k => (api.TEMPLATES[k].accessory || []).length);
+  assert.deepEqual(withDb, ['B', 'C', 'D'], 'drei der fünf Workouts');
+  for (const k of api.TEMPLATE_ORDER) {
+    const w = api.buildWorkout(k, false, { rotation: 0 });
+    const block = w.filter(p => p.section && p.section.startsWith('Hantel-Block'));
+    assert.equal(block.length > 0, withDb.includes(k), k + ': Hantel-Block vorhanden?');
+    if (block.length) assert.equal(block.filter(p => p.logFor).length, 4, k + ': 2 Übungen × 2 Sätze');
+  }
+});
+
+test('A und E bleiben reines Körpergewicht (für unterwegs)', () => {
+  const { api } = boot({ store: { mikeTrainingPrefs: JSON.stringify({ bar: true, dumbbells: true }) } });
+  api.setState({ levels: api.DEFAULT_LEVELS });
+  for (const k of ['A', 'E']) {
+    const pats = api.buildWorkout(k, false, { rotation: 0 }).filter(p => p.logFor).map(p => p.logFor.pattern);
+    assert.ok(!pats.some(p => p.startsWith('db')), k + ': keine Hantelübung');
+  }
+});
+
+test('ohne Hanteln entfällt der Block, die Session bleibt vollständig', () => {
+  const { api } = boot({ store: { mikeTrainingPrefs: JSON.stringify({ bar: true, dumbbells: false }) } });
+  api.setState({ levels: api.DEFAULT_LEVELS });
+  for (const k of ['B', 'C', 'D']) {
+    const w = api.buildWorkout(k, false, { rotation: 0 });
+    const pats = [...new Set(w.filter(p => p.logFor).map(p => p.logFor.pattern))];
+    assert.ok(!pats.some(p => p.startsWith('db')), k + ': keine Hantelübung ohne Hanteln');
+    // Hauptteil und Core stehen trotzdem
+    for (const p of [...api.TEMPLATES[k].mix.flat(), 'core']) {
+      assert.equal(w.filter(x => x.logFor && x.logFor.pattern === p).length, 2, k + '/' + p);
+    }
+    assert.ok(!w.some(p => p.section && p.section.startsWith('Hantel-Block')));
+  }
+});
+
+test('alle sechs Hantelübungen kommen im Zyklus dran', () => {
+  const { api } = boot({ store: { mikeTrainingPrefs: JSON.stringify({ bar: true, dumbbells: true }) } });
+  api.setState({ levels: api.DEFAULT_LEVELS });
+  const seen = new Set();
+  for (const k of api.TEMPLATE_ORDER) {
+    for (const ph of api.buildWorkout(k, false, { rotation: 0 })) {
+      if (ph.logFor && ph.logFor.pattern.startsWith('db')) seen.add(ph.logFor.pattern);
+    }
+  }
+  assert.deepEqual([...seen].sort(), ['dbcurl', 'dblateral', 'dbpress', 'dbrdl', 'dbrow', 'dbtricep']);
+});
+
+test('Gewicht ist die Progressionsstufe', () => {
+  const { api } = boot({ store: { mikeTrainingPrefs: JSON.stringify({ bar: true, dumbbells: true }) } });
+  api.setState({ levels: Object.assign({}, api.DEFAULT_LEVELS, { dbcurl: 2 }), selectedTemplate: 'B',
+                 sessionSets: {}, sessionConfirmed: {} });
+  const w = api.buildWorkout('B', false, { rotation: 0 });
+  const curl = w.find(p => p.pattern === 'dbcurl');
+  assert.match(curl.name, /7,5 kg/, 'Level 2 = 7,5 kg');
+  // Oberes Ende des B-Bereichs (6–10) in beiden Sätzen bestätigen
+  for (const r of w.filter(p => p.logFor && p.logFor.pattern === 'dbcurl')) {
+    api.setState({ workout: w, currentIdx: w.indexOf(r) });
+    api.renderPhase();
+    api.setState({ stepperVal: 10 });
+    api.commitReps(true);
+  }
+  const { changes } = api.applyProgression('B');
+  assert.deepEqual(changes.map(c => c.pattern), ['dbcurl']);
+  assert.equal(api.getState().levels.dbcurl, 3);
+  assert.match(changes[0].newName, /10 kg/, 'nächste Stufe = mehr Gewicht');
+});
+
+test('über 12,5 kg geht die Leiter einarmig oder langsamer weiter', () => {
+  const { api } = boot({ store: { mikeTrainingPrefs: JSON.stringify({ dumbbells: true }) } });
+  for (const p of ['dbpress', 'dbrow', 'dbcurl', 'dbtricep', 'dbrdl']) {
+    const lv = api.LADDERS[p].levels;
+    const last = lv[lv.length - 1].name;
+    assert.ok(/einarmig|langsam|Einarmig|Einbeinig/.test(last), p + ': Ausweg am Limit fehlt — ' + last);
+  }
+  // Seitheben ist bewusst bei 12,5 kg gedeckelt und arbeitet über Wdh
+  assert.deepEqual(api.LADDERS.dblateral.reps, [12, 20]);
+});
+
+test('eigenes Tempo einer Leiter überschreibt das des Templates nicht doppelt', () => {
+  const { api } = boot({ store: { mikeTrainingPrefs: JSON.stringify({ bar: true, dumbbells: true }) } });
+  api.setState({ levels: api.DEFAULT_LEVELS });
+  const w = api.buildWorkout('C', false, { rotation: 0 });
+  const lat = w.find(p => p.pattern === 'dblateral');
+  assert.ok(!lat.detail.includes(api.TEMPLATES.C.tempo), 'kein widersprüchliches Template-Tempo');
+  assert.ok(lat.detail.includes('bewusst langsam'), 'eigener Hinweis bleibt');
+  // Ohne ownTempo hängt das Template-Tempo weiterhin an
+  const row = w.find(p => p.pattern === 'dbrow');
+  assert.ok(row.detail.includes(api.TEMPLATES.C.tempo), 'sonst wie gehabt');
+});
+
+test('eigener Wdh-Bereich der Leiter schlägt den des Templates', () => {
+  const { api } = boot({ store: { mikeTrainingPrefs: JSON.stringify({ dumbbells: true }) } });
+  assert.deepEqual(api.repRange(api.TEMPLATES.B, 'dblateral'), [12, 20], 'Leiter gewinnt');
+  assert.deepEqual(api.repRange(api.TEMPLATES.B, 'dbcurl'), [6, 10], 'sonst Template');
+  // Und die Progression rechnet damit: 10 Wdh wären im B-Bereich (6–10) das
+  // obere Ende und würden hochleveln — für Seitheben sind sie zu wenig.
+  api.setState({ levels: Object.assign({}, api.DEFAULT_LEVELS, { dblateral: 2 }),
+                 sessionSets: { dblateral: [10, 10] }, sessionConfirmed: { dblateral: [true, true] } });
+  const low = api.applyProgression('B').changes;
+  assert.ok(!low.some(c => c.dir === 'up'), 'kein Level-Up bei 10 Wdh');
+  assert.deepEqual(low.map(c => c.dir), ['down'], 'zu schwer → eine Gewichtsstufe zurück');
+  api.setState({ levels: Object.assign({}, api.DEFAULT_LEVELS, { dblateral: 2 }),
+                 sessionSets: { dblateral: [20, 20] }, sessionConfirmed: { dblateral: [true, true] } });
+  const high = api.applyProgression('B').changes;
+  assert.deepEqual(high.map(c => c.dir), ['up'], 'bei 20 Wdh eine Stufe mehr Gewicht');
+});
+
+test('Hantel-Sessions kosten rund 6 Minuten mehr', () => {
+  const { api } = boot({ store: { mikeTrainingPrefs: JSON.stringify({ bar: true, dumbbells: true }) } });
+  api.setState({ levels: api.DEFAULT_LEVELS });
+  const min = k => api.estimateSec(api.buildWorkout(k, false, { rotation: 0 })) / 60;
+  assert.ok(min('A') < 20, 'A bleibt unter 20 Min: ' + min('A'));
+  for (const k of ['B', 'C', 'D']) {
+    assert.ok(min(k) > min('A') + 4 && min(k) < 27, k + ' = ' + min(k) + ' Min');
+  }
+});
+
+test('Levels-Liste zeigt Hantel-Leitern nur mit Hanteln', () => {
+  const off = boot({ store: { mikeTrainingPrefs: JSON.stringify({ dumbbells: false }) } }).api;
+  assert.ok(!off.visiblePatterns().some(p => p.startsWith('db')));
+  const on = boot({ store: { mikeTrainingPrefs: JSON.stringify({ dumbbells: true }) } }).api;
+  assert.equal(on.visiblePatterns().filter(p => p.startsWith('db')).length, 6);
+});
+
 console.log('\nÜbungs-Details');
 
 test('jede Leiter-Übung hat eine Anleitung, ohne Waisen', () => {
   const { api } = boot();
-  const names = Object.values(api.LADDERS).flatMap(l => l.levels.map(e => e.name));
-  assert.equal(names.length, 42, '7 Leitern × 6 Level');
-  assert.equal(new Set(names).size, names.length, 'Übungsnamen sind eindeutig');
-  const missing = names.filter(n => !api.EXERCISE_GUIDE[n]);
-  const orphan = Object.keys(api.EXERCISE_GUIDE).filter(n => !names.includes(n));
+  const levels = Object.values(api.LADDERS).flatMap(l => l.levels);
+  const names = levels.map(e => e.name);
+  assert.equal(new Set(names).size, names.length, 'Stufennamen sind eindeutig');
+  // Gewichtsstufen teilen eine Anleitung — der Schlüssel ist guide, sonst name.
+  const keys = [...new Set(levels.map(e => e.guide || e.name))];
+  const missing = keys.filter(k => !api.EXERCISE_GUIDE[k]);
+  const orphan = Object.keys(api.EXERCISE_GUIDE).filter(k => !keys.includes(k));
   assert.deepEqual(missing, [], 'ohne Anleitung');
   assert.deepEqual(orphan, [], 'Anleitung ohne Übung');
 });
@@ -458,6 +589,21 @@ test('Levels-Liste blendet Stangen-Leitern ohne Stange aus', () => {
   assert.ok(noBar.visiblePatterns().includes('vpush'), 'Pike braucht keine Stange');
   const withBar = boot({ store: { mikeTrainingPrefs: JSON.stringify({ bar: true }) } }).api;
   assert.ok(withBar.visiblePatterns().includes('vpull'));
+});
+
+test('Gewichtsstufen zeigen dieselbe Anleitung plus die eigene Stufe', () => {
+  const { api, el } = boot({ store: { mikeTrainingPrefs: JSON.stringify({ dumbbells: true }) } });
+  api.setState({ levels: api.DEFAULT_LEVELS, workout: [], currentIdx: 0 });
+  api.openDetail('dbcurl', 2);
+  const a = el('sheetBody').innerHTML;
+  assert.equal(el('sheetTitle').textContent, 'Curls · 7,5 kg');
+  assert.ok(a.includes('Diese Stufe'), 'Stufen-Hinweis');
+  assert.ok(a.includes('7,5 kg pro Hand'), 'Gewicht der Stufe');
+  assert.ok(a.includes('Ellbogen bleiben am Rumpf fixiert'), 'geteilte Anleitung');
+  api.openDetail('dbcurl', 4);
+  const b = el('sheetBody').innerHTML;
+  assert.ok(b.includes('12,5 kg pro Hand'), 'anderes Gewicht');
+  assert.ok(b.includes('Ellbogen bleiben am Rumpf fixiert'), 'gleiche Anleitung');
 });
 
 console.log(`\n${pass} passed, ${fail} failed\n`);
