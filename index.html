@@ -990,7 +990,22 @@ function loadJSON(key, fallback) {
 }
 const saveJSON = (key, val) => localStorage.setItem(key, JSON.stringify(val));
 
-let levels = Object.assign({}, DEFAULT_LEVELS, loadJSON(LS_LEVELS, {}));
+// Gespeicherte Level können aus einer früheren, längeren Leiter stammen
+// (squat hatte 6 Stufen, jetzt 3) oder zu einem Muster gehören, das es nicht
+// mehr gibt. Einmal beim Laden bereinigen — sonst greift die Progression auf
+// eine Stufe zu, die nicht existiert.
+function sanitizeLevels(stored) {
+  const out = {};
+  for (const p of PATTERNS) {
+    const max = LADDERS[p].levels.length;
+    const v = Number(stored[p]);
+    out[p] = Number.isFinite(v) ? Math.max(1, Math.min(max, Math.round(v)))
+                                : DEFAULT_LEVELS[p];
+  }
+  return out;
+}
+
+let levels = sanitizeLevels(Object.assign({}, DEFAULT_LEVELS, loadJSON(LS_LEVELS, {})));
 let prefs = Object.assign({ cardio: true, nextTemplate: 'A', dumbbells: true, finisher: 'auto' }, loadJSON(LS_PREFS, {}));
 
 // ══════════════════════════════════════════
@@ -1615,12 +1630,13 @@ function applyProgression(tplKey) {
     const vals = raw.filter((v, i) => typeof v === 'number' && conf[i] === true);
     if (raw.filter(v => typeof v === 'number').length > vals.length) unconfirmed.push(p);
     if (vals.length < 2) continue;
-    const lvl = levels[p];
+    const max = LADDERS[p].levels.length;
+    const lvl = Math.max(1, Math.min(max, levels[p] || 1));
     const unit = LADDERS[p].levels[lvl - 1].unit;
     const range = unit === 'sec' ? holdRange(p) : repRange(p);
     const top = range[1];
     const bottom = range[0];
-    if (Math.min(...vals) >= top && lvl < LADDERS[p].levels.length) {
+    if (Math.min(...vals) >= top && lvl < max) {
       levels[p] = lvl + 1;
       changes.push({ pattern: p, dir: 'up', newName: LADDERS[p].levels[lvl].name });
     } else if (Math.max(...vals) < bottom && lvl > 1) {

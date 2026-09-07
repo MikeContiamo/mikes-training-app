@@ -77,7 +77,7 @@ export function boot({ search = '', store = {}, htmlPath = null } = {}) {
     'observedHold', 'addSet', 'WARMUPS', 'FINISHERS', 'FINISHER_ORDER',
     'EXERCISE_GUIDE', 'openDetail', 'closeDetail', 'phasePattern', 'renderLevels',
     'changeLevel', 'togglePause', 'repRange', 'holdRange', 'hasEquipment',
-    'blockLabel', 'TEMPO', 'SEC_PER_REP',
+    'blockLabel', 'TEMPO', 'SEC_PER_REP', 'sanitizeLevels',
     'LADDERS', 'TEMPLATES', 'PATTERNS', 'DEFAULT_LEVELS', 'TEMPLATE_ORDER',
   ];
   const getters = exposed.map(n => `  get ${n}() { return typeof ${n} === 'undefined' ? undefined : ${n}; },`).join('\n');

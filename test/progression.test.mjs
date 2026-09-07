@@ -403,6 +403,42 @@ test('isoWeekKey trifft ISO-Wochengrenzen', () => {
 });
 
 // ══════════════════════════════════════════════════════════════════════
+section('Altbestand aus früheren Versionen');
+
+test('Level aus früheren, längeren Leitern werden beim Laden bereinigt', () => {
+  // Stand aus der alten App: squat hatte 6 Stufen, jetzt 3; vpull gibt es nicht mehr
+  const alt = { push: 4, pull: 6, squat: 6, hinge: 5, core: 3, vpull: 4, dbcurl: 3 };
+  const b = boot({ store: { mikeTrainingLevels: JSON.stringify(alt),
+                            mikeTrainingPrefs: JSON.stringify({ dumbbells: true }) } });
+  const lv = b.api.getState().levels;
+  for (const p of b.api.PATTERNS) {
+    const max = b.api.LADDERS[p].levels.length;
+    assert.ok(lv[p] >= 1 && lv[p] <= max, `${p}: ${lv[p]} außerhalb 1..${max}`);
+    assert.ok(b.api.LADDERS[p].levels[lv[p] - 1], p + ': Stufe existiert nicht');
+  }
+  assert.equal(lv.squat, 3, 'auf die neue Leiterlänge geklemmt');
+  assert.equal(lv.pull, 3);
+  assert.equal(lv.hinge, 4);
+  assert.equal(lv.push, 4, 'gültige Werte bleiben');
+  assert.ok(!('vpull' in lv) && !('dbcurl' in lv), 'entfallene Muster werden verworfen');
+});
+
+test('Workout mit Altbestand abschließen wirft nicht', () => {
+  const alt = { push: 4, pull: 6, squat: 6, hinge: 5, core: 3 };
+  const b = boot({ store: { mikeTrainingLevels: JSON.stringify(alt),
+                            mikeTrainingPrefs: JSON.stringify({ dumbbells: false }) } });
+  b.api.setState({ sessionSets: {}, sessionConfirmed: {}, selectedTemplate: 'A' });
+  const w = b.api.buildWorkout('A', false, { rotation: 0 });
+  for (const i of restsFor(w, 'squat')) {
+    b.api.setState({ workout: w, currentIdx: i });
+    b.api.renderPhase();
+    b.api.setState({ stepperVal: 15 });
+    b.api.commitReps(true);
+  }
+  assert.doesNotThrow(() => b.api.applyProgression('A'));
+  assert.ok(b.api.LADDERS.squat.levels[b.api.getState().levels.squat - 1], 'Stufe bleibt gültig');
+});
+
 section('Übungs-Details');
 
 test('jede Stufe hat eine Anleitung, ohne Waisen', () => {
