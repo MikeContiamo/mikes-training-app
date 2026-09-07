@@ -73,6 +73,8 @@ export function boot({ search = '', store = {}, htmlPath = null } = {}) {
     'buildWorkout', 'estimateSec', 'applyProgression', 'prefillReps', 'commitReps',
     'renderPhase', 'enterPhase', 'captureHold', 'isoWeekKey', 'weekStats',
     'historySetValue', 'selectTemplate', 'updatePrimaryLabel', 'stepReps',
+    'pickFinisher', 'finisherRounds', 'sessionCount', 'resolvePattern', 'visiblePatterns',
+    'observedHold', 'addSet', 'WARMUPS', 'FINISHERS', 'FINISHER_ORDER',
     'LADDERS', 'TEMPLATES', 'PATTERNS', 'DEFAULT_LEVELS', 'TEMPLATE_ORDER',
   ];
   const getters = exposed.map(n => `  get ${n}() { return typeof ${n} === 'undefined' ? undefined : ${n}; },`).join('\n');

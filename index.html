@@ -57,7 +57,7 @@
   }
   .card h3 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 12px; }
 
-  .template-chips { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+  .template-chips { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 12px; }
   .tpl-chip {
     background: var(--surface2);
     border: 2px solid var(--border);
@@ -70,9 +70,24 @@
   }
   .tpl-chip.selected { border-color: var(--work); background: rgba(34,197,94,0.12); }
   .tpl-chip .tpl-letter { font-weight: 800; font-size: 1.1rem; }
-  .tpl-chip .tpl-name { font-size: 0.68rem; color: var(--muted); margin-top: 2px; }
+  .tpl-chip { padding: 10px 4px; }
+  .tpl-chip .tpl-name { font-size: 0.58rem; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .tpl-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.45; }
   .tpl-desc strong { color: var(--text); }
+  .tpl-focus {
+    font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;
+    color: var(--work); font-weight: 700; margin-bottom: 5px;
+  }
+
+  .finisher-chips { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 10px; }
+  .fin-chip {
+    background: var(--surface2); border: 2px solid var(--border); border-radius: 10px;
+    padding: 8px 2px; font-size: 0.62rem; font-weight: 700; color: var(--muted);
+    cursor: pointer; font-family: inherit;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .fin-chip.selected { border-color: var(--cardio); color: var(--text); background: rgba(251,146,60,0.12); }
+  .fin-sub { font-size: 0.72rem; color: var(--muted); margin-top: 8px; text-align: center; }
 
   .toggle-row {
     display: flex; justify-content: space-between; align-items: center;
@@ -340,27 +355,31 @@
 
   <div class="card">
     <h3>Heutiges Workout</h3>
-    <div class="template-chips">
-      <button class="tpl-chip" id="tplA" onclick="selectTemplate('A')">
-        <div class="tpl-letter">A</div><div class="tpl-name">Klassisch</div>
-      </button>
-      <button class="tpl-chip" id="tplB" onclick="selectTemplate('B')">
-        <div class="tpl-letter">B</div><div class="tpl-name">Exzentrisch</div>
-      </button>
-      <button class="tpl-chip" id="tplC" onclick="selectTemplate('C')">
-        <div class="tpl-letter">C</div><div class="tpl-name">Volumen</div>
-      </button>
-    </div>
+    <div class="template-chips" id="templateChips"></div>
     <div class="tpl-desc" id="tplDesc"></div>
     <div class="toggle-row">
       <div>
+        <div class="toggle-label">🏋️ Klimmzugstange vorhanden</div>
+        <div class="toggle-sub">Schaltet Klimmzüge frei · sonst Rudern am Tisch</div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="barToggle" onchange="onBarToggle()">
+        <span class="slider-toggle"></span>
+      </label>
+    </div>
+    <div class="toggle-row">
+      <div>
         <div class="toggle-label">🔥 Cardio-Finisher</div>
-        <div class="toggle-sub">10 Min Intervalle (8× 20s Vollgas / 40s locker)</div>
+        <div class="toggle-sub">Intervall-Block im Anschluss</div>
       </div>
       <label class="switch">
         <input type="checkbox" id="cardioToggle" onchange="onCardioToggle()">
         <span class="slider-toggle"></span>
       </label>
+    </div>
+    <div id="finisherWrap" class="hidden">
+      <div class="finisher-chips" id="finisherChips"></div>
+      <div class="fin-sub" id="finSub"></div>
     </div>
   </div>
 
@@ -379,8 +398,15 @@
       <h4>📅 Rhythmus</h4>
       <ul>
         <li><strong>3× pro Woche</strong>, immer ein Ruhetag dazwischen — z. B. <strong>Mo · Mi · Fr</strong>. Minimum: 2× pro Woche.</li>
-        <li>Die App rotiert automatisch <strong>A → B → C</strong> — einfach das vorgeschlagene Workout machen. Die drei Templates setzen unterschiedliche Reize (Kraft-Technik, Muskelspannung, Ausdauer).</li>
+        <li>Die App rotiert automatisch <strong>A → B → C → D → E</strong> — einfach das vorgeschlagene Workout machen. Jedes Template setzt einen anderen Reiz und trainiert einen anderen Muster-Mix: Kraft-Technik, Muskelspannung, Ausdauer, Haltekraft, Explosivität.</li>
+        <li>Ein Zyklus dauert rund <strong>anderthalb Wochen</strong>. Dadurch kommt jede Woche eine andere Kombination — und Drücken und Ziehen werden über <span class="highlight">zwei Richtungen</span> verteilt (horizontal und vertikal), statt immer dieselbe Übung zu machen. Das Gesamtvolumen bleibt gleich, die Progression je Leiter läuft dafür etwas langsamer.</li>
+        <li>Auch Warm-Up und Finisher wechseln automatisch durch, damit die Session nicht zur Gewohnheit wird.</li>
         <li>Nie zwei Tage direkt hintereinander: Der Muskel wächst in den <strong>~48 h Erholung</strong>, nicht im Training.</li>
+      </ul>
+      <h4>🏋️ Ausstattung</h4>
+      <ul>
+        <li>Alles geht ohne Geräte. Mit einer <strong>Klimmzugstange oder einem Türreck</strong> den Schalter oben umlegen — dann kommen echte Klimmzüge dazu (die stärkste Rückenübung überhaupt).</li>
+        <li>Ohne Stange ersetzt die App Klimmzüge automatisch durch Rudern am Tisch bzw. Türrahmen. Kein Loch im Programm.</li>
       </ul>
       <h4>🔥 Intensität — der wichtigste Hebel</h4>
       <ul>
@@ -390,10 +416,13 @@
       <h4>📈 Progression</h4>
       <ul>
         <li>Erreichst du in <strong>beiden Sätzen das obere Wdh-Ziel</strong>, levelt die App die Übung automatisch hoch — dein Fortschritt über Monate.</li>
+        <li>Dafür muss der Wert <span class="highlight">bestätigt</span> sein: in der Pause auf − / + tippen oder den Weiter-Button drücken, der die Zahl anzeigt. Läuft die Pause unbestätigt durch, wird der Satz nicht gewertet — die App levelt nie auf Vermutungen.</li>
+        <li>Haltezeiten misst die Uhr selbst. Brichst du früh ab, wird genau das protokolliert; ein sofortiger Abbruch gilt als Auslassen und kostet kein Level.</li>
         <li>Fühlt sich ein Level technisch unsauber an → unter „⚙️ Levels" manuell zurückstellen. Qualität vor Ego.</li>
       </ul>
       <h4>🏃 Cardio</h4>
       <ul>
+        <li>Vier Varianten: <strong>HIIT</strong> (8× 20/40 — der Standard), <strong>Tabata</strong> (8× 20/10, kurz und brutal), <strong>Pyramide</strong> (Intervalle 30 → 60 → 30 Sek.) und <strong>EMOM</strong> (6× 30/30, gleichmäßiger). Auf „Auto" wechseln sie automatisch durch.</li>
         <li>Finisher bei <strong>2–3 Sessions pro Woche</strong> anschalten; an vollen Tagen einfach weglassen — der Kraftteil ist der Kern.</li>
         <li>Dazu im Alltag viel gehen (~7.000+ Schritte) — kostet keine Trainingszeit.</li>
       </ul>
@@ -510,7 +539,7 @@ const CIRCUMFERENCE = 2 * Math.PI * 108;
 const FAST = new URLSearchParams(location.search).has('fast');
 const T = s => FAST ? Math.max(2, Math.round(s * 0.1)) : s;
 
-const PATTERNS = ['push', 'pull', 'squat', 'hinge', 'core'];
+const PATTERNS = ['push', 'vpush', 'pull', 'vpull', 'squat', 'hinge', 'core'];
 
 const LADDERS = {
   push: { label: 'Push (Brust/Schulter)', levels: [
@@ -521,6 +550,14 @@ const LADDERS = {
     { name: 'Liegestütze, Füße erhöht', detail: 'Füße auf Stuhl/Sofa · mehr Last auf Brust & Schultern', unit: 'reps' },
     { name: 'Archer-Liegestütze', detail: 'Sehr breit greifen · zu einer Seite absenken · anderer Arm streckt', unit: 'reps' },
   ]},
+  vpush: { label: 'Vertical Push (Schulter)', levels: [
+    { name: 'Wand-Schulterdrücken', detail: 'Gesicht zur Wand · Hände auf Kopfhöhe · Körper hochdrücken', unit: 'reps' },
+    { name: 'Pike Push-ups (Boden)', detail: 'Hüfte hoch, Dach-Position · Scheitel Richtung Boden', unit: 'reps' },
+    { name: 'Pike Push-ups, Füße erhöht', detail: 'Füße auf Stufe/Kiste · steiler · mehr Last auf die Schulter', unit: 'reps' },
+    { name: 'Pike Push-ups, Füße hoch', detail: 'Füße auf Stuhl/Sofa · Oberkörper fast senkrecht · tief absenken', unit: 'reps' },
+    { name: 'Wand-Handstand, Teilstrecke', detail: 'Bauch zur Wand hochlaufen · kleine kontrollierte Absenkung', unit: 'reps' },
+    { name: 'Handstand-Liegestütze (Wand)', detail: 'An der Wand · Kopf bis knapp über den Boden · volle Kontrolle', unit: 'reps' },
+  ]},
   pull: { label: 'Pull (Rücken)', levels: [
     { name: 'Türrahmen-Rudern (steil)', detail: 'Türrahmen greifen · leicht zurücklehnen · Brust zum Rahmen ziehen', unit: 'reps' },
     { name: 'Türrahmen-Rudern (45°)', detail: 'Füße näher am Rahmen · Körper schräg · kontrolliert ziehen', unit: 'reps' },
@@ -528,6 +565,15 @@ const LADDERS = {
     { name: 'Tisch-Rudern (Beine gestreckt)', detail: 'Körper gerade · Schulterblätter zusammenziehen', unit: 'reps' },
     { name: 'Tisch-Rudern, Füße erhöht', detail: 'Füße auf Stuhl · noch horizontaler · volle Kontrolle', unit: 'reps' },
     { name: 'Einarmiges Türrahmen-Rudern', detail: 'Ein Arm · Körper weit zurücklehnen · langsam & stabil', unit: 'reps' },
+  ]},
+  // Braucht eine Stange; ohne Stange fällt die Session auf Pull zurück.
+  vpull: { label: 'Vertical Pull (Klimmzug)', requires: 'bar', fallback: 'pull', levels: [
+    { name: 'Aktives Hängen', detail: 'An der Stange hängen · Schulterblätter aktiv nach unten ziehen', unit: 'sec' },
+    { name: 'Scapular Pulls', detail: 'Arme gestreckt · nur die Schulterblätter arbeiten · kleine Bewegung', unit: 'reps' },
+    { name: 'Negative Klimmzüge', detail: 'Oben starten (abspringen) · 4–5 Sek. langsam ablassen', unit: 'reps' },
+    { name: 'Klimmzüge, Fußhilfe', detail: 'Ein Fuß auf Stuhl/Band · so viel helfen wie nötig', unit: 'reps' },
+    { name: 'Klimmzüge (Untergriff)', detail: 'Handflächen zu dir · Brust zur Stange · voll ausstrecken unten', unit: 'reps' },
+    { name: 'Klimmzüge (Obergriff)', detail: 'Handflächen weg · schulterbreit · saubere volle Amplitude', unit: 'reps' },
   ]},
   squat: { label: 'Squat (Beine)', levels: [
     { name: 'Kniebeugen', detail: 'Füße schulterbreit · tief runter · Fersen am Boden', unit: 'reps' },
@@ -555,20 +601,60 @@ const LADDERS = {
   ]},
 };
 
+// Jedes Template bringt ein eigenes Wdh-Schema UND einen eigenen Muster-Mix.
+// Die Leitern bleiben pro Muster stabil — variiert wird das Drumherum, damit
+// die Double Progression weiter vergleichbare Zahlen bekommt.
 const TEMPLATES = {
   A: { name: 'Klassisch', reps: [8, 15], holdSec: 40,
        tempo: 'Kontrolliert: 2 Sek. runter, zügig hoch',
+       focus: 'Ganzkörper · horizontal',
+       mix: [['push', 'pull'], ['squat', 'hinge']],
        desc: '<strong>8–15 Wdh</strong> pro Satz, kontrolliertes Tempo. Jeder Satz bis <strong>1–2 Wdh vor Muskelversagen</strong>.' },
   B: { name: 'Exzentrisch', reps: [6, 10], holdSec: 30,
        tempo: 'Langsam: 4 Sek. runter, explosiv hoch',
+       focus: 'Vertikal · Schulter & Klimmzug',
+       mix: [['vpush', 'vpull'], ['hinge', 'squat']],
        desc: '<strong>6–10 Wdh</strong>, betont langsames Absenken (4 Sek.). Maximale Muskelspannung pro Wdh.' },
   C: { name: 'Volumen', reps: [12, 20], holdSec: 55,
        tempo: 'Flüssiges Tempo · keine Pause oben',
+       focus: 'Ganzkörper · Zug vertikal',
+       mix: [['push', 'vpull'], ['squat', 'hinge']],
        desc: '<strong>12–20 Wdh</strong>, flüssiges Tempo, kurze Sätze bis zum Brennen. Muskelausdauer & Pump.' },
+  D: { name: 'Isometrie', reps: [6, 12], holdSec: 50,
+       tempo: 'Unten 2 Sek. anhalten, dann kontrolliert hoch',
+       focus: 'Schulter & Rücken · Pausen unter Last',
+       mix: [['vpush', 'pull'], ['hinge', 'squat']],
+       desc: '<strong>6–12 Wdh</strong> mit <strong>2 Sek. Pause im schwersten Punkt</strong>. Kein Schwung, reine Muskelarbeit.' },
+  E: { name: 'Power', reps: [5, 8], holdSec: 35,
+       tempo: 'Runter kontrolliert, hoch so explosiv wie möglich',
+       focus: 'Ganzkörper · explosiv',
+       mix: [['push', 'pull'], ['squat', 'hinge']],
+       desc: '<strong>5–8 Wdh</strong>, jede Wdh <strong>explosiv</strong> nach oben. Satz beenden, sobald das Tempo einbricht.' },
 };
-const TEMPLATE_ORDER = ['A', 'B', 'C'];
+const TEMPLATE_ORDER = ['A', 'B', 'C', 'D', 'E'];
 
-const DEFAULT_LEVELS = { push: 4, pull: 2, squat: 3, hinge: 1, core: 3 };
+// Warm-Up rotiert mit, damit die zwei Minuten nicht zur Gewohnheit werden.
+const WARMUPS = [
+  [{ name: 'Hampelmänner', detail: 'Locker aufwärmen · Puls leicht hoch' },
+   { name: 'Ausfallschritte + Armkreisen', detail: 'Dynamisch · große Bewegungen · Gelenke mobilisieren' }],
+  [{ name: 'Seilspringen ohne Seil', detail: 'Kleine schnelle Sprünge · Fußgelenke wecken' },
+   { name: 'Hüftkreisen + Katzenbuckel', detail: 'Wirbelsäule rund und lang · Hüfte in alle Richtungen' }],
+  [{ name: 'High Knees', detail: 'Knie hoch · aufrecht bleiben · zügiger Rhythmus' },
+   { name: 'Weltbeste Dehnung', detail: 'Tiefer Ausfallschritt · Ellbogen zum Boden · Brust aufdrehen · Seiten wechseln' }],
+  [{ name: 'Shadow Boxing', detail: 'Leichte Schläge · auf den Fußballen bleiben' },
+   { name: 'Beinschwingen + Schulterkreisen', detail: 'Kontrolliert schwingen · Bewegungsumfang langsam größer' }],
+];
+
+// Vier Finisher-Varianten statt einem festen Intervall-Block.
+const FINISHERS = {
+  hiit:     { name: 'HIIT', sub: '8× 20s Vollgas / 40s locker' },
+  tabata:   { name: 'Tabata', sub: '8× 20s / 10s Pause · kurz und hart' },
+  pyramide: { name: 'Pyramide', sub: 'Intervalle 30 → 60 → 30 Sek.' },
+  emom:     { name: 'EMOM', sub: '6× 30s Arbeit / 30s locker' },
+};
+const FINISHER_ORDER = ['hiit', 'tabata', 'pyramide', 'emom'];
+
+const DEFAULT_LEVELS = { push: 4, vpush: 2, pull: 2, vpull: 3, squat: 3, hinge: 1, core: 3 };
 const REST_SEC = 60;
 // Ein Halt, der fast sofort abgebrochen wird, ist ein Auslassen und kein
 // Scheitern — er darf weder hoch- noch runterleveln.
@@ -590,77 +676,95 @@ function loadJSON(key, fallback) {
 const saveJSON = (key, val) => localStorage.setItem(key, JSON.stringify(val));
 
 let levels = Object.assign({}, DEFAULT_LEVELS, loadJSON(LS_LEVELS, {}));
-let prefs = Object.assign({ cardio: true, nextTemplate: 'A' }, loadJSON(LS_PREFS, {}));
+let prefs = Object.assign({ cardio: true, nextTemplate: 'A', bar: false, finisher: 'auto' }, loadJSON(LS_PREFS, {}));
 
 // ══════════════════════════════════════════
 // WORKOUT BUILDER
 // ══════════════════════════════════════════
-function buildWorkout(tplKey, withCardio) {
+function sessionCount() {
+  return loadJSON(LS_LOG, []).filter(e => e.v >= 2).length;
+}
+
+// Ohne Stange gibt es keine Klimmzüge — die Session fällt auf das horizontale
+// Muster zurück, statt eine Übung anzubieten, die gar nicht durchführbar ist.
+function resolvePattern(p) {
+  const l = LADDERS[p];
+  return l && l.requires === 'bar' && !prefs.bar ? l.fallback : p;
+}
+
+function pickFinisher(rotation) {
+  if (prefs.finisher && prefs.finisher !== 'auto' && FINISHERS[prefs.finisher]) return prefs.finisher;
+  return FINISHER_ORDER[rotation % FINISHER_ORDER.length];
+}
+
+// Intervalle je Finisher als [Sek. hart, Sek. locker] pro Runde
+function finisherRounds(key) {
+  if (key === 'tabata') return Array.from({ length: 8 }, () => [20, 10]);
+  if (key === 'pyramide') return [30, 40, 50, 60, 50, 40, 30].map(h => [h, 30]);
+  if (key === 'emom') return Array.from({ length: 6 }, () => [30, 30]);
+  return Array.from({ length: 8 }, () => [20, 40]);
+}
+
+// Ein Satz plus Pause. Einheitlich für alle Muster, weil manche Leitern
+// gemischt sind (Aktives Hängen und Plank zählen Sekunden, nicht Wdh).
+function addSet(phases, tpl, p, set, label, restSec) {
+  const ladder = LADDERS[p];
+  const lvl = Math.max(1, Math.min(ladder.levels.length, levels[p] || 1));
+  const ex = ladder.levels[lvl - 1];
+  const section = `${label} · Satz ${set}/2`;
+  if (ex.unit === 'sec') {
+    phases.push({ kind: 'work-time', pattern: p, set, dur: T(tpl.holdSec), name: ex.name,
+                  section, detail: ex.detail, target: `${tpl.holdSec} Sek. halten`, level: lvl });
+    phases.push({ kind: 'rest', dur: T(restSec), name: 'Pause', section,
+                  detail: 'Wie lange gehalten? Eintragen · dann „Weiter"',
+                  logFor: { pattern: p, set, unit: 'sec', full: tpl.holdSec } });
+  } else {
+    phases.push({ kind: 'work-reps', pattern: p, set, name: ex.name, section,
+                  detail: `${ex.detail} · ${tpl.tempo}`,
+                  target: `${tpl.reps[0]}–${tpl.reps[1]} Wdh · 1–2 in Reserve`, level: lvl });
+    phases.push({ kind: 'rest', dur: T(restSec), name: 'Pause', section,
+                  detail: 'Wdh eintragen · dann „Weiter" wenn bereit',
+                  logFor: { pattern: p, set, unit: 'reps' } });
+  }
+}
+
+function buildWorkout(tplKey, withCardio, opts) {
   const tpl = TEMPLATES[tplKey];
+  const rotation = opts && typeof opts.rotation === 'number' ? opts.rotation : sessionCount();
+  const finKey = (opts && opts.finisher) || pickFinisher(rotation);
   const phases = [];
-  const add = p => phases.push(p);
 
-  // Ramp-up (2 min): dient zugleich als exercise-spezifisches Aufwärmen
-  add({ kind: 'warmup', dur: T(60), name: 'Hampelmänner', section: 'Warm-Up 1/2',
-        detail: 'Locker aufwärmen · Puls leicht hoch' });
-  add({ kind: 'warmup', dur: T(60), name: 'Ausfallschritte + Armkreisen', section: 'Warm-Up 2/2',
-        detail: 'Dynamisch · große Bewegungen · Gelenke mobilisieren' });
+  // Ramp-up (2 min): rotierendes Warm-Up, zugleich Aufwärmen für den Kraftteil
+  const warm = WARMUPS[rotation % WARMUPS.length];
+  warm.forEach((w, i) => phases.push({ kind: 'warmup', dur: T(60), name: w.name,
+    section: `Warm-Up ${i + 1}/${warm.length}`, detail: w.detail }));
 
-  // Kraftblock: 2 Antagonisten-Supersets à 2 Sätze, dann Core
-  const pairs = [
-    { label: 'Superset 1', patterns: ['push', 'pull'] },
-    { label: 'Superset 2', patterns: ['squat', 'hinge'] },
-  ];
-  for (const pair of pairs) {
+  // Kraftblock: 2 Antagonisten-Supersets à 2 Sätze, Muster kommen vom Template
+  tpl.mix.forEach((pair, i) => {
+    const patterns = pair.map(resolvePattern);
     for (let set = 1; set <= 2; set++) {
-      for (const p of pair.patterns) {
-        const lvl = levels[p];
-        const ex = LADDERS[p].levels[lvl - 1];
-        add({ kind: 'work-reps', pattern: p, set, name: ex.name,
-              section: `${pair.label} · Satz ${set}/2`,
-              detail: `${ex.detail} · ${tpl.tempo}`,
-              target: `${tpl.reps[0]}–${tpl.reps[1]} Wdh · 1–2 in Reserve`,
-              level: lvl });
-        add({ kind: 'rest', dur: T(REST_SEC), name: 'Pause', section: `${pair.label} · Satz ${set}/2`,
-              detail: 'Wdh eintragen · dann „Weiter" wenn bereit',
-              logFor: { pattern: p, set, unit: 'reps' } });
-      }
+      for (const p of patterns) addSet(phases, tpl, p, set, `Superset ${i + 1}`, REST_SEC);
     }
-  }
+  });
 
-  // Core: 2 Sätze (Halten = Zeit, V-Ups = Wdh)
-  const coreLvl = levels.core;
-  const coreEx = LADDERS.core.levels[coreLvl - 1];
-  for (let set = 1; set <= 2; set++) {
-    if (coreEx.unit === 'sec') {
-      add({ kind: 'work-time', pattern: 'core', set, dur: T(tpl.holdSec), name: coreEx.name,
-            section: `Core · Satz ${set}/2`, detail: coreEx.detail,
-            target: `${tpl.holdSec} Sek. halten`, level: coreLvl });
-      add({ kind: 'rest', dur: T(CORE_REST_SEC), name: 'Pause', section: `Core · Satz ${set}/2`,
-            detail: 'Wie lange gehalten? Eintragen · dann „Weiter"',
-            logFor: { pattern: 'core', set, unit: 'sec', full: tpl.holdSec } });
-    } else {
-      add({ kind: 'work-reps', pattern: 'core', set, name: coreEx.name,
-            section: `Core · Satz ${set}/2`, detail: `${coreEx.detail} · ${tpl.tempo}`,
-            target: `${tpl.reps[0]}–${tpl.reps[1]} Wdh · 1–2 in Reserve`, level: coreLvl });
-      add({ kind: 'rest', dur: T(CORE_REST_SEC), name: 'Pause', section: `Core · Satz ${set}/2`,
-            detail: 'Wdh eintragen · dann „Weiter"',
-            logFor: { pattern: 'core', set, unit: 'reps' } });
-    }
-  }
+  // Core: 2 Sätze
+  for (let set = 1; set <= 2; set++) addSet(phases, tpl, 'core', set, 'Core', CORE_REST_SEC);
 
-  // Optionaler Cardio-Finisher (10 Min HIIT — zeiteffizienter als Steady State)
+  // Optionaler Finisher (Intervalle — zeiteffizienter als Steady State)
   if (withCardio) {
-    add({ kind: 'cardio-easy', dur: T(60), name: 'Locker einlaufen 🏃', section: 'Cardio-Finisher',
-          detail: 'Lockeres Traben / auf der Stelle laufen' });
-    for (let r = 1; r <= 8; r++) {
-      add({ kind: 'cardio-hard', dur: T(20), name: 'VOLLGAS! ⚡', section: `HIIT · Runde ${r}/8`,
-            detail: 'Sprint auf der Stelle / High Knees / Burpees – maximale Intensität!' });
-      add({ kind: 'cardio-easy', dur: T(40), name: 'Locker (Erholung)', section: `HIIT · Runde ${r}/8`,
-            detail: 'Gehen · Atmung kontrollieren' });
-    }
-    add({ kind: 'cardio-easy', dur: T(60), name: 'Auslaufen', section: 'Cool-down',
-          detail: 'Sehr ruhiges Tempo · Puls runterbringen' });
+    const fin = FINISHERS[finKey] || FINISHERS.hiit;
+    const rounds = finisherRounds(finKey);
+    phases.push({ kind: 'cardio-easy', dur: T(60), name: 'Locker einlaufen 🏃',
+                  section: `Finisher · ${fin.name}`, detail: 'Lockeres Traben / auf der Stelle laufen' });
+    rounds.forEach(([hard, easy], i) => {
+      const section = `${fin.name} · Runde ${i + 1}/${rounds.length}`;
+      phases.push({ kind: 'cardio-hard', dur: T(hard), name: 'VOLLGAS! ⚡', section,
+                    detail: 'Sprint auf der Stelle / High Knees / Burpees – maximale Intensität!' });
+      phases.push({ kind: 'cardio-easy', dur: T(easy), name: 'Locker (Erholung)', section,
+                    detail: 'Gehen · Atmung kontrollieren' });
+    });
+    phases.push({ kind: 'cardio-easy', dur: T(60), name: 'Auslaufen', section: 'Cool-down',
+                  detail: 'Sehr ruhiges Tempo · Puls runterbringen' });
   }
 
   return phases;
@@ -1125,16 +1229,51 @@ function weekStats() {
 // ══════════════════════════════════════════
 // FLOW CONTROL
 // ══════════════════════════════════════════
+function renderTemplateChips() {
+  $('templateChips').innerHTML = TEMPLATE_ORDER.map(k => `
+    <button class="tpl-chip${k === selectedTemplate ? ' selected' : ''}" onclick="selectTemplate('${k}')">
+      <div class="tpl-letter">${k}</div><div class="tpl-name">${TEMPLATES[k].name}</div>
+    </button>`).join('');
+}
+
+function renderFinisherChips() {
+  const wrap = $('finisherWrap');
+  wrap.classList.toggle('hidden', !$('cardioToggle').checked);
+  const labels = { auto: 'Auto' };
+  $('finisherChips').innerHTML = ['auto', ...FINISHER_ORDER].map(k => `
+    <button class="fin-chip${prefs.finisher === k ? ' selected' : ''}" onclick="selectFinisher('${k}')">${labels[k] || FINISHERS[k].name}</button>`).join('');
+  const active = FINISHERS[pickFinisher(sessionCount())];
+  $('finSub').textContent = prefs.finisher === 'auto'
+    ? `Wechselt automatisch · heute: ${active.name} (${active.sub})`
+    : active.sub;
+}
+
 function selectTemplate(key) {
   selectedTemplate = key;
-  for (const k of TEMPLATE_ORDER) $('tpl' + k).classList.toggle('selected', k === key);
-  $('tplDesc').innerHTML = TEMPLATES[key].desc;
+  renderTemplateChips();
+  const tpl = TEMPLATES[key];
+  $('tplDesc').innerHTML = `<div class="tpl-focus">${tpl.focus}</div>${tpl.desc}`;
+  updateEstimate();
+}
+
+function selectFinisher(key) {
+  prefs.finisher = key;
+  saveJSON(LS_PREFS, prefs);
+  renderFinisherChips();
   updateEstimate();
 }
 
 function onCardioToggle() {
   prefs.cardio = $('cardioToggle').checked;
   saveJSON(LS_PREFS, prefs);
+  renderFinisherChips();
+  updateEstimate();
+}
+
+function onBarToggle() {
+  prefs.bar = $('barToggle').checked;
+  saveJSON(LS_PREFS, prefs);
+  renderLevels();
   updateEstimate();
 }
 
@@ -1214,7 +1353,7 @@ function finishWorkout() {
   saveJSON(LS_LOG, hist.slice(0, 60));
 
   // Nächstes Template im Zyklus vormerken
-  prefs.nextTemplate = TEMPLATE_ORDER[(TEMPLATE_ORDER.indexOf(selectedTemplate) + 1) % 3];
+  prefs.nextTemplate = TEMPLATE_ORDER[(TEMPLATE_ORDER.indexOf(selectedTemplate) + 1) % TEMPLATE_ORDER.length];
   saveJSON(LS_PREFS, prefs);
 
   // Complete screen
@@ -1283,8 +1422,12 @@ function changeLevel(pattern, delta) {
   renderLevels();
 }
 
+function visiblePatterns() {
+  return PATTERNS.filter(p => !(LADDERS[p].requires === 'bar' && !prefs.bar));
+}
+
 function renderLevels() {
-  $('levelsList').innerHTML = PATTERNS.map(p => {
+  $('levelsList').innerHTML = visiblePatterns().map(p => {
     const lvl = levels[p];
     const ex = LADDERS[p].levels[lvl - 1];
     return `<div class="level-row">
@@ -1327,7 +1470,9 @@ function renderStartScreen() {
   $('weekCount').firstChild.textContent = thisWeek;
   $('streakCount').textContent = streak;
   $('cardioToggle').checked = !!prefs.cardio;
+  $('barToggle').checked = !!prefs.bar;
   selectTemplate(prefs.nextTemplate && TEMPLATES[prefs.nextTemplate] ? prefs.nextTemplate : 'A');
+  renderFinisherChips();
   renderLevels();
   renderHistory();
 }

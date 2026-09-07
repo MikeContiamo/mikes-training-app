@@ -189,23 +189,129 @@ test('Satz 2 startet beim Ergebnis von Satz 1', () => {
 
 console.log('\nWorkout-Aufbau & Wochenlogik');
 
-test('buildWorkout: Warm-Up, 5 Muster, je 2 Sätze', () => {
-  const { api } = boot();
-  api.setState({ levels: api.DEFAULT_LEVELS, selectedTemplate: 'A' });
-  const w = api.buildWorkout('A', false);
-  assert.equal(w.filter(p => p.kind === 'warmup').length, 2);
-  for (const p of api.PATTERNS) {
-    const n = w.filter(x => x.logFor && x.logFor.pattern === p).length;
-    assert.equal(n, 2, `${p}: 2 Sätze erwartet, ${n} gefunden`);
+test('jedes Template: Warm-Up + eigener Muster-Mix, je 2 Sätze', () => {
+  const { api } = boot({ store: { mikeTrainingPrefs: JSON.stringify({ bar: true }) } });
+  api.setState({ levels: api.DEFAULT_LEVELS });
+  for (const k of api.TEMPLATE_ORDER) {
+    const w = api.buildWorkout(k, false, { rotation: 0 });
+    assert.equal(w.filter(p => p.kind === 'warmup').length, 2, k + ': Warm-Up');
+    const want = [...api.TEMPLATES[k].mix.flat(), 'core'];
+    for (const p of want) {
+      const n = w.filter(x => x.logFor && x.logFor.pattern === p).length;
+      assert.equal(n, 2, `${k}/${p}: 2 Sätze erwartet, ${n} gefunden`);
+    }
+    const got = [...new Set(w.filter(x => x.logFor).map(x => x.logFor.pattern))];
+    assert.deepEqual(got.sort(), [...new Set(want)].sort(), k + ': keine fremden Muster');
+    assert.ok(w.every(p => p.section && p.name), k + ': jede Phase hat Label und Namen');
   }
-  assert.ok(w.every(p => p.section && p.name), 'jede Phase hat Label und Namen');
 });
 
-test('Cardio-Finisher hängt 8 Intervalle an', () => {
+test('die 5 Templates decken alle Muster ab und variieren den Mix', () => {
+  const { api } = boot({ store: { mikeTrainingPrefs: JSON.stringify({ bar: true }) } });
+  api.setState({ levels: api.DEFAULT_LEVELS });
+  const seen = new Set();
+  const mixes = new Set();
+  for (const k of api.TEMPLATE_ORDER) {
+    api.TEMPLATES[k].mix.flat().forEach(p => seen.add(p));
+    mixes.add(JSON.stringify(api.TEMPLATES[k].mix));
+  }
+  seen.add('core');
+  assert.deepEqual([...seen].sort(), [...api.PATTERNS].sort(), 'jedes Muster kommt vor');
+  assert.ok(mixes.size >= 4, `mindestens 4 verschiedene Mixe, sind ${mixes.size}`);
+});
+
+test('Druck- und Zugvolumen bleiben pro Zyklus erhalten', () => {
+  const { api } = boot({ store: { mikeTrainingPrefs: JSON.stringify({ bar: true }) } });
+  api.setState({ levels: api.DEFAULT_LEVELS });
+  const n = {};
+  for (const k of api.TEMPLATE_ORDER) {
+    for (const ph of api.buildWorkout(k, false, { rotation: 0 })) {
+      if (ph.logFor) n[ph.logFor.pattern] = (n[ph.logFor.pattern] || 0) + 1;
+    }
+  }
+  // 5 Sessions × 2 Sätze = 10 Sätze pro Bewegungsrichtung
+  assert.equal(n.push + n.vpush, 10, 'Druck gesamt');
+  assert.equal(n.pull + n.vpull, 10, 'Zug gesamt');
+  assert.equal(n.core, 10, 'Core');
+});
+
+test('ohne Stange fällt Vertical Pull auf Rudern zurück', () => {
+  const { api } = boot({ store: { mikeTrainingPrefs: JSON.stringify({ bar: false }) } });
+  api.setState({ levels: api.DEFAULT_LEVELS });
+  const w = api.buildWorkout('B', false, { rotation: 0 });   // B = [vpush, vpull]
+  const pats = new Set(w.filter(p => p.logFor).map(p => p.logFor.pattern));
+  assert.ok(!pats.has('vpull'), 'keine Klimmzüge ohne Stange');
+  assert.ok(pats.has('pull'), 'stattdessen horizontales Ziehen');
+  assert.ok(!api.buildWorkout('B', false, { rotation: 0 }).some(p => /Klimmzug/.test(p.name || '')));
+});
+
+test('mit Stange kommen Klimmzüge vor', () => {
+  const { api } = boot({ store: { mikeTrainingPrefs: JSON.stringify({ bar: true }) } });
+  api.setState({ levels: Object.assign({}, api.DEFAULT_LEVELS, { vpull: 5 }) });
+  const w = api.buildWorkout('B', false, { rotation: 0 });
+  assert.ok(w.some(p => p.name === 'Klimmzüge (Untergriff)'));
+});
+
+test('gemischte Einheiten in einer Leiter: Aktives Hängen wird als Zeit geführt', () => {
+  const { api } = boot({ store: { mikeTrainingPrefs: JSON.stringify({ bar: true }) } });
+  api.setState({ levels: Object.assign({}, api.DEFAULT_LEVELS, { vpull: 1 }) });
+  const w = api.buildWorkout('B', false, { rotation: 0 });
+  const work = w.filter(p => p.pattern === 'vpull' && p.kind === 'work-time');
+  assert.equal(work.length, 2, 'Level 1 ist eine Halte-Übung');
+  const rests = w.filter(p => p.logFor && p.logFor.pattern === 'vpull');
+  assert.ok(rests.every(r => r.logFor.unit === 'sec' && r.logFor.full > 0));
+});
+
+test('Warm-Up rotiert über 4 Varianten', () => {
   const { api } = boot();
   api.setState({ levels: api.DEFAULT_LEVELS });
-  const w = api.buildWorkout('A', true);
-  assert.equal(w.filter(p => p.kind === 'cardio-hard').length, 8);
+  const seen = new Set();
+  for (let r = 0; r < 4; r++) {
+    seen.add(api.buildWorkout('A', false, { rotation: r }).filter(p => p.kind === 'warmup').map(p => p.name).join('+'));
+  }
+  assert.equal(seen.size, 4, 'vier verschiedene Warm-Ups');
+  const a = api.buildWorkout('A', false, { rotation: 0 }).filter(p => p.kind === 'warmup').map(p => p.name);
+  const b = api.buildWorkout('A', false, { rotation: 4 }).filter(p => p.kind === 'warmup').map(p => p.name);
+  assert.deepEqual(a, b, 'danach von vorn');
+});
+
+test('Finisher-Varianten haben die erwartete Intervallstruktur', () => {
+  const { api } = boot();
+  api.setState({ levels: api.DEFAULT_LEVELS });
+  const shape = f => {
+    const w = api.buildWorkout('A', true, { rotation: 0, finisher: f });
+    const hard = w.filter(p => p.kind === 'cardio-hard');
+    return { rounds: hard.length, secs: hard.map(p => p.dur) };
+  };
+  assert.deepEqual(shape('hiit'),   { rounds: 8, secs: [20, 20, 20, 20, 20, 20, 20, 20] });
+  assert.deepEqual(shape('tabata'), { rounds: 8, secs: [20, 20, 20, 20, 20, 20, 20, 20] });
+  assert.deepEqual(shape('pyramide'), { rounds: 7, secs: [30, 40, 50, 60, 50, 40, 30] });
+  assert.deepEqual(shape('emom'),   { rounds: 6, secs: [30, 30, 30, 30, 30, 30] });
+  // Tabata unterscheidet sich von HIIT durch die kurze Erholung
+  const easy = f => api.buildWorkout('A', true, { rotation: 0, finisher: f })
+    .filter(p => p.kind === 'cardio-easy').map(p => p.dur);
+  assert.ok(easy('tabata').includes(10), 'Tabata: 10s Pause');
+  assert.ok(easy('hiit').includes(40), 'HIIT: 40s locker');
+});
+
+test('Finisher rotiert automatisch, feste Wahl gewinnt', () => {
+  const { api } = boot();
+  const seen = new Set([0, 1, 2, 3].map(r => api.pickFinisher(r)));
+  assert.equal(seen.size, 4, 'alle vier kommen dran');
+  assert.equal(api.pickFinisher(0), api.pickFinisher(4), 'dann von vorn');
+  const fixed = boot({ store: { mikeTrainingPrefs: JSON.stringify({ finisher: 'tabata' }) } }).api;
+  assert.equal(fixed.pickFinisher(0), 'tabata');
+  assert.equal(fixed.pickFinisher(3), 'tabata');
+});
+
+test('Template-Zyklus läuft über alle 5', () => {
+  const { api } = boot();
+  const order = api.TEMPLATE_ORDER;
+  assert.equal(order.length, 5);
+  const next = k => order[(order.indexOf(k) + 1) % order.length];
+  let k = 'A'; const path = [k];
+  for (let i = 0; i < 5; i++) { k = next(k); path.push(k); }
+  assert.deepEqual(path, ['A', 'B', 'C', 'D', 'E', 'A'], 'kein Abschneiden bei 3');
 });
 
 test('isoWeekKey trifft ISO-Wochengrenzen', () => {
