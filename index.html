@@ -221,6 +221,9 @@
   .stepper-btn:active { transform: scale(0.94); }
   .stepper-value { font-size: 2.2rem; font-weight: 900; min-width: 76px; text-align: center; font-variant-numeric: tabular-nums; }
   .stepper-value small { font-size: 0.8rem; font-weight: 600; color: var(--muted); display: block; letter-spacing: 0.5px; }
+  .rep-stepper.unconfirmed .stepper-value { color: var(--muted); }
+  .stepper-hint { font-size: 0.72rem; color: var(--muted); margin-top: 8px; letter-spacing: 0.3px; }
+  .stepper-hint.pending { color: var(--transition); font-weight: 700; }
 
   .next-up {
     display: flex; align-items: center; gap: 10px;
@@ -269,6 +272,8 @@
     border-radius: 12px; padding: 10px 14px; font-size: 0.88rem; font-weight: 600;
   }
   .leveldown-item { background: rgba(96,165,250,0.08); border-color: rgba(96,165,250,0.3); }
+  .hint-item { background: var(--surface); border-color: var(--border); color: var(--muted); font-weight: 500; }
+  .hint-item strong { color: var(--text); }
 
   .saved-msg { text-align: center; color: var(--work); font-weight: 700; font-size: 0.85rem; }
 
@@ -445,6 +450,7 @@
       <div class="stepper-value" id="stepperValue">12<small id="stepperUnit">WDH</small></div>
       <button class="stepper-btn" onclick="stepReps(1)">+</button>
     </div>
+    <div class="stepper-hint hidden" id="stepperHint"></div>
   </div>
 
   <div class="next-up" id="nextUp">
@@ -564,6 +570,9 @@ const TEMPLATE_ORDER = ['A', 'B', 'C'];
 
 const DEFAULT_LEVELS = { push: 4, pull: 2, squat: 3, hinge: 1, core: 3 };
 const REST_SEC = 60;
+// Ein Halt, der fast sofort abgebrochen wird, ist ein Auslassen und kein
+// Scheitern — er darf weder hoch- noch runterleveln.
+const MIN_ATTEMPT_FRAC = 0.2;
 const CORE_REST_SEC = 45;
 const WORK_EST_SEC = 40; // Schätzung pro Wdh-Satz für die Fortschrittsanzeige
 
@@ -747,6 +756,7 @@ let selectedTemplate = prefs.nextTemplate || 'A';
 let workoutStartTime = null;
 let totalEstimate = 1;
 let sessionSets = {};       // { push: [12, 11], ... }
+let sessionConfirmed = {};  // { push: [true, false], ... } — nur bestätigte Sätze zählen für Progression
 let stepperVal = 0;
 
 // ══════════════════════════════════════════
@@ -801,28 +811,47 @@ function renderPhase() {
 
   // Stepper nur in Pausen mit Log-Aufgabe
   const stepper = $('repStepper');
+  const hint = $('stepperHint');
   if (phase.kind === 'rest' && phase.logFor) {
     const lf = phase.logFor;
+    // Haltezeit misst die Uhr → gilt als belegt, sofern der Satz wirklich
+    // angegangen wurde. Wdh kann die App nicht messen: erst ein Tap auf
+    // −/+ oder der Weiter-Button bestätigt den Wert.
+    const attempted = lf.unit === 'sec' && observedHold(lf).frac >= MIN_ATTEMPT_FRAC;
     stepperVal = prefillReps(lf);
     $('stepperUnit').textContent = lf.unit === 'sec' ? 'SEK' : 'WDH';
     $('stepperValue').firstChild.textContent = stepperVal;
     stepper.classList.add('visible');
-    commitReps(); // Default sofort übernehmen, falls Pause durchläuft
+    commitReps(attempted);
+    stepper.classList.toggle('unconfirmed', !attempted);
+    hint.textContent = attempted ? 'gemessen · korrigierbar' : 'Wert bestätigen — sonst keine Progression';
+    hint.classList.toggle('pending', !attempted);
+    hint.classList.remove('hidden');
   } else {
-    stepper.classList.remove('visible');
+    stepper.classList.remove('visible', 'unconfirmed');
+    hint.classList.add('hidden');
   }
 
   // Nächste Übung
   const next = workout[currentIdx + 1];
   $('nextName').textContent = next ? next.name : '🎉 Fertig!';
 
-  // Primär-Button
+  updatePrimaryLabel();
+}
+
+// Der Weiter-Button trägt den Wert, den er bestätigt — ein Tap ist damit
+// eine bewusste Zusage, kein stilles Übernehmen eines Vorschlags.
+function updatePrimaryLabel() {
+  const phase = workout[currentIdx];
+  if (!phase) return;
   const btn = $('primaryBtn');
   if (phase.kind === 'work-reps') {
     btn.textContent = '✓ Fertig';
     btn.className = 'ctrl-btn primary';
   } else if (phase.kind === 'rest') {
-    btn.textContent = 'Weiter →';
+    btn.textContent = phase.logFor
+      ? `✓ ${stepperVal} ${phase.logFor.unit === 'sec' ? 'Sek' : 'Wdh'} · Weiter →`
+      : 'Weiter →';
     btn.className = 'ctrl-btn primary rest-mode';
   } else {
     btn.textContent = 'Überspringen ⏭';
@@ -887,8 +916,17 @@ function cueForPhase(phase) {
   else playStartCue();
 }
 
+// Wie viel der Halte-Phase wurde wirklich durchgehalten? Als Anteil gespeichert,
+// damit der ?fast-Testmodus die Werte nicht verzerrt.
+function captureHold(idx, atTime) {
+  const p = workout[idx];
+  if (!p || p.kind !== 'work-time' || !p.dur || !phaseEndsAt) return;
+  const elapsed = p.dur - (phaseEndsAt - atTime) / 1000;
+  p.heldFraction = Math.max(0, Math.min(1, elapsed / p.dur));
+}
+
 function advancePhase(boundaryTime) {
-  const from = workout[currentIdx];
+  captureHold(currentIdx, boundaryTime);
   const nextIdx = currentIdx + 1;
   if (nextIdx >= workout.length) { finishWorkout(); return; }
   enterPhase(nextIdx, boundaryTime);
@@ -909,11 +947,13 @@ function tick() {
     }
     if (remaining <= 0) {
       playCountdownBeep(0);
+      captureHold(currentIdx, phaseEndsAt); // voll abgelaufen = voll gehalten
       // Verpasste Phasen nachholen (z.B. wenn der Tab im Hintergrund war):
       // Kette abgelaufener Countdown-Phasen überspringen, Grenzen sauber addieren.
       let boundary = phaseEndsAt;
       let idx = currentIdx + 1;
       while (idx < workout.length && workout[idx].dur && boundary + workout[idx].dur * 1000 <= now) {
+        if (workout[idx].kind === 'work-time') workout[idx].heldFraction = 1;
         boundary += workout[idx].dur * 1000;
         idx++;
       }
@@ -950,6 +990,7 @@ function primaryAction() {
   const phase = workout[currentIdx];
   if (!phase) return;
   try { getAudioCtx().resume(); } catch (e) {}
+  if (phase.kind === 'rest' && phase.logFor) commitReps(true);
   advancePhase(Date.now()); // Fertig / Weiter / Überspringen: alle drei = nächste Phase
 }
 
@@ -962,15 +1003,42 @@ function toggleAudio() {
 // ══════════════════════════════════════════
 // REP LOGGING (Stepper in der Pause)
 // ══════════════════════════════════════════
+// Startwert eines Log-Musters aus einem History-Eintrag — aber nur, wenn die
+// Einheit damals dieselbe war (eine Halte-Übung liefert keinen Wdh-Startwert)
+// und der Satz bestätigt wurde.
+function historySetValue(entry, logFor) {
+  if (!entry || !(entry.v >= 2)) return null;
+  const arr = entry.sets && entry.sets[logFor.pattern];
+  if (!arr || !arr.length) return null;
+  const lvl = entry.levels && entry.levels[logFor.pattern];
+  const ladder = LADDERS[logFor.pattern];
+  const ex = lvl && ladder ? ladder.levels[lvl - 1] : null;
+  if (ex && ex.unit !== logFor.unit) return null;
+  const conf = entry.confirmed && entry.confirmed[logFor.pattern];
+  for (let i = 0; i < arr.length; i++) {
+    if (typeof arr[i] !== 'number') continue;
+    if (entry.v >= 3 && (!conf || conf[i] !== true)) continue;
+    return arr[i];
+  }
+  return null;
+}
+
+// Gemessen statt angenommen: Anteil der tatsächlich gehaltenen Zeit.
+function observedHold(logFor) {
+  const work = workout[currentIdx - 1];
+  const frac = work && typeof work.heldFraction === 'number' ? work.heldFraction : 1;
+  return { frac, secs: Math.max(0, Math.round(frac * logFor.full)) };
+}
+
 function prefillReps(logFor) {
   const prev = sessionSets[logFor.pattern];
-  if (prev && prev.length) return prev[prev.length - 1]; // Satz 1 dieser Session
-  if (logFor.unit === 'sec') return logFor.full;         // Halten: voll geschafft als Default
-  const hist = loadJSON(LS_LOG, []);
-  for (const e of hist) {
-    if (e.v === 2 && e.sets && e.sets[logFor.pattern] && e.sets[logFor.pattern].length) {
-      return e.sets[logFor.pattern][0];
-    }
+  if (prev && prev.length && typeof prev[prev.length - 1] === 'number') {
+    return prev[prev.length - 1];  // Satz 2 startet beim Ergebnis von Satz 1
+  }
+  if (logFor.unit === 'sec') return observedHold(logFor).secs;
+  for (const e of loadJSON(LS_LOG, [])) {
+    const val = historySetValue(e, logFor);
+    if (val !== null) return val;
   }
   const [lo, hi] = TEMPLATES[selectedTemplate].reps;
   return Math.round((lo + hi) / 2);
@@ -979,15 +1047,22 @@ function prefillReps(logFor) {
 function stepReps(delta) {
   stepperVal = Math.max(0, Math.min(999, stepperVal + delta));
   $('stepperValue').firstChild.textContent = stepperVal;
-  commitReps();
+  commitReps(true); // Antippen = bewusst gesetzt
+  $('repStepper').classList.remove('unconfirmed');
+  const hint = $('stepperHint');
+  hint.textContent = 'bestätigt';
+  hint.classList.remove('pending');
+  updatePrimaryLabel();
 }
 
-function commitReps() {
+function commitReps(confirmed) {
   const phase = workout[currentIdx];
   if (!phase || !phase.logFor) return;
   const { pattern, set } = phase.logFor;
   if (!sessionSets[pattern]) sessionSets[pattern] = [];
+  if (!sessionConfirmed[pattern]) sessionConfirmed[pattern] = [];
   sessionSets[pattern][set - 1] = stepperVal;
+  sessionConfirmed[pattern][set - 1] = confirmed === true || sessionConfirmed[pattern][set - 1] === true;
 }
 
 // ══════════════════════════════════════════
@@ -996,8 +1071,12 @@ function commitReps() {
 function applyProgression(tplKey) {
   const tpl = TEMPLATES[tplKey];
   const changes = [];
+  const unconfirmed = [];
   for (const p of PATTERNS) {
-    const vals = (sessionSets[p] || []).filter(v => typeof v === 'number');
+    const raw = sessionSets[p] || [];
+    const conf = sessionConfirmed[p] || [];
+    const vals = raw.filter((v, i) => typeof v === 'number' && conf[i] === true);
+    if (raw.filter(v => typeof v === 'number').length > vals.length) unconfirmed.push(p);
     if (vals.length < 2) continue;
     const lvl = levels[p];
     const unit = LADDERS[p].levels[lvl - 1].unit;
@@ -1012,7 +1091,7 @@ function applyProgression(tplKey) {
     }
   }
   saveJSON(LS_LEVELS, levels);
-  return changes;
+  return { changes, unconfirmed };
 }
 
 // ══════════════════════════════════════════
@@ -1028,7 +1107,7 @@ function isoWeekKey(ts) {
 }
 
 function weekStats() {
-  const hist = loadJSON(LS_LOG, []).filter(e => e.v === 2 && e.ts);
+  const hist = loadJSON(LS_LOG, []).filter(e => e.v >= 2 && e.ts);
   const nowKey = isoWeekKey(Date.now());
   const thisWeek = hist.filter(e => isoWeekKey(e.ts) === nowKey).length;
   // Streak: aufeinanderfolgende Wochen mit ≥1 Workout, rückwärts ab dieser Woche
@@ -1091,6 +1170,7 @@ function startWorkout() {
   workout = buildWorkout(selectedTemplate, $('cardioToggle').checked);
   totalEstimate = estimateSec(workout);
   sessionSets = {};
+  sessionConfirmed = {};
   isPaused = false;
   workoutActive = true;
   workoutStartTime = Date.now();
@@ -1116,16 +1196,17 @@ function finishWorkout() {
 
   const durationSec = Math.round((Date.now() - workoutStartTime) / 1000);
   const setsDone = Object.values(sessionSets).reduce((s, arr) => s + arr.filter(v => typeof v === 'number').length, 0);
-  const changes = applyProgression(selectedTemplate);
+  const { changes, unconfirmed } = applyProgression(selectedTemplate);
 
   // Auto-Save
   const entry = {
-    v: 2, ts: Date.now(),
+    v: 3, ts: Date.now(),
     date: new Date().toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' }),
     template: selectedTemplate,
     durationSec,
     cardio: $('cardioToggle').checked,
     sets: sessionSets,
+    confirmed: sessionConfirmed,
     levels: Object.assign({}, levels),
   };
   const hist = loadJSON(LS_LOG, []);
@@ -1142,10 +1223,14 @@ function finishWorkout() {
   $('statDuration').textContent = fmtTime(durationSec);
   $('statSets').textContent = setsDone;
   $('statWeek').textContent = thisWeek;
-  $('levelupList').innerHTML = changes.map(c => c.dir === 'up'
+  const items = changes.map(c => c.dir === 'up'
     ? `<div class="levelup-item">🎉 Level Up! <strong>${LADDERS[c.pattern].label}</strong> → ${c.newName}</div>`
     : `<div class="levelup-item leveldown-item">↩️ <strong>${LADDERS[c.pattern].label}</strong> → ${c.newName} (nächstes Mal wieder angreifen!)</div>`
-  ).join('');
+  );
+  if (unconfirmed.length) {
+    items.push(`<div class="levelup-item hint-item">ℹ️ Ohne bestätigte Wdh keine Progression: <strong>${unconfirmed.map(p => LADDERS[p].label).join(', ')}</strong></div>`);
+  }
+  $('levelupList').innerHTML = items.join('');
 
   showScreen('completeScreen');
 }
@@ -1222,7 +1307,7 @@ function renderHistory() {
   if (hist.length === 0) { section.classList.add('hidden'); return; }
   section.classList.remove('hidden');
   $('historyList').innerHTML = hist.slice(0, 6).map(e => {
-    if (e.v === 2) {
+    if (e.v >= 2) {
       const sets = Object.values(e.sets || {}).reduce((s, a) => s + a.filter(v => typeof v === 'number').length, 0);
       return `<div class="history-entry">
         <span>${e.date} · <strong>Workout ${e.template}</strong>${e.cardio ? ' +🔥' : ''}</span>

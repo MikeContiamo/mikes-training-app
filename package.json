@@ -1,0 +1,8 @@
+{
+  "name": "mikes-training-app",
+  "private": true,
+  "description": "Minimum Effective Dose Bodyweight-Training als PWA — kein Build, eine Datei.",
+  "scripts": {
+    "test": "node test/progression.test.mjs"
+  }
+}
