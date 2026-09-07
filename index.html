@@ -57,7 +57,7 @@
   }
   .card h3 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 12px; }
 
-  .template-chips { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 12px; }
+  .template-chips { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; margin-bottom: 12px; }
   .tpl-chip {
     background: var(--surface2);
     border: 2px solid var(--border);
@@ -79,7 +79,7 @@
     color: var(--work); font-weight: 700; margin-bottom: 5px;
   }
 
-  .finisher-chips { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 10px; }
+  .finisher-chips { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; margin-top: 10px; }
   .fin-chip {
     background: var(--surface2); border: 2px solid var(--border); border-radius: 10px;
     padding: 8px 2px; font-size: 0.62rem; font-weight: 700; color: var(--muted);
@@ -111,7 +111,7 @@
   .est-time { text-align: center; font-size: 0.85rem; color: var(--muted); }
   .est-time strong { color: var(--work); font-size: 1rem; }
 
-  .week-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .week-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
   .week-stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px; text-align: center; }
   .week-stat .val { font-size: 1.4rem; font-weight: 900; color: var(--work); }
   .week-stat .lbl { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
@@ -273,7 +273,7 @@
   .complete-header h2 { font-size: 1.7rem; font-weight: 900; margin-top: 8px; }
   .complete-header p { color: var(--muted); margin-top: 4px; }
 
-  .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .stats-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
   .stat-card {
     background: var(--surface); border-radius: var(--radius);
     padding: 14px 8px; text-align: center; border: 1px solid var(--border);
@@ -307,6 +307,59 @@
   .history-date { color: var(--muted); white-space: nowrap; }
 
   .hidden { display: none !important; }
+
+  /* ── ÜBUNGS-DETAILS (Bottom Sheet) ── */
+  .detail-btn {
+    background: var(--surface2); border: 1px solid var(--border); color: var(--muted);
+    border-radius: 10px; padding: 8px 14px; font-size: 0.74rem; font-weight: 700;
+    cursor: pointer; font-family: inherit; margin-top: 12px;
+  }
+  .detail-btn:active { transform: scale(0.97); }
+  .info-btn {
+    width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--surface2); color: var(--muted); font-size: 0.85rem;
+    cursor: pointer; line-height: 1; flex-shrink: 0; font-family: inherit;
+  }
+
+  .sheet-backdrop {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.62);
+    z-index: 200; display: none; align-items: flex-end; justify-content: center;
+  }
+  .sheet-backdrop.visible { display: flex; }
+  .sheet {
+    background: var(--surface); width: 100%; max-width: 480px;
+    border-radius: var(--radius) var(--radius) 0 0;
+    border: 1px solid var(--border); border-bottom: none;
+    max-height: 88dvh; display: flex; flex-direction: column;
+    animation: sheetUp 0.22s ease;
+  }
+  @keyframes sheetUp { from { transform: translateY(20px); opacity: 0.3; } to { transform: none; opacity: 1; } }
+  .sheet-head {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 16px 16px 12px; border-bottom: 1px solid var(--border);
+  }
+  .sheet-head > div { flex: 1; min-width: 0; }
+  .sheet-kicker { font-size: 0.66rem; text-transform: uppercase; letter-spacing: 1px; color: var(--work); font-weight: 700; }
+  .sheet-title { font-size: 1.2rem; font-weight: 800; line-height: 1.2; margin-top: 4px; }
+  .sheet-close {
+    background: var(--surface2); border: 1px solid var(--border); color: var(--text);
+    border-radius: 10px; width: 34px; height: 34px; flex-shrink: 0;
+    font-size: 0.9rem; cursor: pointer; line-height: 1; font-family: inherit;
+  }
+  .sheet-paused { font-size: 0.7rem; color: var(--transition); font-weight: 700; padding: 10px 16px 0; }
+  .sheet-body {
+    padding: 2px 16px 28px; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    font-size: 0.85rem; line-height: 1.5; color: var(--muted);
+  }
+  .sheet-body h4 {
+    color: var(--text); font-size: 0.7rem; text-transform: uppercase;
+    letter-spacing: 1px; margin: 18px 0 7px;
+  }
+  .sheet-body p { margin: 0; }
+  .sheet-body ol, .sheet-body ul { padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+  .sheet-body strong { color: var(--text); }
+  .sheet-body .mistakes li::marker { color: var(--danger); }
+  .sheet-body .ladder-nav { list-style: none; padding-left: 0; }
 
   /* ── COUNTDOWN OVERLAY ── */
   .countdown-overlay {
@@ -474,6 +527,7 @@
     <div class="exercise-name" id="exerciseName">–</div>
     <div class="exercise-target" id="exerciseTarget"></div>
     <div class="exercise-detail" id="exerciseDetail"></div>
+    <button class="detail-btn hidden" id="detailBtn" onclick="openDetail()">ⓘ Übung im Detail</button>
     <div class="rep-stepper" id="repStepper">
       <button class="stepper-btn" onclick="stepReps(-1)">−</button>
       <div class="stepper-value" id="stepperValue">12<small id="stepperUnit">WDH</small></div>
@@ -491,6 +545,24 @@
     <button class="ctrl-btn icon-btn" id="audioBtn" onclick="toggleAudio()">🔊</button>
     <button class="ctrl-btn icon-btn" id="pauseBtn" onclick="togglePause()">⏸</button>
     <button class="ctrl-btn primary" id="primaryBtn" onclick="primaryAction()">–</button>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     ÜBUNGS-DETAILS (Bottom Sheet)
+══════════════════════════════════════════ -->
+<div class="sheet-backdrop" id="detailSheet" onclick="if (event.target === this) closeDetail()">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <div class="sheet-head">
+      <div>
+        <div class="sheet-kicker" id="sheetKicker"></div>
+        <div class="sheet-title" id="sheetTitle"></div>
+      </div>
+      <button class="sheet-close" onclick="closeDetail()" aria-label="Schließen">✕</button>
+    </div>
+    <div class="sheet-paused hidden" id="sheetPaused">⏸ Timer pausiert, solange das Detail offen ist</div>
+    <div class="sheet-body" id="sheetBody"></div>
   </div>
 </div>
 
@@ -599,6 +671,305 @@ const LADDERS = {
     { name: 'Hollow Hold', detail: 'Rücken in den Boden drücken · Arme & Beine schweben lassen', unit: 'sec' },
     { name: 'V-Ups', detail: 'Gestreckt liegen · Hände & Füße treffen sich oben · kontrolliert', unit: 'reps' },
   ]},
+};
+
+// Ausführliche Anleitung je Übung — Quelle für den ⓘ-Button.
+// Schlüssel ist der Übungsname aus LADDERS; ein Test prüft die 1:1-Abdeckung.
+const EXERCISE_GUIDE = {
+  'Wand-Liegestütze': {
+    setup: 'Eine Armlänge vor der Wand stehen, Hände schulterbreit auf Brusthöhe an die Wand.',
+    steps: ['Körper von Kopf bis Ferse zu einer geraden Linie spannen, Gesäß mitanspannen.', 'Ellbogen beugen und den Oberkörper kontrolliert zur Wand bringen, Ellbogen dabei ca. 45° vom Körper weg.', 'Brust fast bis zur Wand, kurz halten, dann kraftvoll wegdrücken.'],
+    mistakes: ['Hüfte knickt nach hinten ab — dann trägt der Rumpf nicht mit.', 'Ellbogen weit nach außen (90°) — belastet die Schulter unnötig.', 'Zu weit weg von der Wand stehen: es wird schwer, aber die Technik bricht.'],
+    muscles: 'Brust, vordere Schulter, Trizeps',
+    breath: 'Beim Absenken einatmen, beim Wegdrücken ausatmen.',
+  },
+  'Erhöhte Liegestütze': {
+    setup: 'Hände schulterbreit auf eine stabile Erhöhung — Tisch, Sofalehne, Treppenstufe. Je höher, je leichter.',
+    steps: ['Füße zurücksetzen, bis Körper und Beine eine gerade Linie bilden.', 'Schulterblätter leicht zusammen und nach unten ziehen, Rumpf fest.', 'Brust zur Kante absenken, Ellbogen ca. 45°, dann hochdrücken.'],
+    mistakes: ['Durchhängende Hüfte oder hochgeschobenes Gesäß.', 'Kopf in den Nacken legen — Blick bleibt schräg nach unten.', 'Wackelige Auflage: unbedingt etwas Rutschfestes wählen.'],
+    muscles: 'Brust, vordere Schulter, Trizeps',
+    breath: 'Unten einatmen, beim Drücken ausatmen.',
+  },
+  'Knie-Liegestütze': {
+    setup: 'Vierfüßlerstand, Hände etwas breiter als schulterbreit, Knie am Boden (weich unterlegen).',
+    steps: ['Knie so weit zurücksetzen, dass Hüfte und Oberkörper eine Linie bilden — Hüfte gestreckt.', 'Bauch und Gesäß anspannen, damit der untere Rücken nicht durchhängt.', 'Brust fast bis zum Boden absenken, dann hochdrücken.'],
+    mistakes: ['Hüfte gebeugt (Po nach hinten) — das ist die häufigste Abkürzung und macht die Übung viel leichter.', 'Nur halb absenken; die letzten Zentimeter sind der eigentliche Reiz.', 'Ellbogen komplett nach außen abspreizen.'],
+    muscles: 'Brust, vordere Schulter, Trizeps',
+    breath: 'Absenken einatmen, drücken ausatmen.',
+  },
+  'Liegestütze': {
+    setup: 'Stütz auf Händen und Fußballen, Hände etwas breiter als schulterbreit, direkt unter der Brust.',
+    steps: ['Ganzer Körper ein Brett: Gesäß, Bauch und Oberschenkel gleichzeitig anspannen.', 'Kontrolliert absenken, bis die Brust knapp über dem Boden ist, Ellbogen ca. 45°.', 'Ohne Schwung hochdrücken, oben nicht ganz durchdrücken und die Spannung halten.'],
+    mistakes: ['Hüfte hängt durch oder wandert nach oben.', 'Kopf schiebt vor, Kinn zieht zum Boden statt der Brust.', 'Nur Teilstrecke: lieber Level zurück und dafür voll absenken.'],
+    muscles: 'Brust, vordere Schulter, Trizeps, Rumpf',
+    breath: 'Unten einatmen, beim Drücken kräftig ausatmen.',
+  },
+  'Liegestütze, Füße erhöht': {
+    setup: 'Füße auf Stuhl, Sofa oder Stufe, Hände am Boden. Je höher die Füße, je mehr Last auf Brust und Schulter.',
+    steps: ['Körperspannung aufbauen, bevor die Füße hochkommen — Rumpf muss die Position halten.', 'Schulterblätter stabil, Brust in Richtung Boden absenken.', 'Kontrolliert hochdrücken, Hüfte bleibt gestreckt.'],
+    mistakes: ['Hohlkreuz, weil der Rumpf die schräge Position nicht hält.', 'Zu hoch angefangen — bei über Hüfthöhe wird es zur Schulterübung.', 'Hände zu weit vorn: Belastung wandert in die Schulter.'],
+    muscles: 'Obere Brust, vordere Schulter, Trizeps, Rumpf',
+    breath: 'Unten einatmen, oben ausatmen.',
+  },
+  'Archer-Liegestütze': {
+    setup: 'Liegestütz mit deutlich breiterem Griff als üblich, Hände leicht nach außen gedreht.',
+    steps: ['Zu einer Seite absenken, das Gewicht auf diesem Arm, Ellbogen beugt.', 'Der andere Arm bleibt fast gestreckt und dient nur als Stütze.', 'Über den beugenden Arm hochdrücken, dann die Seite wechseln.'],
+    mistakes: ['Der gestreckte Arm drückt kräftig mit — dann fehlt der einseitige Reiz.', 'Oberkörper verdreht sich; Brust bleibt zum Boden gerichtet.', 'Zu tief bei zu breitem Griff: Vorsicht mit der Schulter, langsam steigern.'],
+    muscles: 'Brust, vordere Schulter, Trizeps — einseitig betont',
+    breath: 'Absenken einatmen, drücken ausatmen.',
+  },
+  'Wand-Schulterdrücken': {
+    setup: 'Mit dem Gesicht zur Wand, Hände auf Kopfhöhe an die Wand, Füße etwa 30 cm entfernt.',
+    steps: ['Körper gerade, Rumpf fest, Blick zur Wand.', 'Ellbogen beugen und den Kopf zur Wand bringen, Ellbogen bleiben eher nach vorn.', 'Über die Schultern wegdrücken, Arme oben lang machen.'],
+    mistakes: ['Hohlkreuz — Rippen nach unten, Bauch aktiv.', 'Ellbogen weit nach außen: die Schulter mag den engeren Winkel lieber.', 'Zu nah an der Wand, dadurch kaum Bewegungsumfang.'],
+    muscles: 'Vordere und seitliche Schulter, Trizeps',
+    breath: 'Zur Wand einatmen, wegdrücken ausatmen.',
+  },
+  'Pike Push-ups (Boden)': {
+    setup: 'Aus dem Liegestütz die Hüfte hoch schieben, bis Körper ein umgedrehtes V bildet. Beine so gerade wie möglich.',
+    steps: ['Hände schulterbreit, Finger gespreizt, Schultern über den Händen.', 'Ellbogen beugen und den Scheitel Richtung Boden führen — nicht die Brust.', 'Kurz vor dem Boden umkehren und über die Schultern hochdrücken.'],
+    mistakes: ['Der Oberkörper wandert nach vorn und es wird ein normaler Liegestütz.', 'Hüfte sinkt ab, dadurch geht die Last von der Schulter weg.', 'Kopf schlägt auf: langsam absenken, letzten Zentimeter kontrollieren.'],
+    muscles: 'Schultern, Trizeps, oberer Rücken',
+    breath: 'Absenken einatmen, drücken ausatmen.',
+  },
+  'Pike Push-ups, Füße erhöht': {
+    setup: 'Füße auf eine niedrige Stufe oder Kiste, Hüfte hoch — der Oberkörper steht steiler als am Boden.',
+    steps: ['V-Position aufbauen, Schultern direkt über den Händen.', 'Scheitel kontrolliert Richtung Boden, Ellbogen nach vorn/außen etwa 45°.', 'Kraftvoll hochdrücken, Position der Hüfte nicht verändern.'],
+    mistakes: ['Beim Drücken die Hüfte nach vorn kippen — verschiebt die Arbeit in die Brust.', 'Zu große Erhöhung auf einmal; in kleinen Schritten steigern.', 'Handgelenke schmerzen: Hände etwas weiter auseinander, Finger aktiv eingraben.'],
+    muscles: 'Schultern, Trizeps, oberer Rücken',
+    breath: 'Unten einatmen, oben ausatmen.',
+  },
+  'Pike Push-ups, Füße hoch': {
+    setup: 'Füße auf Stuhl oder Sofa, Hüfte senkrecht über den Schultern — fast eine Handstand-Position.',
+    steps: ['Hände etwas vor die Schultern setzen, damit die Position stabil ist.', 'Tief absenken, bis der Kopf knapp über dem Boden ist.', 'Über die Schultern hochdrücken, Rumpf die ganze Zeit fest.'],
+    mistakes: ['Rücken fällt ins Hohlkreuz, weil die Rumpfspannung fehlt.', 'Zu wenig Tiefe — hier lohnt der volle Bewegungsumfang besonders.', 'Zu früh auf dieses Level: erst wenn Level 3 mit voller Tiefe sauber läuft.'],
+    muscles: 'Schultern, Trizeps, oberer Rücken, Rumpf',
+    breath: 'Unten einatmen, beim Drücken ausatmen.',
+  },
+  'Wand-Handstand, Teilstrecke': {
+    setup: 'Mit dem Bauch zur Wand in den Handstand hochlaufen, Hände 15–20 cm von der Wand.',
+    steps: ['Körper lang machen, Rippen nach unten, Gesäß anspannen — keine Bananen-Form.', 'Ellbogen ein kleines Stück beugen und wieder strecken; nur eine Teilstrecke.', 'Absenktiefe erst erhöhen, wenn die kleine Strecke völlig kontrolliert ist.'],
+    mistakes: ['Kopf zieht nach hinten in den Nacken; Blick zwischen die Hände.', 'Ellbogen kippen nach außen, sobald es schwer wird.', 'Ohne Ausweg üben: immer wissen, wie man seitlich abrollt oder abgeht.'],
+    muscles: 'Schultern, Trizeps, Rumpf',
+    breath: 'Einatmen beim Absenken, ausatmen beim Drücken. Nicht die Luft anhalten.',
+  },
+  'Handstand-Liegestütze (Wand)': {
+    setup: 'Handstand an der Wand, Hände etwa schulterbreit, Fersen leicht an der Wand.',
+    steps: ['Ganzkörperspannung: Bauch, Gesäß, Beine gestreckt.', 'Kontrolliert absenken, bis der Kopf knapp über dem Boden ist.', 'Explosiv, aber sauber hochdrücken, Ellbogen zum Schluss strecken.'],
+    mistakes: ['Durchhängen im Rücken und die Bewegung mit Schwung retten.', 'Ellbogen weit nach außen.', 'Ohne Matte unter dem Kopf üben.'],
+    muscles: 'Schultern, Trizeps, oberer Rücken, Rumpf',
+    breath: 'Vor dem Absenken einatmen, beim Drücken ausatmen.',
+  },
+  'Türrahmen-Rudern (steil)': {
+    setup: 'Beide Seiten eines Türrahmens greifen, Füße direkt am Rahmen, nur leicht zurücklehnen.',
+    steps: ['Arme strecken, Körper gerade, Gesäß angespannt.', 'Schulterblätter zuerst zusammenziehen, dann die Arme beugen.', 'Brust zum Rahmen ziehen, kurz halten, langsam zurücklassen.'],
+    mistakes: ['Nur mit den Armen ziehen und die Schulterblätter vergessen.', 'Hüfte knickt ein, es wird ein Kniebeugen-Ziehen.', 'Türrahmen ungeeignet: nur an tragfähigen Kanten greifen.'],
+    muscles: 'Oberer Rücken, Latissimus, Bizeps',
+    breath: 'Ziehen ausatmen, zurücklassen einatmen.',
+  },
+  'Türrahmen-Rudern (45°)': {
+    setup: 'Türrahmen greifen, Füße näher heranstellen, Körper etwa 45° schräg nach hinten.',
+    steps: ['Körper von Kopf bis Ferse gerade, Fersen am Boden.', 'Schulterblätter zusammen, dann Brust zum Rahmen ziehen.', 'Oben eine Sekunde halten, dann kontrolliert in die Streckung.'],
+    mistakes: ['Mit der Hüfte pumpen, um hochzukommen.', 'Nicht ganz ausstrecken unten — der Latissimus braucht die Länge.', 'Schultern ziehen zu den Ohren; bewusst nach unten halten.'],
+    muscles: 'Oberer Rücken, Latissimus, Bizeps, hintere Schulter',
+    breath: 'Ziehen ausatmen, ablassen einatmen.',
+  },
+  'Tisch-Rudern (Knie gebeugt)': {
+    setup: 'Unter einen stabilen Tisch legen, Kante etwas breiter als schulterbreit greifen, Knie gebeugt, Füße flach.',
+    steps: ['Rumpf anspannen, Hüfte gestreckt halten — Körper eine Linie von Knie bis Kopf.', 'Schulterblätter zusammenziehen, dann Brust zur Tischkante ziehen.', 'Langsam ablassen, Arme unten vollständig strecken.'],
+    mistakes: ['Hüfte hängt durch.', 'Kinn oder Bauch zur Kante statt der Brust.', 'Wackeliger oder leichter Tisch — vorher Belastbarkeit prüfen.'],
+    muscles: 'Oberer Rücken, Latissimus, Bizeps',
+    breath: 'Ziehen ausatmen, ablassen einatmen.',
+  },
+  'Tisch-Rudern (Beine gestreckt)': {
+    setup: 'Wie zuvor, aber Beine gestreckt, Fersen am Boden.',
+    steps: ['Ganzer Körper gerade und fest, Gesäß angespannt.', 'Schulterblätter zuerst, dann Arme — Brust zur Kante.', 'Oben kurz halten, kontrolliert in die volle Streckung ablassen.'],
+    mistakes: ['Der Rumpf gibt nach und die Hüfte sinkt.', 'Zu schnelles Ablassen; die exzentrische Phase ist die Hälfte der Arbeit.', 'Griff zu breit, wodurch der Bewegungsumfang klein wird.'],
+    muscles: 'Oberer Rücken, Latissimus, Bizeps, Rumpf',
+    breath: 'Ziehen ausatmen, ablassen einatmen.',
+  },
+  'Tisch-Rudern, Füße erhöht': {
+    setup: 'Beine gestreckt, Füße auf einen Stuhl — der Körper liegt fast horizontal unter der Tischkante.',
+    steps: ['Position aufbauen und den Rumpf fest machen, bevor der erste Zug kommt.', 'Schulterblätter zusammen, Brust zur Kante ziehen.', 'Sehr kontrolliert ablassen, unten voll ausstrecken.'],
+    mistakes: ['Hohlkreuz in der horizontalen Position.', 'Nur halb ziehen, weil es schwer ist — dann eher Level zurück.', 'Füße rutschen vom Stuhl: rutschfest positionieren.'],
+    muscles: 'Oberer Rücken, Latissimus, Bizeps, Rumpf',
+    breath: 'Ziehen ausatmen, ablassen einatmen.',
+  },
+  'Einarmiges Türrahmen-Rudern': {
+    setup: 'Mit einer Hand den Türrahmen greifen, Füße nah an den Rahmen, Körper weit zurücklehnen.',
+    steps: ['Freier Arm vor dem Körper, Rumpf gegen das Verdrehen anspannen.', 'Schulterblatt der Zugseite zuerst nach hinten/unten, dann den Arm beugen.', 'Brust zur Hand ziehen, langsam zurücklassen. Seiten gleich oft.'],
+    mistakes: ['Oberkörper dreht sich auf — Brust bleibt nach vorn gerichtet.', 'Mit Schwung aus der Hüfte arbeiten.', 'Griffkraft ist zuerst am Ende: das ist normal, dann eher Sätze kürzen als Technik opfern.'],
+    muscles: 'Latissimus, oberer Rücken, Bizeps, Rumpf (Anti-Rotation)',
+    breath: 'Ziehen ausatmen, ablassen einatmen.',
+  },
+  'Aktives Hängen': {
+    setup: 'An der Stange hängen, Griff schulterbreit, Daumen um die Stange.',
+    steps: ['Zuerst passiv hängen, Schultern an den Ohren.', 'Dann Schulterblätter aktiv nach unten ziehen, Brust leicht heben — der Körper hebt sich ein paar Zentimeter.', 'Diese aktive Position halten, Beine ruhig, Rumpf fest.'],
+    mistakes: ['Nur passiv hängen — das ist eine Dehnung, kein Satz.', 'Schaukeln; Beine leicht nach vorn und Bauch anspannen stabilisiert.', 'Griff zu locker: bewusst zudrücken, das trainiert mit.'],
+    muscles: 'Latissimus, Schulterblatt-Stabilisatoren, Griffkraft, Rumpf',
+    breath: 'Ruhig und gleichmäßig weiteratmen, nicht pressen.',
+  },
+  'Scapular Pulls': {
+    setup: 'Aktives Hängen als Startposition, Arme bleiben gestreckt.',
+    steps: ['Aus dem passiven Hang die Schulterblätter nach unten und hinten ziehen.', 'Körper hebt sich nur wenige Zentimeter — die Ellbogen bleiben gestreckt.', 'Kontrolliert zurück in den passiven Hang, dann wieder.'],
+    mistakes: ['Die Ellbogen beugen und daraus einen halben Klimmzug machen.', 'Mit Schwung arbeiten; die Bewegung ist klein und langsam.', 'Zu wenig Umfang: bewusst am Ende jeder Wdh nach unten ziehen.'],
+    muscles: 'Schulterblatt-Stabilisatoren, unterer Latissimus, Griffkraft',
+    breath: 'Ziehen ausatmen, ablassen einatmen.',
+  },
+  'Negative Klimmzüge': {
+    setup: 'Oben starten: auf einen Stuhl steigen oder hochspringen, Kinn über der Stange.',
+    steps: ['Oben die Spannung aufbauen, Schulterblätter unten und hinten.', 'In 4–5 Sekunden gleichmäßig ablassen, bis die Arme voll gestreckt sind.', 'Wieder hochsteigen und die nächste Wdh beginnen — die Absenkphase ist der Reiz.'],
+    mistakes: ['Am Ende einfach fallen lassen; genau die letzten Zentimeter bringen am meisten.', 'Zu schnell ablassen (unter 2 Sekunden).', 'Schultern locker lassen — bewusst aktiv bleiben, um die Gelenke zu schützen.'],
+    muscles: 'Latissimus, oberer Rücken, Bizeps, Griffkraft',
+    breath: 'Oben einatmen, während des Ablassens langsam ausatmen.',
+  },
+  'Klimmzüge, Fußhilfe': {
+    setup: 'Stange greifen, ein Fuß auf einem Stuhl oder ein Band unter dem Knie — so viel Hilfe wie nötig.',
+    steps: ['Aus der aktiven Hängeposition starten, Arme gestreckt.', 'Ziehen und mit dem Fuß nur so viel nachhelfen, dass die letzten Wdh knapp gelingen.', 'Kinn über die Stange, dann kontrolliert in die volle Streckung ablassen.'],
+    mistakes: ['Mit dem Bein den ganzen Weg drücken — Hilfe minimal dosieren.', 'Nicht voll ausstrecken unten.', 'Hilfe nie reduzieren: alle paar Wochen bewusst weniger nachhelfen.'],
+    muscles: 'Latissimus, oberer Rücken, Bizeps',
+    breath: 'Ziehen ausatmen, ablassen einatmen.',
+  },
+  'Klimmzüge (Untergriff)': {
+    setup: 'Stange mit den Handflächen zu dir greifen, etwa schulterbreit.',
+    steps: ['Aus der vollen Streckung starten, Schulterblätter erst nach unten ziehen.', 'Brust zur Stange führen, Ellbogen nach unten denken — nicht nur das Kinn hochschieben.', 'Oben kurz halten, dann in 2–3 Sekunden ablassen bis zur vollen Streckung.'],
+    mistakes: ['Mit den Beinen kippen (Kipping) — für Kraftaufbau kontraproduktiv.', 'Nur bis zur Nase ziehen; Kinn deutlich über die Stange.', 'Unten die Spannung verlieren und in die Schultern fallen.'],
+    muscles: 'Latissimus, Bizeps, oberer Rücken',
+    breath: 'Ziehen ausatmen, ablassen einatmen.',
+  },
+  'Klimmzüge (Obergriff)': {
+    setup: 'Stange mit den Handflächen weg vom Körper greifen, schulterbreit bis etwas breiter.',
+    steps: ['Volle Streckung unten, aber aktive Schultern.', 'Ellbogen nach unten und hinten ziehen, Brust zur Stange, leicht nach hinten lehnen.', 'Kinn über die Stange, kontrolliert ablassen bis die Arme lang sind.'],
+    mistakes: ['Schwung aus der Hüfte.', 'Griff zu breit — schränkt den Bewegungsumfang ein und belastet die Schulter.', 'Halbe Wdh im müden Zustand: Satz lieber beenden.'],
+    muscles: 'Latissimus, oberer Rücken, hintere Schulter, Bizeps',
+    breath: 'Ziehen ausatmen, ablassen einatmen.',
+  },
+  'Kniebeugen': {
+    setup: 'Füße schulterbreit, Fußspitzen leicht nach außen, Arme vor dem Körper als Gegengewicht.',
+    steps: ['Hüfte nach hinten und unten, Knie folgen über den Füßen.', 'So tief wie möglich, ohne dass der untere Rücken rund wird — Fersen bleiben am Boden.', 'Über die ganze Fußsohle nach oben drücken, oben Gesäß anspannen.'],
+    mistakes: ['Fersen heben sich; Fußstellung etwas breiter oder mehr nach außen versuchen.', 'Knie fallen nach innen — bewusst nach außen denken.', 'Nur halb tief: Tiefe ist hier der wichtigste Faktor.'],
+    muscles: 'Oberschenkelvorderseite, Gesäß, Rumpf',
+    breath: 'Runter einatmen, hoch ausatmen.',
+  },
+  'Tempo-Kniebeugen': {
+    setup: 'Wie die normale Kniebeuge, aber mit vorgegebenem Tempo.',
+    steps: ['In 3 Sekunden gleichmäßig nach unten.', 'Eine Sekunde in der tiefsten Position halten, ohne die Spannung zu verlieren.', 'Zügig, aber kontrolliert nach oben.'],
+    mistakes: ['Unten „abfedern" statt halten.', 'Das Tempo nur in der ersten Wdh einhalten.', 'Im Halten die Luft anhalten und pressen.'],
+    muscles: 'Oberschenkelvorderseite, Gesäß, Rumpf',
+    breath: 'Beim Absenken einatmen, im Halten ruhig weiteratmen, beim Hochdrücken ausatmen.',
+  },
+  'Split Squats': {
+    setup: 'Großer Ausfallschritt, Oberkörper aufrecht, Gewicht überwiegend auf dem vorderen Bein.',
+    steps: ['Senkrecht absenken, bis das hintere Knie fast den Boden berührt.', 'Vorderes Schienbein bleibt möglichst senkrecht, Rumpf aufrecht.', 'Über das vordere Bein hochdrücken. Alle Wdh einer Seite, dann wechseln.'],
+    mistakes: ['Zu kleiner Schritt — dann kippt das Knie weit nach vorn.', 'Oberkörper fällt nach vorn.', 'Nach hinten drücken statt nach oben.'],
+    muscles: 'Oberschenkelvorderseite, Gesäß, Hüftbeuger-Dehnung hinten',
+    breath: 'Runter einatmen, hoch ausatmen.',
+  },
+  'Bulgarian Split Squats': {
+    setup: 'Hinterer Fußrücken auf Stuhl oder Sofa, vorderes Bein einen großen Schritt davor.',
+    steps: ['Aufrecht bleiben, Gewicht auf dem vorderen Fuß, Rumpf fest.', 'Kontrolliert absenken, bis der vordere Oberschenkel etwa waagerecht ist.', 'Über das vordere Bein hochdrücken, oben Gesäß anspannen. Seiten getrennt.'],
+    mistakes: ['Abstand zu klein: Knie schiebt weit vor und die Hüfte kommt nicht in Länge.', 'Auf dem hinteren Bein mitdrücken.', 'Wegkippen zur Seite — Blick auf einen festen Punkt, Rumpf aktiv.'],
+    muscles: 'Gesäß, Oberschenkelvorderseite, Hüftstabilisatoren',
+    breath: 'Runter einatmen, hoch ausatmen.',
+  },
+  'Pistol-Progression (Stuhl)': {
+    setup: 'Vor einem Stuhl stehen, ein Bein nach vorn gestreckt, auf dem anderen Bein balancieren.',
+    steps: ['Kontrolliert auf dem Standbein absenken, bis das Gesäß den Stuhl berührt.', 'Nicht absetzen und ausruhen — nur antippen.', 'Einbeinig wieder aufstehen. Seiten getrennt zählen.'],
+    mistakes: ['Sich auf den Stuhl fallen lassen und mit Schwung hochkommen.', 'Das gestreckte Bein am Boden mithelfen lassen.', 'Ferse hebt sich; Beweglichkeit im Sprunggelenk begrenzt die Übung häufig.'],
+    muscles: 'Oberschenkelvorderseite, Gesäß, Hüftstabilisatoren, Balance',
+    breath: 'Runter einatmen, hoch ausatmen.',
+  },
+  'Pistol Squats (assistiert)': {
+    setup: 'Einbeinig stehen, eine Hand leicht am Türrahmen, anderes Bein nach vorn gestreckt.',
+    steps: ['Langsam ganz nach unten, bis das Gesäß fast die Ferse berührt.', 'Die Hand hilft nur zum Balancieren, nicht zum Ziehen.', 'Einbeinig wieder hochkommen. Seiten getrennt.'],
+    mistakes: ['Sich am Rahmen hochziehen — dann ist es keine Beinübung mehr.', 'Runder Rücken in der tiefsten Position.', 'Zu früh auf diesem Level: erst wenn die Stuhl-Variante sauber sitzt.'],
+    muscles: 'Oberschenkelvorderseite, Gesäß, Hüftstabilisatoren, Balance',
+    breath: 'Runter einatmen, hoch ausatmen.',
+  },
+  'Glute Bridges': {
+    setup: 'Auf dem Rücken liegen, Knie gebeugt, Füße hüftbreit flach am Boden, Arme neben dem Körper.',
+    steps: ['Fersen in den Boden drücken und das Becken heben.', 'Oben Gesäß maximal anspannen, Hüfte voll strecken — Rippen bleiben unten.', 'Kontrolliert ablassen, ohne den Boden ganz zu berühren.'],
+    mistakes: ['Ins Hohlkreuz gehen statt die Hüfte zu strecken — Bauch mit anspannen.', 'Mit dem unteren Rücken statt dem Gesäß arbeiten.', 'Füße zu weit weg; dann übernimmt die Beinrückseite.'],
+    muscles: 'Gesäß, Beinrückseite, Rumpf',
+    breath: 'Beim Heben ausatmen, beim Ablassen einatmen.',
+  },
+  'Hip Thrusts (Sofa)': {
+    setup: 'Schulterblätter auf die Sofakante, Füße hüftbreit am Boden, Knie etwa 90°.',
+    steps: ['Kinn leicht zur Brust, Rippen unten.', 'Über die Fersen die Hüfte nach oben drücken, bis Oberkörper und Oberschenkel eine Linie bilden.', 'Oben eine Sekunde Gesäß fest anspannen, dann kontrolliert ablassen.'],
+    mistakes: ['Überstrecken im unteren Rücken statt in der Hüfte.', 'Kopf in den Nacken drücken.', 'Zu kurzer Bewegungsumfang: unten wirklich tief, oben wirklich strecken.'],
+    muscles: 'Gesäß, Beinrückseite, Rumpf',
+    breath: 'Beim Drücken ausatmen, beim Ablassen einatmen.',
+  },
+  'Einbeinige Glute Bridges': {
+    setup: 'Wie Glute Bridge, aber ein Bein gestreckt in der Luft.',
+    steps: ['Standbein-Ferse in den Boden drücken und das Becken heben.', 'Becken waagerecht halten — die freie Hüftseite darf nicht absinken.', 'Oben anspannen, kontrolliert ablassen. Seiten getrennt.'],
+    mistakes: ['Becken kippt zur freien Seite.', 'Mit dem gestreckten Bein Schwung holen.', 'Zu wenig Höhe, weil das Gesäß nicht voll anspannt.'],
+    muscles: 'Gesäß, Beinrückseite, Rumpf (Anti-Rotation)',
+    breath: 'Heben ausatmen, ablassen einatmen.',
+  },
+  'Einbeinige Hip Thrusts': {
+    setup: 'Schultern auf der Sofakante, ein Fuß am Boden, das andere Bein gestreckt oder angezogen.',
+    steps: ['Über die Ferse des Standbeins die Hüfte hochdrücken.', 'Becken bleibt gerade, keine Rotation.', 'Oben voll strecken und anspannen, dann kontrolliert ablassen. Seiten getrennt.'],
+    mistakes: ['Becken verdreht sich.', 'Hohlkreuz statt Hüftstreckung.', 'Position rutscht weg; Sofa muss stabil stehen.'],
+    muscles: 'Gesäß, Beinrückseite, Rumpf',
+    breath: 'Drücken ausatmen, ablassen einatmen.',
+  },
+  'Single-Leg RDL': {
+    setup: 'Auf einem Bein stehen, Knie minimal gebeugt, Rumpf fest.',
+    steps: ['Hüfte nach hinten schieben und den Oberkörper nach vorn kippen — Rücken bleibt gerade.', 'Das freie Bein streckt nach hinten, Körper wird zu einer langen Linie.', 'Bis zur Spannungsgrenze in der Beinrückseite, dann über das Gesäß aufrichten. Seiten getrennt.'],
+    mistakes: ['Runder Rücken beim Vorkippen.', 'Hüfte dreht auf; Beckenknochen bleiben zum Boden gerichtet.', 'Kniebeuge statt Hüftbeuge — die Bewegung kommt aus der Hüfte.'],
+    muscles: 'Beinrückseite, Gesäß, Rumpf, Balance',
+    breath: 'Beim Vorkippen einatmen, beim Aufrichten ausatmen.',
+  },
+  'Slider Leg Curls': {
+    setup: 'Auf dem Rücken, Handtücher unter den Fersen auf glattem Boden, Becken angehoben.',
+    steps: ['Brückenposition halten — Hüfte bleibt oben, Gesäß aktiv.', 'Fersen langsam wegschieben, bis die Beine fast gestreckt sind.', 'Über die Beinrückseite die Fersen wieder heranziehen, ohne die Hüfte absinken zu lassen.'],
+    mistakes: ['Hüfte sinkt beim Ausfahren ab — dann macht die Übung kaum noch etwas.', 'Zu schnell; das langsame Ausfahren ist der Reiz.', 'Krampfneigung in der Beinrückseite: Umfang verkleinern und aufbauen.'],
+    muscles: 'Beinrückseite, Gesäß, Rumpf',
+    breath: 'Ausfahren einatmen, heranziehen ausatmen.',
+  },
+  'Plank (Knie)': {
+    setup: 'Unterarmstütz, Ellbogen unter den Schultern, Knie am Boden.',
+    steps: ['Unterarme parallel, Hände zu leichten Fäusten oder flach.', 'Bauch und Gesäß anspannen, Becken leicht nach hinten kippen — kein Hohlkreuz.', 'Von Kopf bis Knie eine gerade Linie halten, ruhig weiteratmen.'],
+    mistakes: ['Gesäß nach oben schieben, um es leichter zu machen.', 'Schultern rutschen vor die Ellbogen.', 'Die Luft anhalten.'],
+    muscles: 'Gerade Bauchmuskulatur, Rumpf-Stabilisatoren, Schultern',
+    breath: 'Ruhig und gleichmäßig weiteratmen — nicht pressen.',
+  },
+  'Plank': {
+    setup: 'Unterarmstütz auf Unterarmen und Fußballen, Ellbogen unter den Schultern.',
+    steps: ['Becken leicht nach hinten kippen, Rippen nach unten, Bauch fest.', 'Gesäß und Oberschenkel gleichzeitig anspannen.', 'Gerade Linie von Kopf bis Ferse halten, Blick zum Boden.'],
+    mistakes: ['Hüfte hängt durch — der häufigste Fehler und schlecht für den Rücken.', 'Gesäß zu hoch (Zelt-Form).', 'Zeit halten, aber ohne Spannung: 20 Sekunden fest sind mehr wert als 60 Sekunden schlaff.'],
+    muscles: 'Gerade Bauchmuskulatur, tiefe Rumpfmuskulatur, Schultern',
+    breath: 'Ruhig weiteratmen, Spannung dabei halten.',
+  },
+  'Plank mit Reach': {
+    setup: 'Aus dem normalen Plank, Füße etwas breiter für mehr Stabilität.',
+    steps: ['Position aufbauen und fest anspannen.', 'Einen Arm langsam nach vorn strecken, ohne die Hüfte zu bewegen.', 'Zurücksetzen und die Seite wechseln — abwechselnd für die ganze Zeit.'],
+    mistakes: ['Hüfte dreht sich beim Strecken auf; das Becken muss ruhig bleiben.', 'Zu schnell wechseln, dadurch fällt die Anti-Rotation weg.', 'Füße zu eng, wodurch die Position kippt.'],
+    muscles: 'Gerade und schräge Bauchmuskulatur, Rumpf (Anti-Rotation), Schultern',
+    breath: 'Gleichmäßig weiteratmen, besonders beim Strecken.',
+  },
+  'Side Plank': {
+    setup: 'Seitlage, Ellbogen unter der Schulter, Beine gestreckt übereinander.',
+    steps: ['Hüfte anheben, bis Körper von Kopf bis Fuß eine Linie bildet.', 'Untere Schulter aktiv wegdrücken, oberer Arm an der Hüfte oder nach oben.', 'Nach der halben Zeit die Seite wechseln.'],
+    mistakes: ['Hüfte sinkt nach vorn oder unten.', 'Nur eine Seite trainieren.', 'Auf der Schulter „hängen" statt sie aktiv zu stabilisieren.'],
+    muscles: 'Schräge Bauchmuskulatur, Hüftstabilisatoren, Schulter',
+    breath: 'Ruhig weiteratmen; Bauch bleibt fest.',
+  },
+  'Hollow Hold': {
+    setup: 'Auf dem Rücken liegen, Arme über dem Kopf, Beine gestreckt.',
+    steps: ['Zuerst den unteren Rücken in den Boden drücken — das ist die eigentliche Arbeit.', 'Dann Schulterblätter und Beine wenige Zentimeter vom Boden lösen.', 'Position halten. Wird der Rücken hohl: Beine höher oder Knie leicht beugen.'],
+    mistakes: ['Hohlkreuz — dann arbeitet der Rücken statt des Bauchs.', 'Beine so tief, dass die Position nicht zu halten ist.', 'Kopf in den Nacken; Kinn leicht zur Brust.'],
+    muscles: 'Gerade Bauchmuskulatur, Hüftbeuger, tiefe Rumpfmuskulatur',
+    breath: 'Flach und ruhig weiteratmen, ohne die Spannung zu verlieren.',
+  },
+  'V-Ups': {
+    setup: 'Ausgestreckt auf dem Rücken, Arme über dem Kopf, Beine gestreckt.',
+    steps: ['Arme und Beine gleichzeitig heben und in der Mitte über der Hüfte zusammenführen.', 'Beine möglichst gerade, Hände Richtung Füße.', 'Kontrolliert zurück in die gestreckte Lage, ohne Schwung zu holen.'],
+    mistakes: ['Mit den Armen Schwung holen und sich hochschleudern.', 'Knie stark beugen, um es leichter zu machen — dann eher Level zurück.', 'Ruckartige Bewegung im Nacken.'],
+    muscles: 'Gerade Bauchmuskulatur, Hüftbeuger',
+    breath: 'Beim Zusammenführen ausatmen, beim Ablassen einatmen.',
+  },
 };
 
 // Jedes Template bringt ein eigenes Wdh-Schema UND einen eigenen Muster-Mix.
@@ -907,7 +1278,8 @@ function renderPhase() {
 
   const chip = $('levelChip');
   if (phase.level) {
-    chip.textContent = `LEVEL ${phase.level}/6`;
+    const p = phasePattern(phase);
+    chip.textContent = `LEVEL ${phase.level}/${p && LADDERS[p] ? LADDERS[p].levels.length : 6}`;
     chip.classList.remove('hidden');
   } else {
     chip.classList.add('hidden');
@@ -935,6 +1307,9 @@ function renderPhase() {
     stepper.classList.remove('visible', 'unconfirmed');
     hint.classList.add('hidden');
   }
+
+  // Detail-Button nur, wenn die Phase zu einer Leiter-Übung gehört
+  $('detailBtn').classList.toggle('hidden', !phasePattern(phase));
 
   // Nächste Übung
   const next = workout[currentIdx + 1];
@@ -1105,6 +1480,77 @@ function toggleAudio() {
 }
 
 // ══════════════════════════════════════════
+// ÜBUNGS-DETAILS
+// ══════════════════════════════════════════
+let detailPausedByMe = false;
+
+// Arbeitsphasen tragen das Muster direkt, Pausen über logFor.
+function phasePattern(phase) {
+  if (!phase) return null;
+  return phase.pattern || (phase.logFor && phase.logFor.pattern) || null;
+}
+
+// Ohne Argumente: die Übung der aktuellen Phase. Mit Argumenten: gezielt
+// (Levels-Liste auf dem Startbildschirm).
+function openDetail(pattern, level) {
+  let p = pattern, lvl = level;
+  if (!p) {
+    const phase = workout[currentIdx];
+    p = phasePattern(phase);
+    lvl = phase && phase.level;
+  }
+  if (!p || !LADDERS[p]) return;
+  const ladder = LADDERS[p];
+  const max = ladder.levels.length;
+  // Nur eine fehlende Angabe fällt auf das aktuelle Level zurück; eine
+  // übergebene Zahl wird geklemmt, nicht stillschweigend ersetzt.
+  if (typeof lvl !== 'number') lvl = levels[p] || 1;
+  lvl = Math.max(1, Math.min(max, lvl));
+  const ex = ladder.levels[lvl - 1];
+  const g = EXERCISE_GUIDE[ex.name];
+
+  $('sheetKicker').textContent = `${ladder.label} · Level ${lvl}/${max}`;
+  $('sheetTitle').textContent = ex.name;
+
+  const li = arr => arr.map(x => `<li>${x}</li>`).join('');
+  const out = [];
+  if (g) {
+    out.push(`<h4>Aufbau</h4><p>${g.setup}</p>`);
+    out.push(`<h4>Ausführung</h4><ol>${li(g.steps)}</ol>`);
+    out.push(`<h4>Häufige Fehler</h4><ul class="mistakes">${li(g.mistakes)}</ul>`);
+    out.push(`<h4>Atmung</h4><p>${g.breath}</p>`);
+    out.push(`<h4>Beteiligte Muskeln</h4><p>${g.muscles}</p>`);
+  } else {
+    out.push(`<p>${ex.detail}</p>`);
+  }
+  out.push(`<h4>Zählweise</h4><p>${ex.unit === 'sec'
+    ? 'Wird in <strong>Sekunden gehalten</strong> — die Uhr misst mit, der Wert lässt sich in der Pause korrigieren.'
+    : 'Wird in <strong>Wiederholungen</strong> gezählt. In der Pause bestätigen, sonst zählt der Satz nicht für die Progression.'}</p>`);
+  out.push(`<h4>Position in der Leiter</h4><ul class="ladder-nav">
+    <li>${lvl > 1 ? `↓ Leichter (Level ${lvl - 1}): <strong>${ladder.levels[lvl - 2].name}</strong>` : 'Leichteste Stufe dieser Leiter.'}</li>
+    <li>${lvl < max ? `↑ Schwerer (Level ${lvl + 1}): <strong>${ladder.levels[lvl].name}</strong>` : 'Schwerste Stufe dieser Leiter.'}</li>
+  </ul>`);
+  $('sheetBody').innerHTML = out.join('');
+  $('sheetBody').scrollTop = 0;
+
+  // Lesen kostet Zeit — der Timer soll nicht heimlich weiterlaufen.
+  if (workoutActive && !isPaused) { togglePause(); detailPausedByMe = true; }
+  $('sheetPaused').classList.toggle('hidden', !detailPausedByMe);
+  $('detailSheet').classList.add('visible');
+}
+
+function closeDetail() {
+  if (!$('detailSheet').classList.contains('visible')) return;
+  $('detailSheet').classList.remove('visible');
+  if (detailPausedByMe) {
+    detailPausedByMe = false;
+    if (isPaused) togglePause();   // nur die eigene Pause zurücknehmen
+  }
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail(); });
+
+// ══════════════════════════════════════════
 // REP LOGGING (Stepper in der Pause)
 // ══════════════════════════════════════════
 // Startwert eines Log-Musters aus einem History-Eintrag — aber nur, wenn die
@@ -1186,7 +1632,7 @@ function applyProgression(tplKey) {
     const unit = LADDERS[p].levels[lvl - 1].unit;
     const top = unit === 'sec' ? tpl.holdSec : tpl.reps[1];
     const bottom = unit === 'sec' ? Math.round(tpl.holdSec * 0.6) : tpl.reps[0];
-    if (Math.min(...vals) >= top && lvl < 6) {
+    if (Math.min(...vals) >= top && lvl < LADDERS[p].levels.length) {
       levels[p] = lvl + 1;
       changes.push({ pattern: p, dir: 'up', newName: LADDERS[p].levels[lvl].name });
     } else if (Math.max(...vals) < bottom && lvl > 1) {
@@ -1417,7 +1863,8 @@ function toggleGuide() {
 }
 
 function changeLevel(pattern, delta) {
-  levels[pattern] = Math.max(1, Math.min(6, levels[pattern] + delta));
+  const max = LADDERS[pattern].levels.length;
+  levels[pattern] = Math.max(1, Math.min(max, (levels[pattern] || 1) + delta));
   saveJSON(LS_LEVELS, levels);
   renderLevels();
 }
@@ -1428,7 +1875,8 @@ function visiblePatterns() {
 
 function renderLevels() {
   $('levelsList').innerHTML = visiblePatterns().map(p => {
-    const lvl = levels[p];
+    const max = LADDERS[p].levels.length;
+    const lvl = Math.max(1, Math.min(max, levels[p] || 1));
     const ex = LADDERS[p].levels[lvl - 1];
     return `<div class="level-row">
       <div class="level-info">
@@ -1436,9 +1884,10 @@ function renderLevels() {
         <div class="level-ex-name">${ex.name}</div>
       </div>
       <div class="level-ctrl">
+        <button class="info-btn" onclick="openDetail('${p}',${lvl})" aria-label="Details zu ${ex.name}">ⓘ</button>
         <button class="mini-btn" onclick="changeLevel('${p}',-1)" ${lvl <= 1 ? 'disabled' : ''}>−</button>
-        <span class="level-num">${lvl}/6</span>
-        <button class="mini-btn" onclick="changeLevel('${p}',1)" ${lvl >= 6 ? 'disabled' : ''}>+</button>
+        <span class="level-num">${lvl}/${max}</span>
+        <button class="mini-btn" onclick="changeLevel('${p}',1)" ${lvl >= max ? 'disabled' : ''}>+</button>
       </div>
     </div>`;
   }).join('');

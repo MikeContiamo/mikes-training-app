@@ -75,6 +75,8 @@ export function boot({ search = '', store = {}, htmlPath = null } = {}) {
     'historySetValue', 'selectTemplate', 'updatePrimaryLabel', 'stepReps',
     'pickFinisher', 'finisherRounds', 'sessionCount', 'resolvePattern', 'visiblePatterns',
     'observedHold', 'addSet', 'WARMUPS', 'FINISHERS', 'FINISHER_ORDER',
+    'EXERCISE_GUIDE', 'openDetail', 'closeDetail', 'phasePattern', 'renderLevels',
+    'changeLevel', 'togglePause',
     'LADDERS', 'TEMPLATES', 'PATTERNS', 'DEFAULT_LEVELS', 'TEMPLATE_ORDER',
   ];
   const getters = exposed.map(n => `  get ${n}() { return typeof ${n} === 'undefined' ? undefined : ${n}; },`).join('\n');
@@ -88,11 +90,17 @@ export function boot({ search = '', store = {}, htmlPath = null } = {}) {
     if ('stepperVal' in patch) stepperVal = patch.stepperVal;
     if ('phaseEndsAt' in patch) phaseEndsAt = patch.phaseEndsAt;
     if ('selectedTemplate' in patch) selectedTemplate = patch.selectedTemplate;
+    if ('workoutActive' in patch) workoutActive = patch.workoutActive;
+    if ('isPaused' in patch) isPaused = patch.isPaused;
+    if ('prefs' in patch) prefs = patch.prefs;
   },
   getState() { return {
     workout, currentIdx, sessionSets, levels, stepperVal,
     // tolerant, damit derselbe Harness auch gegen ältere Versionen läuft
     sessionConfirmed: typeof sessionConfirmed === 'undefined' ? undefined : sessionConfirmed,
+    isPaused: typeof isPaused === 'undefined' ? undefined : isPaused,
+    workoutActive: typeof workoutActive === 'undefined' ? undefined : workoutActive,
+    detailPausedByMe: typeof detailPausedByMe === 'undefined' ? undefined : detailPausedByMe,
   }; },`;
 
   const factory = new Function(

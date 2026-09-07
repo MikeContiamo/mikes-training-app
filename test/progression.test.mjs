@@ -321,5 +321,144 @@ test('isoWeekKey trifft ISO-Wochengrenzen', () => {
   assert.equal(api.isoWeekKey(new Date(2025, 11, 29).getTime()), '2026-W1');
 });
 
+console.log('\nÜbungs-Details');
+
+test('jede Leiter-Übung hat eine Anleitung, ohne Waisen', () => {
+  const { api } = boot();
+  const names = Object.values(api.LADDERS).flatMap(l => l.levels.map(e => e.name));
+  assert.equal(names.length, 42, '7 Leitern × 6 Level');
+  assert.equal(new Set(names).size, names.length, 'Übungsnamen sind eindeutig');
+  const missing = names.filter(n => !api.EXERCISE_GUIDE[n]);
+  const orphan = Object.keys(api.EXERCISE_GUIDE).filter(n => !names.includes(n));
+  assert.deepEqual(missing, [], 'ohne Anleitung');
+  assert.deepEqual(orphan, [], 'Anleitung ohne Übung');
+});
+
+test('jede Anleitung ist vollständig', () => {
+  const { api } = boot();
+  for (const [name, g] of Object.entries(api.EXERCISE_GUIDE)) {
+    assert.ok(g.setup && g.setup.length > 20, name + ': Aufbau');
+    assert.ok(Array.isArray(g.steps) && g.steps.length >= 2, name + ': Ausführung');
+    assert.ok(Array.isArray(g.mistakes) && g.mistakes.length >= 2, name + ': Fehler');
+    assert.ok(g.muscles && g.breath, name + ': Muskeln/Atmung');
+    for (const x of [...g.steps, ...g.mistakes]) assert.ok(x.length > 10, name + ': zu knapp — ' + x);
+  }
+});
+
+test('openDetail zeigt die Übung der aktuellen Phase', () => {
+  const { api, el } = boot();
+  api.setState({ levels: Object.assign({}, api.DEFAULT_LEVELS, { push: 4 }), selectedTemplate: 'A',
+                 sessionSets: {}, sessionConfirmed: {} });
+  const w = api.buildWorkout('A', false, { rotation: 0 });
+  const idx = w.findIndex(x => x.pattern === 'push' && x.kind === 'work-reps');
+  api.setState({ workout: w, currentIdx: idx });
+  api.openDetail();
+  assert.equal(el('sheetTitle').textContent, 'Liegestütze');
+  assert.match(el('sheetKicker').textContent, /Push \(Brust\/Schulter\) · Level 4\/6/);
+  const body = el('sheetBody').innerHTML;
+  for (const h of ['Aufbau', 'Ausführung', 'Häufige Fehler', 'Atmung', 'Beteiligte Muskeln', 'Zählweise', 'Position in der Leiter']) {
+    assert.ok(body.includes(h), 'Abschnitt fehlt: ' + h);
+  }
+  assert.ok(el('detailSheet')._classes.has('visible'), 'Sheet offen');
+});
+
+test('openDetail funktioniert auch in der Pause (Muster aus logFor)', () => {
+  const { api, el } = boot();
+  api.setState({ levels: api.DEFAULT_LEVELS, selectedTemplate: 'A', sessionSets: {}, sessionConfirmed: {} });
+  const w = api.buildWorkout('A', false, { rotation: 0 });
+  const idx = w.findIndex(x => x.logFor && x.logFor.pattern === 'squat');
+  api.setState({ workout: w, currentIdx: idx });
+  api.openDetail();
+  assert.match(el('sheetKicker').textContent, /Squat \(Beine\)/);
+});
+
+test('phasePattern: nur Leiter-Phasen, nicht Warm-Up oder Cardio', () => {
+  const { api } = boot();
+  api.setState({ levels: api.DEFAULT_LEVELS });
+  const w = api.buildWorkout('A', true, { rotation: 0, finisher: 'hiit' });
+  assert.equal(api.phasePattern(w.find(p => p.kind === 'warmup')), null);
+  assert.equal(api.phasePattern(w.find(p => p.kind === 'cardio-hard')), null);
+  assert.ok(api.phasePattern(w.find(p => p.kind === 'work-reps')));
+  assert.ok(api.phasePattern(w.find(p => p.logFor)));
+});
+
+test('openDetail gezielt aus der Levels-Liste, Level wird geklemmt', () => {
+  const { api, el } = boot();
+  api.setState({ levels: api.DEFAULT_LEVELS, workout: [], currentIdx: 0 });
+  api.openDetail('core', 6);
+  assert.equal(el('sheetTitle').textContent, 'V-Ups');
+  api.openDetail('core', 99);
+  assert.equal(el('sheetTitle').textContent, 'V-Ups', 'nach oben geklemmt');
+  api.openDetail('core', 0);
+  assert.equal(el('sheetTitle').textContent, 'Plank (Knie)', 'nach unten geklemmt');
+  api.openDetail('gibtsnicht', 3);
+  assert.equal(el('sheetTitle').textContent, 'Plank (Knie)', 'unbekanntes Muster ändert nichts');
+});
+
+test('Leiter-Navigation nennt Nachbarstufen und die Ränder', () => {
+  const { api, el } = boot();
+  api.setState({ levels: api.DEFAULT_LEVELS, workout: [], currentIdx: 0 });
+  api.openDetail('push', 3);
+  let b = el('sheetBody').innerHTML;
+  assert.ok(b.includes('Knie-Liegestütze') === false || b.includes('Erhöhte Liegestütze'), 'leichtere Stufe genannt');
+  assert.ok(b.includes('Liegestütze</strong>'), 'schwerere Stufe genannt');
+  api.openDetail('push', 1);
+  assert.ok(el('sheetBody').innerHTML.includes('Leichteste Stufe'));
+  api.openDetail('push', 6);
+  assert.ok(el('sheetBody').innerHTML.includes('Schwerste Stufe'));
+});
+
+test('Zählweise unterscheidet Halten und Wiederholungen', () => {
+  const { api, el } = boot({ store: { mikeTrainingPrefs: JSON.stringify({ bar: true }) } });
+  api.setState({ levels: api.DEFAULT_LEVELS, workout: [], currentIdx: 0 });
+  api.openDetail('vpull', 1);   // Aktives Hängen = Sekunden
+  assert.ok(el('sheetBody').innerHTML.includes('Sekunden gehalten'));
+  api.openDetail('vpull', 5);   // Klimmzüge = Wdh
+  assert.ok(el('sheetBody').innerHTML.includes('Wiederholungen'));
+});
+
+test('Detail öffnen pausiert den Timer, schließen setzt fort', () => {
+  const { api, el } = boot();
+  api.setState({ levels: api.DEFAULT_LEVELS, selectedTemplate: 'A', sessionSets: {}, sessionConfirmed: {} });
+  const w = api.buildWorkout('A', false, { rotation: 0 });
+  api.setState({ workout: w, currentIdx: w.findIndex(x => x.kind === 'work-reps'),
+                 workoutActive: true, isPaused: false });
+  api.openDetail();
+  assert.equal(api.getState().isPaused, true, 'pausiert');
+  assert.ok(!el('sheetPaused')._classes.has('hidden'), 'Hinweis sichtbar');
+  api.closeDetail();
+  assert.equal(api.getState().isPaused, false, 'wieder gestartet');
+  assert.ok(!el('detailSheet')._classes.has('visible'), 'Sheet zu');
+});
+
+test('eine selbst gesetzte Pause bleibt nach dem Schließen bestehen', () => {
+  const { api } = boot();
+  api.setState({ levels: api.DEFAULT_LEVELS, selectedTemplate: 'A', sessionSets: {}, sessionConfirmed: {} });
+  const w = api.buildWorkout('A', false, { rotation: 0 });
+  api.setState({ workout: w, currentIdx: w.findIndex(x => x.kind === 'work-reps'),
+                 workoutActive: true, isPaused: true });
+  api.openDetail();
+  assert.equal(api.getState().detailPausedByMe, false, 'nicht selbst pausiert');
+  api.closeDetail();
+  assert.equal(api.getState().isPaused, true, 'Pause bleibt');
+});
+
+test('auf dem Startbildschirm läuft kein Timer mit', () => {
+  const { api } = boot();
+  api.setState({ levels: api.DEFAULT_LEVELS, workout: [], currentIdx: 0, workoutActive: false, isPaused: false });
+  api.openDetail('hinge', 2);
+  assert.equal(api.getState().isPaused, false);
+  api.closeDetail();
+  assert.equal(api.getState().isPaused, false);
+});
+
+test('Levels-Liste blendet Stangen-Leitern ohne Stange aus', () => {
+  const noBar = boot({ store: { mikeTrainingPrefs: JSON.stringify({ bar: false }) } }).api;
+  assert.ok(!noBar.visiblePatterns().includes('vpull'));
+  assert.ok(noBar.visiblePatterns().includes('vpush'), 'Pike braucht keine Stange');
+  const withBar = boot({ store: { mikeTrainingPrefs: JSON.stringify({ bar: true }) } }).api;
+  assert.ok(withBar.visiblePatterns().includes('vpull'));
+});
+
 console.log(`\n${pass} passed, ${fail} failed\n`);
 process.exit(fail ? 1 : 0);
