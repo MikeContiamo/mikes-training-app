@@ -11,7 +11,7 @@ function test(name, fn) {
 }
 const section = t => console.log('\n' + t);
 
-const FULL = { bar: true, dumbbells: true };
+const FULL = { dumbbells: true };
 const setup = (store = FULL, levels = null) => {
   const b = boot({ store: { mikeTrainingPrefs: JSON.stringify(store) } });
   b.api.setState({ levels: levels || b.api.DEFAULT_LEVELS, sessionSets: {}, sessionConfirmed: {},
@@ -57,6 +57,7 @@ test('das Wdh-Fenster kommt von der Übung, nicht vom Template', () => {
   }
   assert.deepEqual(api.repRange('push'), [8, 15]);
   assert.deepEqual(api.repRange('dblateral'), [12, 20], 'Seitheben bleibt im hohen Bereich');
+  assert.deepEqual(api.repRange('vpush'), [6, 12]);
   assert.deepEqual(api.holdRange('core'), [20, 40]);
 });
 
@@ -99,14 +100,14 @@ test('unbestätigte Wdh leveln nicht hoch', () => {
 });
 
 test('bestätigte Wdh am oberen Ende leveln hoch, darunter ab', () => {
-  const up = setup(FULL, { push: 3, vpush: 3, pull: 2, vpull: 1, squat: 2, hinge: 1, core: 2,
+  const up = setup(FULL, { push: 3, vpush: 3, pull: 2, squat: 2, hinge: 1, core: 2,
                            dbrow: 2, dbrdl: 1, dbsquat: 2, dblateral: 1 });
   let w = up.api.buildWorkout('A', false, { rotation: 0 });
   confirmSets(up.api, w, 'push', 15);
   assert.deepEqual(up.api.applyProgression('A').changes.map(c => c.dir), ['up']);
   assert.equal(up.api.getState().levels.push, 4);
 
-  const down = setup(FULL, { push: 3, vpush: 3, pull: 2, vpull: 1, squat: 2, hinge: 1, core: 2,
+  const down = setup(FULL, { push: 3, vpush: 3, pull: 2, squat: 2, hinge: 1, core: 2,
                              dbrow: 2, dbrdl: 1, dbsquat: 2, dblateral: 1 });
   w = down.api.buildWorkout('A', false, { rotation: 0 });
   confirmSets(down.api, w, 'push', 5);
@@ -279,21 +280,36 @@ test('mit Hanteln ersetzen Hantelübungen die schlecht dosierbaren Varianten', (
 });
 
 test('ohne Hanteln bleibt alles auf Körpergewicht', () => {
-  const { api } = setup({ bar: true, dumbbells: false });
+  const { api } = setup({ dumbbells: false });
   for (const p of ['pull', 'hinge', 'squat']) assert.equal(api.resolvePattern(p), p);
   assert.equal(api.resolvePattern('dblateral'), 'core', 'Abschlussblock fällt auf Rumpf zurück');
 });
 
-test('ohne Stange läuft Klimmzug über den Fallback bis zur Hantel', () => {
-  assert.equal(setup({ bar: false, dumbbells: true }).api.resolvePattern('vpull'), 'dbrow',
-    'vpull → pull → dbrow, transitiv');
-  assert.equal(setup({ bar: false, dumbbells: false }).api.resolvePattern('vpull'), 'pull');
-  assert.equal(setup({ bar: true, dumbbells: true }).api.resolvePattern('vpull'), 'vpull');
+test('keine Übung hängt an einer Klimmzugstange', () => {
+  const { api } = setup();
+  assert.ok(!api.PATTERNS.includes('vpull'), 'kein vertikales Ziehen im Programm');
+  const requires = new Set(Object.values(api.LADDERS).map(l => l.requires).filter(Boolean));
+  assert.deepEqual([...requires], ['dumbbells'], 'nur Hanteln als Ausrüstung');
+  const all = Object.values(api.LADDERS).flatMap(l => l.levels)
+    .map(e => e.name + ' ' + e.detail).join(' ');
+  // Bewusst spezifische Begriffe: „durchhängen" im Plank-Hinweis ist kein Stangenbezug.
+  assert.ok(!/Klimmzug|Klimmzüge|Stange|Türreck|Aktives Hängen|Scapular/.test(all),
+    'keine Stangenübung übrig');
+  for (const k of api.TEMPLATE_ORDER) {
+    assert.ok(!api.TEMPLATES[k].mix.flat().includes('vpull'), k);
+  }
+});
+
+test('Ziehen läuft über Rudern, in jeder Session', () => {
+  const { api } = setup();
+  for (const k of api.TEMPLATE_ORDER) {
+    const pats = api.buildWorkout(k, false, { rotation: 0 }).filter(p => p.logFor).map(p => p.logFor.pattern);
+    assert.ok(pats.includes('dbrow'), k + ': Rudern fehlt');
+  }
 });
 
 test('jede Session hat zehn Satzplätze, mit und ohne Ausrüstung', () => {
-  for (const store of [FULL, { bar: true, dumbbells: false }, { bar: false, dumbbells: false },
-                       { bar: false, dumbbells: true }]) {
+  for (const store of [FULL, { dumbbells: false }]) {
     const { api } = setup(store);
     for (const k of api.TEMPLATE_ORDER) {
       const n = api.buildWorkout(k, false, { rotation: 0 }).filter(p => p.logFor).length;
@@ -303,7 +319,7 @@ test('jede Session hat zehn Satzplätze, mit und ohne Ausrüstung', () => {
 });
 
 test('kein Muster steht zweimal in derselben Session', () => {
-  for (const store of [FULL, { bar: false, dumbbells: true }, { bar: false, dumbbells: false }]) {
+  for (const store of [FULL, { dumbbells: false }]) {
     const { api } = setup(store);
     for (const k of api.TEMPLATE_ORDER) {
       const w = api.buildWorkout(k, false, { rotation: 0 });
@@ -350,7 +366,7 @@ test('Volumen pro Woche bei 3 Sessions', () => {
   assert.equal(Object.values(n).reduce((a, b) => a + b, 0), 40, '4 Sessions × 10 Sätze');
   // Drücken und Ziehen je 6, Beine je 6, Abschluss je 3
   assert.equal(perWeek('push') + perWeek('vpush'), 6, 'Drücken');
-  assert.equal(perWeek('dbrow') + perWeek('vpull'), 6, 'Ziehen');
+  assert.equal(perWeek('dbrow'), 6, 'Ziehen — in jeder Session');
   assert.equal(perWeek('dbsquat'), 6, 'knie-dominant');
   assert.equal(perWeek('dbrdl'), 6, 'hüft-dominant');
   assert.equal(perWeek('core'), 3);
@@ -481,9 +497,8 @@ test('eine selbst gesetzte Pause bleibt nach dem Schließen bestehen', () => {
 });
 
 test('Levels-Liste zeigt nur verfügbare Leitern', () => {
-  assert.ok(!setup({ bar: false, dumbbells: false }).api.visiblePatterns().some(p => p.startsWith('db')));
+  assert.ok(!setup({ dumbbells: false }).api.visiblePatterns().some(p => p.startsWith('db')));
   assert.equal(setup(FULL).api.visiblePatterns().filter(p => p.startsWith('db')).length, 4);
-  assert.ok(!setup({ bar: false, dumbbells: true }).api.visiblePatterns().includes('vpull'));
 });
 
 console.log(`\n${pass} passed, ${fail} failed\n`);

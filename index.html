@@ -412,16 +412,6 @@
     <div class="tpl-desc" id="tplDesc"></div>
     <div class="toggle-row">
       <div>
-        <div class="toggle-label">🧗 Klimmzugstange vorhanden</div>
-        <div class="toggle-sub">Schaltet Klimmzüge frei · sonst Türrahmen/Hantel</div>
-      </div>
-      <label class="switch">
-        <input type="checkbox" id="barToggle" onchange="onBarToggle()">
-        <span class="slider-toggle"></span>
-      </label>
-    </div>
-    <div class="toggle-row">
-      <div>
         <div class="toggle-label">🏋️ Freihanteln vorhanden</div>
         <div class="toggle-sub">Ersetzt schlecht dosierbare Übungen · bis 12,5 kg</div>
       </div>
@@ -462,6 +452,7 @@
       <ul>
         <li><strong>3× pro Woche</strong>, immer ein Ruhetag dazwischen — z. B. <strong>Mo · Mi · Fr</strong>. Minimum: 2× pro Woche.</li>
         <li>Die App rotiert <strong>A → B → C → D</strong> und schlägt das nächste Workout selbst vor. Ein Zyklus dauert bei 3 Sessions pro Woche etwa <strong>anderthalb Wochen</strong> (bei 2 Sessions zwei Wochen), dadurch fällt nicht jede Woche dasselbe auf denselben Wochentag.</li>
+        <li>Die vier Sessions unterscheiden sich in der <strong>Druckrichtung</strong> (Liegestütze oder Überkopfdrücken) und im <strong>Abschlussblock</strong> (Rumpf oder Seitheben). Rudern und Beine sind in jeder Session dabei.</li>
         <li>Jede Session hat <span class="highlight">zehn harte Sätze</span> und dauert rund 19 Minuten: zwei Minuten Warm-Up, zwei Supersets à zwei Sätze, dann der Abschlussblock.</li>
         <li>Die vier Workouts unterscheiden sich nur darin, <strong>welche</strong> Muster drankommen — nicht in Wiederholungszahl oder Tempo. Das ist Absicht: nur so bleiben deine Zahlen über Monate vergleichbar.</li>
         <li>In <strong>B und D stehen die Beine zuerst</strong>, damit sie bei Zeitmangel nicht immer als Erstes wegfallen.</li>
@@ -474,7 +465,7 @@
       </ul>
       <h4>📈 Progression</h4>
       <ul>
-        <li>Jede Übung hat ein <strong>festes Wiederholungsfenster</strong> (meist 8–15, Klimmzüge 5–10, Seitheben 12–20, Halten 20–40 Sek.). Schaffst du in <strong>beiden Sätzen das obere Ende</strong>, legt die App eine Stufe drauf. Bleibst du in beiden unter dem unteren Ende, geht sie eine zurück.</li>
+        <li>Jede Übung hat ein <strong>festes Wiederholungsfenster</strong> (meist 8–15, Überkopfdrücken 6–12, Seitheben 12–20, Halten 20–40 Sek.). Schaffst du in <strong>beiden Sätzen das obere Ende</strong>, legt die App eine Stufe drauf. Bleibst du in beiden unter dem unteren Ende, geht sie eine zurück.</li>
         <li>Dafür muss der Wert <span class="highlight">bestätigt</span> sein: in der Pause auf − / + tippen oder den Weiter-Button drücken, der die Zahl anzeigt. Läuft die Pause unbestätigt durch, wird der Satz nicht gewertet — die App levelt nie auf Vermutungen.</li>
         <li>Haltezeiten misst die Uhr selbst, für jeden Satz getrennt. Ein sofortiger Abbruch gilt als Auslassen und kostet kein Level.</li>
         <li>Bei <strong>einseitigen Übungen</strong> zählt die <strong>schwächere Seite</strong>. Sonst zieht die starke Seite dich auf eine Stufe, die die andere nicht trägt.</li>
@@ -483,13 +474,13 @@
       <h4>🧭 Einmal kalibrieren, bevor du loslegst</h4>
       <ul>
         <li>Die Startwerte sind geraten, nicht gemessen. Geh einmal durch „⚙️ Levels" und stelle für jede Übung die Stufe ein, die du <strong>sauber im Fenster</strong> schaffst — mit 1–2 Wiederholungen Reserve. Das ist die halbe Miete für alles, was danach kommt.</li>
-        <li>Bei schweren Übungen (Pike Push-ups, Klimmzüge) vor dem ersten Satz eine <strong>leichte Probe derselben Bewegung</strong> machen. Zwei Minuten allgemeines Warm-Up ersetzen das nicht.</li>
+        <li>Bei schweren Übungen (Pike Push-ups, Kreuzheben) vor dem ersten Satz eine <strong>leichte Probe derselben Bewegung</strong> machen. Zwei Minuten allgemeines Warm-Up ersetzen das nicht.</li>
       </ul>
       <h4>🧗 Ausstattung</h4>
       <ul>
         <li>Alles läuft ohne Geräte. <strong>Hanteln ersetzen</strong> dann die Übungen, die sich mit Möbeln schlecht dosieren lassen: Hantelrudern statt Türrahmen-Rudern, Kreuzheben statt Brücken, belastete Split Squats statt reinem Körpergewicht. <strong>Ersetzen, nicht ergänzen</strong> — die Session bleibt bei zehn Sätzen.</li>
-        <li>Eine <strong>Klimmzugstange</strong> bringt am meisten. Ohne sie fällt vertikales Ziehen weg, und die vier Workouts schrumpfen auf zwei verschiedene. Ein Türreck kostet wenig und ist der größte Einzelgewinn für dieses Programm.</li>
-        <li>Beide Schalter aus: alles läuft weiter auf Körpergewicht, nur mit weniger Abwechslung. Praktisch auf Reisen.</li>
+        <li>Schalter aus: alles läuft weiter auf Körpergewicht, nur mit weniger Last. Praktisch auf Reisen.</li>
+        <li>Der begrenzende Faktor sind derzeit die <strong>12,5 kg</strong>. Sie decken drei der vier belasteten Muster (Rudern, Kreuzheben, Beine). Wenn die Hanteln <strong>mehr Scheiben aufnehmen</strong>, ist das der größte Einzelgewinn — mehr als jedes zusätzliche Gerät.</li>
       </ul>
       <h4>🏋️ Hanteln bis 12,5 kg</h4>
       <ul>
@@ -500,6 +491,7 @@
       </ul>
       <h4>🚫 Was absichtlich fehlt</h4>
       <ul>
+        <li><strong>Klimmzüge</strong> und alles andere an der Stange sind vorerst draußen — ohne Stange im Programm gibt es kein vertikales Ziehen. Ziehen läuft komplett über Rudern, dafür in jeder Session. Kommt eine Stange dazu, lässt sich die Leiter zurückholen.</li>
         <li><strong>Handstand-Liegestütze</strong> sind aus der automatischen Leiter raus. Sie sind eine eigene Fertigkeit mit Sturzrisiko und gehören nicht dazu, weil man ein Wiederholungsziel erreicht hat — schon gar nicht beim Alleintrainieren.</li>
         <li><strong>Tischübungen</strong> sind raus (Tisch trägt nicht). Horizontales Ziehen läuft über Türrahmen oder Hantel.</li>
         <li><strong>Direkte Armarbeit</strong> (Curls, Trizeps) ist raus: Arme arbeiten bei Drücken und Ziehen mit, und zwei Sätze alle anderthalb Wochen hätten kaum etwas gebracht. Wenn Arme ein eigenes Ziel werden, kommen sie zurück.</li>
@@ -645,7 +637,7 @@ const CIRCUMFERENCE = 2 * Math.PI * 108;
 const FAST = new URLSearchParams(location.search).has('fast');
 const T = s => FAST ? Math.max(2, Math.round(s * 0.1)) : s;
 
-const PATTERNS = ['push', 'vpush', 'pull', 'vpull', 'squat', 'hinge', 'core', 'dbrow', 'dbrdl', 'dbsquat', 'dblateral'];
+const PATTERNS = ['push', 'vpush', 'pull', 'squat', 'hinge', 'core', 'dbrow', 'dbrdl', 'dbsquat', 'dblateral'];
 
 // Bewegungsleitern. Eine Stufe ist immer schwerer als die vorige und
 // bleibt in derselben Bewegungsfamilie — gesteigert wird über Hebel,
@@ -672,12 +664,6 @@ const LADDERS = {
     { name: 'Türrahmen-Rudern, aufrecht', detail: 'Griff auf Brusthöhe · Füße am Rahmen · nur leicht zurücklehnen', unit: 'reps', guide: 'Türrahmen-Rudern' },
     { name: 'Türrahmen-Rudern, 45°', detail: 'Griff auf Brusthöhe · Füße eine halbe Fußlänge vor · Körper 45°', unit: 'reps', guide: 'Türrahmen-Rudern' },
     { name: 'Türrahmen-Rudern, tief gegriffen', detail: 'Griff auf Hüfthöhe · weiter zurücklehnen · deutlich waagerechter', unit: 'reps', guide: 'Türrahmen-Rudern' },
-  ]},
-  vpull: { label: 'Vertical Pull (Klimmzug)', reps: [5, 10], requires: 'bar', fallback: 'pull', levels: [
-    { name: 'Klimmzüge, viel Fußhilfe', detail: 'Fuß auf Stuhl · deutlich mitdrücken · voller Bewegungsumfang', unit: 'reps', guide: 'Klimmzüge mit Fußhilfe' },
-    { name: 'Klimmzüge, wenig Fußhilfe', detail: 'Fuß auf Stuhl · nur antippen, kaum helfen', unit: 'reps', guide: 'Klimmzüge mit Fußhilfe' },
-    { name: 'Klimmzüge (Untergriff)', detail: 'Handflächen zu dir · Brust zur Stange · unten voll ausstrecken', unit: 'reps' },
-    { name: 'Klimmzüge (Obergriff)', detail: 'Handflächen weg · schulterbreit · volle Amplitude', unit: 'reps' },
   ]},
   squat: { label: 'Squat (Beine, knie-dominant)', reps: [8, 15], prefer: 'dbsquat', levels: [
     { name: 'Kniebeugen', detail: 'Füße schulterbreit · tief runter · Fersen am Boden', unit: 'reps' },
@@ -813,27 +799,6 @@ const EXERCISE_GUIDE = {
     muscles: 'Oberer Rücken, Latissimus, Bizeps, hintere Schulter',
     breath: 'Ziehen ausatmen, zurücklassen einatmen.',
   },
-  'Klimmzüge mit Fußhilfe': {
-    setup: 'Stange greifen, ein Fuß auf einem Stuhl oder einer Kiste. Der Fuß hilft genau so viel, dass die letzten Wiederholungen knapp gelingen.',
-    steps: ['Aus der vollen Streckung starten, Schultern aktiv nach unten ziehen.', 'Ziehen und mit dem Fuß nur so viel nachhelfen wie nötig — Ellbogen nach unten denken, Brust zur Stange.', 'Kinn über die Stange, dann in 2–3 Sekunden bis zur vollen Streckung ablassen.'],
-    mistakes: ['Mit dem Bein den ganzen Weg drücken. Die Hilfe ist eine Krücke, kein Antrieb.', 'Unten nicht ausstrecken und die Spannung in die Schultern fallen lassen.', 'Die Hilfe nie reduzieren. Alle paar Wochen bewusst weniger nachhelfen — das ist die eigentliche Progression.'],
-    muscles: 'Latissimus, oberer Rücken, Bizeps, Griffkraft',
-    breath: 'Ziehen ausatmen, ablassen einatmen.',
-  },
-  'Klimmzüge (Untergriff)': {
-    setup: 'Stange mit den Handflächen zu dir greifen, etwa schulterbreit.',
-    steps: ['Aus der vollen Streckung starten, Schulterblätter erst nach unten ziehen.', 'Brust zur Stange führen, Ellbogen nach unten denken — nicht nur das Kinn hochschieben.', 'Oben kurz halten, dann in 2–3 Sekunden ablassen bis zur vollen Streckung.'],
-    mistakes: ['Mit den Beinen kippen (Kipping) — für Kraftaufbau kontraproduktiv.', 'Nur bis zur Nase ziehen; das Kinn gehört deutlich über die Stange.', 'Halbe Wiederholungen im müden Zustand: Satz lieber beenden.'],
-    muscles: 'Latissimus, Bizeps, oberer Rücken',
-    breath: 'Ziehen ausatmen, ablassen einatmen.',
-  },
-  'Klimmzüge (Obergriff)': {
-    setup: 'Stange mit den Handflächen weg vom Körper greifen, schulterbreit bis etwas breiter.',
-    steps: ['Volle Streckung unten, aber aktive Schultern.', 'Ellbogen nach unten und hinten ziehen, Brust zur Stange, leicht nach hinten lehnen.', 'Kinn über die Stange, kontrolliert ablassen bis die Arme lang sind.'],
-    mistakes: ['Schwung aus der Hüfte.', 'Griff zu breit — schränkt den Bewegungsumfang ein und belastet die Schulter.', 'Vor dem ersten schweren Satz nicht aufwärmen: eine leichte Probe mit Fußhilfe voranstellen.'],
-    muscles: 'Latissimus, oberer Rücken, hintere Schulter, Bizeps',
-    breath: 'Ziehen ausatmen, ablassen einatmen.',
-  },
   'Kniebeugen': {
     setup: 'Füße schulterbreit, Fußspitzen leicht nach außen, Arme vor dem Körper als Gegengewicht.',
     steps: ['Hüfte nach hinten und unten, Knie folgen über den Füßen.', 'So tief wie möglich, ohne dass der untere Rücken rund wird — Fersen bleiben am Boden.', 'Über die ganze Fußsohle nach oben drücken, oben Gesäß anspannen.'],
@@ -966,18 +931,18 @@ const TEMPO = 'Kontrolliert: ~2 Sek. runter, ~1 Sek. hoch';
 const SEC_PER_REP = 3;   // Grundlage der Dauerschätzung
 
 const TEMPLATES = {
-  A: { name: 'Horizontal', focus: 'Horizontal drücken & ziehen',
+  A: { name: 'Horizontal', focus: 'Liegestütze · Rumpf zum Schluss',
        mix: [['push', 'pull'], ['squat', 'hinge']], trunk: 'core',
-       desc: 'Liegestütze und Rudern, dazu Beine und Rumpf. Die Grundsession.' },
-  B: { name: 'Vertikal', focus: 'Beine zuerst, dann vertikal',
-       mix: [['hinge', 'squat'], ['vpush', 'vpull']], trunk: 'dblateral',
-       desc: 'Beine voran, danach Überkopfdrücken und Klimmzüge. Abschluss: Seitheben.' },
-  C: { name: 'Mix 1', focus: 'Druck horizontal, Zug vertikal',
-       mix: [['push', 'vpull'], ['squat', 'hinge']], trunk: 'core',
-       desc: 'Liegestütze mit Klimmzügen kombiniert, dazu Beine und Rumpf.' },
-  D: { name: 'Mix 2', focus: 'Beine zuerst, Druck vertikal',
+       desc: 'Liegestütze und Rudern, dazu Beine. Abschluss: Rumpf.' },
+  B: { name: 'Vertikal', focus: 'Überkopfdrücken · Schulter zum Schluss',
        mix: [['hinge', 'squat'], ['vpush', 'pull']], trunk: 'dblateral',
        desc: 'Beine voran, danach Überkopfdrücken und Rudern. Abschluss: Seitheben.' },
+  C: { name: 'Mix 1', focus: 'Liegestütze · Schulter zum Schluss',
+       mix: [['push', 'pull'], ['hinge', 'squat']], trunk: 'dblateral',
+       desc: 'Liegestütze und Rudern, Beine zuerst im zweiten Block. Abschluss: Seitheben.' },
+  D: { name: 'Mix 2', focus: 'Überkopfdrücken · Rumpf zum Schluss',
+       mix: [['vpush', 'pull'], ['squat', 'hinge']], trunk: 'core',
+       desc: 'Überkopfdrücken und Rudern, dazu Beine. Abschluss: Rumpf.' },
 };
 const TEMPLATE_ORDER = ['A', 'B', 'C', 'D'];
 
@@ -1004,7 +969,7 @@ const FINISHER_ORDER = ['hiit', 'tabata', 'pyramide', 'emom'];
 
 // Konservative Startwerte. Vor der ersten Session unter „⚙️ Levels"
 // gegenprüfen: die Stufe muss sauber im Wdh-Fenster machbar sein.
-const DEFAULT_LEVELS = { push: 4, vpush: 3, pull: 2, vpull: 1, squat: 2, hinge: 1, core: 2, dbrow: 2, dbrdl: 1, dbsquat: 2, dblateral: 1 };
+const DEFAULT_LEVELS = { push: 4, vpush: 3, pull: 2, squat: 2, hinge: 1, core: 2, dbrow: 2, dbrdl: 1, dbsquat: 2, dblateral: 1 };
 const REST_SEC = 60;
 // Ein Halt, der fast sofort abgebrochen wird, ist ein Auslassen und kein
 // Scheitern — er darf weder hoch- noch runterleveln.
@@ -1026,7 +991,7 @@ function loadJSON(key, fallback) {
 const saveJSON = (key, val) => localStorage.setItem(key, JSON.stringify(val));
 
 let levels = Object.assign({}, DEFAULT_LEVELS, loadJSON(LS_LEVELS, {}));
-let prefs = Object.assign({ cardio: true, nextTemplate: 'A', bar: false, dumbbells: true, finisher: 'auto' }, loadJSON(LS_PREFS, {}));
+let prefs = Object.assign({ cardio: true, nextTemplate: 'A', dumbbells: true, finisher: 'auto' }, loadJSON(LS_PREFS, {}));
 
 // ══════════════════════════════════════════
 // WORKOUT BUILDER
@@ -1035,11 +1000,10 @@ function sessionCount() {
   return loadJSON(LS_LOG, []).filter(e => e.v >= 2).length;
 }
 
-// Fehlt die nötige Ausrüstung, greift der Fallback (Klimmzug → Rudern).
+// Fehlt die nötige Ausrüstung, greift der Fallback (Seitheben → Rumpf).
 // Ohne Fallback entfällt der Slot, statt eine undurchführbare Übung anzubieten.
 function hasEquipment(ladder) {
   if (!ladder || !ladder.requires) return true;
-  if (ladder.requires === 'bar') return !!prefs.bar;
   if (ladder.requires === 'dumbbells') return !!prefs.dumbbells;
   return true;
 }
@@ -1740,13 +1704,6 @@ function onCardioToggle() {
   updateEstimate();
 }
 
-function onBarToggle() {
-  prefs.bar = $('barToggle').checked;
-  saveJSON(LS_PREFS, prefs);
-  renderLevels();
-  updateEstimate();
-}
-
 function onDumbbellToggle() {
   prefs.dumbbells = $('dumbbellToggle').checked;
   saveJSON(LS_PREFS, prefs);
@@ -1954,7 +1911,6 @@ function renderStartScreen() {
   $('weekCount').firstChild.textContent = thisWeek;
   $('streakCount').textContent = streak;
   $('cardioToggle').checked = !!prefs.cardio;
-  $('barToggle').checked = !!prefs.bar;
   $('dumbbellToggle').checked = !!prefs.dumbbells;
   selectTemplate(prefs.nextTemplate && TEMPLATES[prefs.nextTemplate] ? prefs.nextTemplate : 'A');
   renderFinisherChips();
