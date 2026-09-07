@@ -81,6 +81,21 @@ test('sofort übersprungener Halt levelt NICHT ab (Auslassen ist kein Scheitern)
   assert.ok(unconfirmed.includes('core'));
 });
 
+test('kurzer zweiter Halt wird nicht vom ersten überschrieben', () => {
+  const { api } = boot();
+  api.setState({ levels: { push: 4, vpush: 2, pull: 2, vpull: 3, squat: 3, hinge: 1, core: 3 },
+                 selectedTemplate: 'A', sessionSets: {}, sessionConfirmed: {} });
+  const w = api.buildWorkout('A', false, { rotation: 0 });
+  const sets = coreSetPhases(w);
+  w[sets[0].work].heldFraction = 1;    // Satz 1: volle 40 Sek.
+  w[sets[1].work].heldFraction = 0.6;  // Satz 2: nur 24 Sek.
+  for (const s of sets) runRest(api, w, s.rest);
+  assert.deepEqual(api.getState().sessionSets.core, [40, 24], 'jeder Satz mit seiner eigenen Messung');
+  const { changes } = api.applyProgression('A');
+  assert.deepEqual(changes, [], 'kein Level-Up, wenn der zweite Satz einbricht');
+  assert.equal(api.getState().levels.core, 3);
+});
+
 test('Halt wird als Anteil gespeichert — ?fast verzerrt die Werte nicht', () => {
   const { api } = boot({ search: '?fast' });
   api.setState({ levels: { push: 4, pull: 2, squat: 3, hinge: 1, core: 3 }, selectedTemplate: 'A',
@@ -412,8 +427,9 @@ test('eigenes Tempo einer Leiter überschreibt das des Templates nicht doppelt',
   assert.ok(!lat.detail.includes(api.TEMPLATES.C.tempo), 'kein widersprüchliches Template-Tempo');
   assert.ok(lat.detail.includes('bewusst langsam'), 'eigener Hinweis bleibt');
   // Ohne ownTempo hängt das Template-Tempo weiterhin an
-  const row = w.find(p => p.pattern === 'dbrow');
-  assert.ok(row.detail.includes(api.TEMPLATES.C.tempo), 'sonst wie gehabt');
+  const push = w.find(p => p.pattern === 'push');
+  assert.ok(push.detail.includes(api.TEMPLATES.C.tempo), 'sonst wie gehabt');
+  assert.ok(!api.LADDERS.push.ownTempo, 'push schreibt kein eigenes Tempo vor');
 });
 
 test('eigener Wdh-Bereich der Leiter schlägt den des Templates', () => {
@@ -448,6 +464,45 @@ test('Levels-Liste zeigt Hantel-Leitern nur mit Hanteln', () => {
   assert.ok(!off.visiblePatterns().some(p => p.startsWith('db')));
   const on = boot({ store: { mikeTrainingPrefs: JSON.stringify({ dumbbells: true }) } }).api;
   assert.equal(on.visiblePatterns().filter(p => p.startsWith('db')).length, 6);
+});
+
+test('Log hält das trainierte Level, nicht das nach dem Aufstieg', () => {
+  const { api } = boot();
+  // Core Level 5 = Hollow Hold (Sekunden); voll gehalten → Aufstieg auf 6 = V-Ups (Wdh)
+  api.setState({ levels: { push: 4, vpush: 2, pull: 2, vpull: 3, squat: 3, hinge: 1, core: 5 },
+                 selectedTemplate: 'A', sessionSets: {}, sessionConfirmed: {} });
+  const w = api.buildWorkout('A', false, { rotation: 0 });
+  for (const s of coreSetPhases(w)) { w[s.work].heldFraction = 1; runRest(api, w, s.rest); }
+  api.applyProgression('A');
+  assert.equal(api.getState().levels.core, 6, 'Aufstieg fand statt');
+  // So schreibt finishWorkout den Eintrag: levels = Stand VOR der Progression
+  const entry = { v: 3, sets: api.getState().sessionSets, confirmed: api.getState().sessionConfirmed,
+                  levels: { core: 5 } };
+  assert.equal(api.LADDERS.core.levels[4].unit, 'sec', 'trainiert wurde eine Halte-Übung');
+  assert.equal(api.historySetValue(entry, { pattern: 'core', unit: 'reps' }), null,
+    '40 Sekunden dürfen kein Wdh-Startwert werden');
+  assert.equal(api.historySetValue(entry, { pattern: 'core', unit: 'sec' }), 40);
+  // Mit dem Level NACH dem Aufstieg wäre die Prüfung wirkungslos (der alte Fehler)
+  const broken = Object.assign({}, entry, { levels: { core: 6 } });
+  assert.equal(api.historySetValue(broken, { pattern: 'core', unit: 'reps' }), 40,
+    'belegt, warum das trainierte Level gespeichert werden muss');
+});
+
+test('kein Template-Tempo, wo die Stufe selbst eines vorschreibt', () => {
+  const { api } = boot({ store: { mikeTrainingPrefs: JSON.stringify({ bar: true, dumbbells: true }) } });
+  api.setState({ levels: Object.assign({}, api.DEFAULT_LEVELS, { dbcurl: 5, dbrow: 5 }) });
+  const curl = api.buildWorkout('B', false, { rotation: 0 }).find(p => p.pattern === 'dbcurl');
+  assert.ok(curl.detail.includes('3 Sek.'), 'eigene Vorgabe der Stufe');
+  assert.ok(!curl.detail.includes('4 Sek.'), 'kein widersprüchliches 4-Sek-Tempo aus B');
+  const row = api.buildWorkout('C', false, { rotation: 0 }).find(p => p.pattern === 'dbrow');
+  assert.ok(row.detail.includes('oben 1 Sek. halten'), 'eigene Vorgabe der Stufe');
+  assert.ok(!row.detail.includes('keine Pause oben'), 'kein widersprüchliches C-Tempo');
+});
+
+test('keine Hilfsmittel anbieten, die es nicht gibt', () => {
+  const { api } = boot();
+  const all = Object.values(api.LADDERS).flatMap(l => l.levels).map(e => e.detail).join(' ');
+  assert.ok(!/\bBand\b|Bänder|Widerstandsband/.test(all), 'keine Bänder — Mike hat keine');
 });
 
 console.log('\nÜbungs-Details');

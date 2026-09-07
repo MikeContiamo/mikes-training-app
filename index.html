@@ -496,7 +496,8 @@
       </ul>
       <h4>🏃 Cardio</h4>
       <ul>
-        <li>Vier Varianten: <strong>HIIT</strong> (8× 20/40 — der Standard), <strong>Tabata</strong> (8× 20/10, kurz und brutal), <strong>Pyramide</strong> (Intervalle 30 → 60 → 30 Sek.) und <strong>EMOM</strong> (6× 30/30, gleichmäßiger). Auf „Auto" wechseln sie automatisch durch.</li>
+        <li>Vier Varianten: <strong>HIIT</strong> (8× 20/40 — der Standard), <strong>20/10</strong> (8 Runden im Tabata-Zeitformat, kurz), <strong>Pyramide</strong> (Intervalle 30 → 60 → 30 Sek.) und <strong>EMOM</strong> (6× 30/30, gleichmäßiger). Auf „Auto" wechseln sie automatisch durch.</li>
+        <li>Nur das <em>Zeitformat</em> stammt von Tabata; im Original waren es maximale Intervalle auf dem Ergometer. Mit Burpees nach dem Kraftteil ist die Dosis eine andere — wähle eine Bewegung, die du wiederholbar kontrolliert hart machen kannst, statt jedes Mal auf Anschlag zu gehen.</li>
         <li>Finisher bei <strong>2–3 Sessions pro Woche</strong> anschalten; an vollen Tagen einfach weglassen — der Kraftteil ist der Kern.</li>
         <li>Dazu im Alltag viel gehen (~7.000+ Schritte) — kostet keine Trainingszeit.</li>
       </ul>
@@ -665,7 +666,7 @@ const LADDERS = {
     { name: 'Aktives Hängen', detail: 'An der Stange hängen · Schulterblätter aktiv nach unten ziehen', unit: 'sec' },
     { name: 'Scapular Pulls', detail: 'Arme gestreckt · nur die Schulterblätter arbeiten · kleine Bewegung', unit: 'reps' },
     { name: 'Negative Klimmzüge', detail: 'Oben starten (abspringen) · 4–5 Sek. langsam ablassen', unit: 'reps' },
-    { name: 'Klimmzüge, Fußhilfe', detail: 'Ein Fuß auf Stuhl/Band · so viel helfen wie nötig', unit: 'reps' },
+    { name: 'Klimmzüge, Fußhilfe', detail: 'Ein Fuß auf einem Stuhl · nur so viel helfen wie nötig, Hilfe schrittweise reduzieren', unit: 'reps' },
     { name: 'Klimmzüge (Untergriff)', detail: 'Handflächen zu dir · Brust zur Stange · voll ausstrecken unten', unit: 'reps' },
     { name: 'Klimmzüge (Obergriff)', detail: 'Handflächen weg · schulterbreit · saubere volle Amplitude', unit: 'reps' },
   ]},
@@ -712,7 +713,7 @@ const LADDERS = {
     { name: 'Einarmig drücken · 12,5 kg', guide: 'Schulterdrücken (Hantel)', unit: 'reps',
       detail: 'Eine Hantel, 12,5 kg · Rumpf hält das Becken gerade · pro Seite' },
   ]},
-  dbrow: { label: 'Hantelrudern (Rücken)', requires: 'dumbbells', levels: [
+  dbrow: { label: 'Hantelrudern (Rücken)', requires: 'dumbbells', ownTempo: true, levels: [
     { name: 'Einarmiges Rudern · 5 kg', guide: 'Einarmiges Hantelrudern', unit: 'reps',
       detail: '5 kg · pro Seite · Technik vor Gewicht' },
     { name: 'Einarmiges Rudern · 7,5 kg', guide: 'Einarmiges Hantelrudern', unit: 'reps',
@@ -737,7 +738,7 @@ const LADDERS = {
     { name: 'Seitheben · 12,5 kg', guide: 'Seitheben', unit: 'reps',
       detail: '12,5 kg pro Hand · nur wenn die Technik sauber bleibt' },
   ]},
-  dbcurl: { label: 'Bizeps-Curls', requires: 'dumbbells', levels: [
+  dbcurl: { label: 'Bizeps-Curls', requires: 'dumbbells', ownTempo: true, levels: [
     { name: 'Curls · 5 kg', guide: 'Bizeps-Curls', unit: 'reps', detail: '5 kg pro Hand · beide Arme gleichzeitig' },
     { name: 'Curls · 7,5 kg', guide: 'Bizeps-Curls', unit: 'reps', detail: '7,5 kg pro Hand' },
     { name: 'Curls · 10 kg', guide: 'Bizeps-Curls', unit: 'reps', detail: '10 kg pro Hand' },
@@ -990,7 +991,7 @@ const EXERCISE_GUIDE = {
     breath: 'Oben einatmen, während des Ablassens langsam ausatmen.',
   },
   'Klimmzüge, Fußhilfe': {
-    setup: 'Stange greifen, ein Fuß auf einem Stuhl oder ein Band unter dem Knie — so viel Hilfe wie nötig.',
+    setup: 'Stange greifen, ein Fuß auf einem Stuhl oder einer Kiste — so viel Hilfe wie nötig, aber nicht mehr.',
     steps: ['Aus der aktiven Hängeposition starten, Arme gestreckt.', 'Ziehen und mit dem Fuß nur so viel nachhelfen, dass die letzten Wdh knapp gelingen.', 'Kinn über die Stange, dann kontrolliert in die volle Streckung ablassen.'],
     mistakes: ['Mit dem Bein den ganzen Weg drücken — Hilfe minimal dosieren.', 'Nicht voll ausstrecken unten.', 'Hilfe nie reduzieren: alle paar Wochen bewusst weniger nachhelfen.'],
     muscles: 'Latissimus, oberer Rücken, Bizeps',
@@ -1188,7 +1189,7 @@ const WARMUPS = [
 // Vier Finisher-Varianten statt einem festen Intervall-Block.
 const FINISHERS = {
   hiit:     { name: 'HIIT', sub: '8× 20s Vollgas / 40s locker' },
-  tabata:   { name: 'Tabata', sub: '8× 20s / 10s Pause · kurz und hart' },
+  tabata:   { name: '20/10', sub: '8× 20s Arbeit / 10s Pause · Tabata-Zeitformat, kurz' },
   pyramide: { name: 'Pyramide', sub: 'Intervalle 30 → 60 → 30 Sek.' },
   emom:     { name: 'EMOM', sub: '6× 30s Arbeit / 30s locker' },
 };
@@ -1778,11 +1779,13 @@ function observedHold(logFor) {
 }
 
 function prefillReps(logFor) {
+  // Gemessenes hat immer Vorrang: in Satz 2 würde sonst der Wert aus Satz 1
+  // die Messung überschreiben und einen kurzen Halt als vollen protokollieren.
+  if (logFor.unit === 'sec') return observedHold(logFor).secs;
   const prev = sessionSets[logFor.pattern];
   if (prev && prev.length && typeof prev[prev.length - 1] === 'number') {
     return prev[prev.length - 1];  // Satz 2 startet beim Ergebnis von Satz 1
   }
-  if (logFor.unit === 'sec') return observedHold(logFor).secs;
   for (const e of loadJSON(LS_LOG, [])) {
     const val = historySetValue(e, logFor);
     if (val !== null) return val;
@@ -1986,6 +1989,9 @@ function finishWorkout() {
 
   const durationSec = Math.round((Date.now() - workoutStartTime) / 1000);
   const setsDone = Object.values(sessionSets).reduce((s, arr) => s + arr.filter(v => typeof v === 'number').length, 0);
+  // Vor der Progression sichern: applyProgression verändert levels, und der
+  // Eintrag muss die Übung benennen, die tatsächlich trainiert wurde.
+  const trainedLevels = Object.assign({}, levels);
   const { changes, unconfirmed } = applyProgression(selectedTemplate);
 
   // Auto-Save
@@ -1997,7 +2003,8 @@ function finishWorkout() {
     cardio: $('cardioToggle').checked,
     sets: sessionSets,
     confirmed: sessionConfirmed,
-    levels: Object.assign({}, levels),
+    levels: trainedLevels,
+    levelsAfter: Object.assign({}, levels),
   };
   const hist = loadJSON(LS_LOG, []);
   hist.unshift(entry);
